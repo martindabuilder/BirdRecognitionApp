@@ -1,2 +1,1 @@
-# BirdRecognitionApp
 golemi ptici bau

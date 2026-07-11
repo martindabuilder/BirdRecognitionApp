@@ -1,0 +1,1 @@
+File containing all the references and progress on the creation of the frontend portion of the project.
