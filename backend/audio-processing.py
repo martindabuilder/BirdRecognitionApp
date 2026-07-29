@@ -7,6 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import LabelEncoder
 from multiprocessing import Pool, cpu_count
+import cv2
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -38,10 +39,14 @@ NUM_WORKERS = min(4, cpu_count())
 segment_samples = int(audio_duration * sample_rate)
 hop_length = segment_samples // spectrogram_width
 
+# ----FUNCTIONS ----
+
+#splits the audio files into numerous 5s segments for better structured learning 
+#and transforming into a mel spectrogram
 def split_audio(file_path, sr = sample_rate, duration = audio_duration):
     y, sr = librosa.load(file_path, sr = sr, res_type = "soxr_hq")
     y, _ = librosa.effects.trim(y)
-    segment_lentgh = int(duration * sr)
+    segment_length = int(duration * sr)
     segments = []
 
     #this segment of the function is used in case a segment is too short
@@ -54,11 +59,26 @@ def split_audio(file_path, sr = sample_rate, duration = audio_duration):
         segments.append(seg)
     return segments, sr
 
-def audio_to_spectrogram():
-    pass
+#turns the 5s audio segments into a normalized mel spectrogram
+def audio_to_spectrogram(y, sr):
+    spectrogram = librosa.feature.melspectrogram( y = y, sr = sr, n_mels = mel_lines, hop_length = hop_length)
+    spectrogram_db = librosa.power_to_db(spectrogram, ref = np.max)
+    spectrogram_norm = (spectrogram_db - spectrogram_db.min()) / (spectrogram_db.max() - spectrogram_db.min() + 1e-8)
+
+    #safety net if the hop_length is off by one or two frames
+    if spectrogram_norm.shape[1] != spectrogram_width:
+        spectrogram_norm = cv2.resize(spectrogram_norm, (spectrogram_width, mel_lines))
+
+    return spectrogram_norm
 
 def is_seg_active():
     pass
 
-def spectrogram_too_dark():
+def spectrogram_too_dark(spectrogram):
+    return spectrogram.mean() < max_darkness
+
+def main():
     pass
+
+if __name__ == "__main__":
+        main()

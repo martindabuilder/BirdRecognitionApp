@@ -1,2 +1,4 @@
 # Ignore the training dataset
 /dataset/
+
+/backend/spectrograms_npy
