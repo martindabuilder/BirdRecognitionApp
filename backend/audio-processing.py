@@ -91,13 +91,27 @@ def process_file(file_path):
         return []
 
     results = []
+    for seg in segments:
+        spec = audio_to_spectrogram(spectrogram, sr)
+
+        if not is_seg_active(spectrogram) or spectrogra_too_dark(spectrogram):
+            continue
+
+        if STORAGE_DTYPE == "unit8":
+            spectrogram = (spectrogram * 255).astype(np.uint8)
+        elif STORAGE_DTYPE == "float16":
+            spectrogram = spectrogram.astype(np.float16)
+        else: 
+            spectrogram = spectrogram.astype(np.float32)
+
+        results.append(spectrogram)
     return results = []
 
 def process_class(bird_class):
     pass
 
 def main():
-    pass
+    label_encoder = LabelEncoder()
 
 if __name__ == "__main__":
         main()
