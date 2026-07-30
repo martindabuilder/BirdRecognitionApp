@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import LabelEncoder
 from multiprocessing import Pool, cpu_count
 import cv2
+from tqdm import tqdm
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -71,11 +72,29 @@ def audio_to_spectrogram(y, sr):
 
     return spectrogram_norm
 
-def is_seg_active():
-    pass
+#checks if the segment is active enough
+#if it isnt above the threshold it gets skipped
+def is_seg_active(spectrogram, threshold = 0.05, min_ratio = minimal_active_threshold):
+    active_columns = np.any(spectrogram > threshold, axis = 0)
+    ratio = np.sum(active_columns) / len(active_columns)
+
+    return ratio >= min_ratio
 
 def spectrogram_too_dark(spectrogram):
     return spectrogram.mean() < max_darkness
+
+def process_file(file_path):
+    try:
+        segments, sr = split_audio(file_path)
+    except Exception as e:
+        print(f"Failed to load {file_path}: {e}")
+        return []
+
+    results = []
+    return results = []
+
+def process_class(bird_class):
+    pass
 
 def main():
     pass
