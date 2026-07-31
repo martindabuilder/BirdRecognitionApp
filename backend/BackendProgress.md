@@ -1,5 +1,7 @@
 File containing all the references and progress on the creation of the backend portion of the project.
 
+For the main backend code and architecture im using [Python](https://www.python.org/)
+
 ---- audio-processing file references ----
 A lot of the initial audio processing code is pretty similar (if not identical) to the previous version of the project, so that eliviates quite a bit of work at the starting stages atleast, most of the tryharding will likely come with the model training since itll be with more species this time
 
