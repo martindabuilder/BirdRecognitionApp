@@ -18,6 +18,8 @@ res_type(soxr_hq is chosen) used with the librosa library used for the resamplin
 
 For the console progress when training, processing audios etc Tqdm will be used for the progress bars, as its accurate and lightweight: [Tqdm Python: A Guide With Practical Examples](https://www.datacamp.com/tutorial/tqdm-python)
 
+To be able to match the .wav and .mp3 types of files glob will be used in the process classes function [Explainig Globs](https://gulpjs.com/docs/en/getting-started/explaining-globs/)
+
 ---- model training file references ----
 
 ---- backend file references ----

@@ -9,9 +9,13 @@ from sklearn.preprocessing import LabelEncoder
 from multiprocessing import Pool, cpu_count
 import cv2
 from tqdm import tqdm
+import glob
 
 import warnings
 warnings.filterwarnings("ignore")
+
+#folder containing all the audio files that will be processed
+data_directory = "dataset"
 
 #folders conainting the npy output of the spectrograms
 spectogram_npy_output = "spectrograms_npy"
@@ -80,6 +84,8 @@ def is_seg_active(spectrogram, threshold = 0.05, min_ratio = minimal_active_thre
 
     return ratio >= min_ratio
 
+#checks for the overall darkness of the spectrogram
+#if its too dark it gets skipped
 def spectrogram_too_dark(spectrogram):
     return spectrogram.mean() < max_darkness
 
@@ -92,26 +98,47 @@ def process_file(file_path):
 
     results = []
     for seg in segments:
-        spec = audio_to_spectrogram(spectrogram, sr)
+        spec = audio_to_spectrogram(seg, sr)
 
-        if not is_seg_active(spectrogram) or spectrogra_too_dark(spectrogram):
+        if not is_seg_active(spec) or spectrogram_too_dark(spec):
             continue
 
-        if STORAGE_DTYPE == "unit8":
-            spectrogram = (spectrogram * 255).astype(np.uint8)
+        if STORAGE_DTYPE == "uint8":
+            spec = (spec * 255).astype(np.uint8)
         elif STORAGE_DTYPE == "float16":
-            spectrogram = spectrogram.astype(np.float16)
+            spec = spec.astype(np.float16)
         else: 
-            spectrogram = spectrogram.astype(np.float32)
+            spec = spec.astype(np.float32)
 
-        results.append(spectrogram)
-    return results = []
+        results.append(spec)
+
+    return results
 
 def process_class(bird_class):
-    pass
+    out_path = os.path.join(spectrogram_npy_output, f"{bird_class}.npy")
+
+    #checks if a class has already been processed, if it has it gets skipped
+    if os.path.exists(out_path):
+        return bird_class, 0
+
+    class_folder = os.path.join(data_directory, bird_class)
+    audio_files = glob.glob(os.path.join(class_folder, "*.wav")) + \
+                  glob.glob(os.path.join(class_folder, "*.mp3"))
+
+    class_spectrograms = []
+    for f in audio_files:
+        class_spectrograms.extend(process_file(f))
+
+    if not class_spectrograms:
+        return bird_class, 0
+
+    arr = np.stack(class_spectrograms)
+    np.save(out_path, arr)
+    return bird_class, len(class_spectrograms)
 
 def main():
+
     label_encoder = LabelEncoder()
 
 if __name__ == "__main__":
-        main()
+    main()
