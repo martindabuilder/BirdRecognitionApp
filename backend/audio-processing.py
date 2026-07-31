@@ -15,13 +15,13 @@ import warnings
 warnings.filterwarnings("ignore")
 
 #folder containing all the audio files that will be processed
-data_directory = "dataset"
+data_directory = os.path.join("..", "dataset")
 
 #folders conainting the npy output of the spectrograms
-spectogram_npy_output = "spectrograms_npy"
+spectrogram_npy_output = "spectrograms_npy"
 
 #creating (if missing) folders
-os.makedirs(spectogram_npy_output, exist_ok = True)
+os.makedirs(spectrogram_npy_output, exist_ok = True)
 
 #spectrogram specifications
 mel_lines = 150 #spectrogram height, measured in n_mels
@@ -137,8 +137,25 @@ def process_class(bird_class):
     return bird_class, len(class_spectrograms)
 
 def main():
+    bird_classes = sorted(
+        d for d in os.listdir(data_directory)
+        if os.path.isdir(os.path.join(data_directory, d))
+    )
 
+    print(f"processing {len(bird_classes)}")
+
+    with Pool(NUM_WORKERS) as pool:
+        results = list(tqdm(
+            pool.imap_unordered(process_class, bird_classes),
+            total = len(bird_classes)
+        ))
+
+    total_segments = sum(count for _, count in results)
+    
+    #label encoding all the classes
     label_encoder = LabelEncoder()
+    label_encoder.fit(bird_classes)
+    np.save(os.path.join(spectrogram_npy_output, "label_encoder_classes.npy"), label_encoder.classes_)
 
 if __name__ == "__main__":
     main()
