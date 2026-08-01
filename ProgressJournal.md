@@ -16,11 +16,11 @@ create spectrograms (audio-processing.py)
 
 ↓
 
-splitting the dataset prematurely in train/validation/test sets (dataset_split.py)
+splitting the dataset prematurely in train/validation/test sets (dataset_split.py). This way before starting the training i will know which classes also have too few samples to be split up into seperate sets. Making the splitting into a seperate file makes it more memory light as the set splits only need to happen once after all the spectrograms are created.
 
 ↓
 
-model training (model_training.py, using functions from data_parser to make the workload a bit lighter on my laptop)
+model training (model_training.py, using functions from data_parser.py to make the workload a bit lighter on my laptop)
 
 ↓
 

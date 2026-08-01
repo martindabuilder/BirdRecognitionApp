@@ -16,7 +16,7 @@ TEST_SIZE = 0.15
 VAL_SIZE = 0.15
 TRAIN_SIZE = 0.7
 
-MINIMUM_SAMPLES_PER_CLASS = 30
+MINIMUM_SAMPLES_PER_CLASS = 50
 RANDOM_SEED = 42
 
 #shuffles and splits a given single class into seperate train, validation and test sets
@@ -39,8 +39,10 @@ def main():
     rng = np.random.default_rng(RANDOM_SEED)
 
     class_files = sorted(glob.glob(os.path.join(dataset, "*.npy")))
+    class_files = [f for f in class_files if os.path.basename(f) != "label_encoder_classes.npy"]
 
     too_few_samples_classes = 0
+    too_few_samples_classes_list = []
     summary = []
 
     for path in class_files:
@@ -61,6 +63,7 @@ def main():
         if n < MINIMUM_SAMPLES_PER_CLASS:
             np.save(train_output, arr)
             too_few_samples_classes += 1
+            too_few_samples_classes_list.append((class_name, n))
             summary.append((class_name, n, n, 0, 0))
             continue
 
@@ -74,8 +77,14 @@ def main():
 
         summary.append((class_name, n, len(train_set), len(val_set), len(test_set)))
 
-    print(f"Classes with too few samples: {too_few_samples_classes}")
 
+    if too_few_samples_classes_list:
+        print(f"Classes with too few samples: {too_few_samples_classes}")
+
+        for class_name, n in too_few_samples_classes_list:
+            print(f"{class_name}: {n} samples")
+
+    #final information after completing the splitting
     total_train_samples = sum([s[2] for s in summary])
     total_val_samples = sum([s[3] for s in summary])
     total_test_samples = sum([s[4] for s in summary])

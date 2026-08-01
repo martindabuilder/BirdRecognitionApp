@@ -1,8 +1,13 @@
 # Ignore the training dataset
 /dataset/
 
+# Ignore the spectrograms and model files
 /backend/spectrograms_npy
 /backend/model
 /backend/test_set
 /backend/train_set
 /backend/val_set
+/test_audios
+
+#ignoring design ideas folder for the frontend
+/frontend/designs

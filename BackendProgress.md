@@ -32,6 +32,8 @@ The data parser idea is to pass only one class at a time while training the mode
 
 Creating a seperate data split file. The old project split the data in the same file as it was training and that took a lot of processing time even tho splitting the data into seperate sets is a one time thing when training a model. Having it happen before the model training alows the training to go faster in terms of speed and also use much less memory
 
+The data splitting function now also shows the files that each split has, aswell as which classes have too little samples, that way while testing it i can know going forward which classes will need expanding
+
 
 ---- model training file references ----
 [choosing between resnet vs efficientnet](https://medium.com/@enrico.randellini/image-classification-resnet-vs-efficientnet-vs-efficientnet-v2-vs-compact-convolutional-c205838bbf49)
