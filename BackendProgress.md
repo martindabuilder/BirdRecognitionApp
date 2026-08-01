@@ -16,12 +16,16 @@ For the corresponding bird classes to be able to add photos/location ill be usin
 
 Deciding on the amount of used cores for preprocessing - [How the "Number of Workers" Parameter in PyTorch DataLoader Actually Works](https://www.geeksforgeeks.org/deep-learning/how-the-number-of-workers-parameter-in-pytorch-dataloader-actually-works/)
 
-res_type(soxr_hq is chosen) used with the librosa library used for the resampling [librosa.resample](https://librosa.org/doc/main/generated/librosa.resample.html). Its high quality ( second highest behind VHQ, and is also much faster for the resampling as we are handling 500+ classes)
+res_type(soxr_hq is chosen) used alongside with the librosa library used for the resampling: [librosa.resample](https://librosa.org/doc/main/generated/librosa.resample.html). Its high quality (second highest behind VHQ, and is also much faster for the resampling as we are handling 500+ classes).
 
-For the console progress when training, processing audios etc Tqdm will be used for the progress bars, as its accurate and lightweight: [Tqdm Python: A Guide With Practical Examples](https://www.datacamp.com/tutorial/tqdm-python)
+For the console progress when training, processing audios etc [Tqdm](https://www.datacamp.com/tutorial/tqdm-python) will be used for the progress bars, as its accurate and lightweight:
 
 To be able to match the .wav and .mp3 types of files glob will be used in the process classes function [Explainig Globs](https://gulpjs.com/docs/en/getting-started/explaining-globs/)
 
+---- data parser ----
+
 ---- model training file references ----
+[choosing between resnet vs efficientnet](https://medium.com/@enrico.randellini/image-classification-resnet-vs-efficientnet-vs-efficientnet-v2-vs-compact-convolutional-c205838bbf49)
+Ultimately going for EfficientNet as its a bit better and ultimately much lighter to use
 
 ---- backend file references ----
