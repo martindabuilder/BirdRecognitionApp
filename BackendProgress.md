@@ -22,13 +22,21 @@ For the console progress when training, processing audios etc [Tqdm](https://www
 
 To be able to match the .wav and .mp3 types of files glob will be used in the process classes function [Explainig Globs](https://gulpjs.com/docs/en/getting-started/explaining-globs/)
 
----- data parser ----
 
----- data set splitting ----
-creating a seperate data split file. The old project split the data in the same file as it was training and that took a lot of processing time even tho splitting the data into seperate sets is a one time thing when training a model. Haing it happen before the model training alows the training to go faster in terms of speed and also use much less memory
+---- data parser file ----
+The data parser idea is to pass only one class at a time while training the model. That way its lighter and easier to keep track of the seperate steps of the model creating process
+
+
+---- data set splitting file ----
+[The Importance of Splitting Datasets into Training, Validation, and Test Sets](https://ruveydakardelcetin.medium.com/the-importance-of-splitting-datasets-into-training-validation-and-test-sets-417caaeae91d)
+
+Creating a seperate data split file. The old project split the data in the same file as it was training and that took a lot of processing time even tho splitting the data into seperate sets is a one time thing when training a model. Having it happen before the model training alows the training to go faster in terms of speed and also use much less memory
+
 
 ---- model training file references ----
 [choosing between resnet vs efficientnet](https://medium.com/@enrico.randellini/image-classification-resnet-vs-efficientnet-vs-efficientnet-v2-vs-compact-convolutional-c205838bbf49)
 Ultimately going for EfficientNet as its a bit better and ultimately much lighter to use
 
+
 ---- backend file references ----
+Backend will be developed with reactjs

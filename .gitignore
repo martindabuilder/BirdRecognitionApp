@@ -3,3 +3,6 @@
 
 /backend/spectrograms_npy
 /backend/model
+/backend/test_set
+/backend/train_set
+/backend/val_set
