@@ -10,4 +10,22 @@ Work on the functions where the audio files will be cut up into 5s segments and 
 
 Day 3: The audio processing function is complete, and for now it seems to work good. It saves all the different npy files for their respective classes, making saving expanding the data set easy. Will see how it progresses once it gets to the model training if any adjustments to the audio extraction need to be done
 
-Day 4:
+Day 4: Im building up the structure for the project now, and generally the idea will be:
+
+create spectrograms (audio-processing.py)
+
+↓
+
+splitting the dataset prematurely in train/validation/test sets (dataset_split.py)
+
+↓
+
+model training (model_training.py, using functions from data_parser to make the workload a bit lighter on my laptop)
+
+↓
+
+testing the model for how good it works using the test_predict.py file before pushing it to the front end
+
+↓
+
+front end model integration (front end not yet started lol)

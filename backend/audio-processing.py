@@ -20,7 +20,7 @@ data_directory = os.path.join("..", "dataset")
 #folders conainting the npy output of the spectrograms
 spectrogram_npy_output = "spectrograms_npy"
 
-#creating (if missing) folders
+#creating the (potentially missing) folders
 os.makedirs(spectrogram_npy_output, exist_ok = True)
 
 #spectrogram specifications
@@ -59,9 +59,11 @@ def split_audio(file_path, sr = sample_rate, duration = audio_duration):
     for start in range(0, len(y), segment_length):
         end = start + segment_length
         seg = y[start:end]
+        
         if len(seg) < segment_length:
             seg = np.pad(seg, (0, segment_length - len(seg)))
         segments.append(seg)
+
     return segments, sr
 
 #turns the 5s audio segments into a normalized mel spectrogram
@@ -122,8 +124,8 @@ def process_class(bird_class):
         return bird_class, 0
 
     class_folder = os.path.join(data_directory, bird_class)
-    audio_files = glob.glob(os.path.join(class_folder, "*.wav")) + \
-                  glob.glob(os.path.join(class_folder, "*.mp3"))
+    audio_files = glob.glob(os.path.join(class_folder, "*.wav")) + \ 
+                glob.glob(os.path.join(class_folder, "*.mp3"))
 
     class_spectrograms = []
     for f in audio_files:

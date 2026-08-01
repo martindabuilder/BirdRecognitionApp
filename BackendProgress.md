@@ -24,6 +24,9 @@ To be able to match the .wav and .mp3 types of files glob will be used in the pr
 
 ---- data parser ----
 
+---- data set splitting ----
+creating a seperate data split file. The old project split the data in the same file as it was training and that took a lot of processing time even tho splitting the data into seperate sets is a one time thing when training a model. Haing it happen before the model training alows the training to go faster in terms of speed and also use much less memory
+
 ---- model training file references ----
 [choosing between resnet vs efficientnet](https://medium.com/@enrico.randellini/image-classification-resnet-vs-efficientnet-vs-efficientnet-v2-vs-compact-convolutional-c205838bbf49)
 Ultimately going for EfficientNet as its a bit better and ultimately much lighter to use

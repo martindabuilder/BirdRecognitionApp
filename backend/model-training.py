@@ -20,15 +20,3 @@ os.makedirs(model_directory, exist_ok = True)
 #sets the precision to be float16 globally
 #done to reduce memory usage
 tf.keras.mixed_precision.set_global_policy("mixed_float16")
-
-
-#loading the created spectrograms
-
-
-#label encoding
-
-
-#train / validation / test split
-
-
-#saving the model and testings its accuracy

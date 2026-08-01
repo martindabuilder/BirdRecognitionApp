@@ -2,3 +2,4 @@
 /dataset/
 
 /backend/spectrograms_npy
+/backend/model
