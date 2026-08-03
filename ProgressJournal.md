@@ -29,3 +29,5 @@ testing the model for how good it works using the test_predict.py file before pu
 ↓
 
 front end model integration (front end not yet started lol)
+
+Day 5: Working on the model training portion of the code

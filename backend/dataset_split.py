@@ -1,3 +1,6 @@
+#Seperate file for splitting the dataset into seperate train, validation and test sets
+#Done seperately so that the training and go smoother and faster
+
 import os
 import glob
 import numpy as np
