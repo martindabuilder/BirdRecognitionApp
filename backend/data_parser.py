@@ -27,12 +27,10 @@ def spectrogram_generator(data_directory, label_encoder):
         class_name = os.path.splitext(fname)[0]
         label = label_encoder.transform([class_name])[0]
 
-        arr = np.load(path)
+        arr = np.load(path, mmap_mode = "r")
 
         for spec in arr:
             yield spec, label
-
-        del arr
 
 #transforms the given spectrogram from grayscale to RGB as EfficientNet needs a 3 channel input
 def transform_to_rgb(x, label):
@@ -46,20 +44,49 @@ def transform_to_rgb(x, label):
     return x, label
 
 
-def dataset_build(data_directory, label_encoder, batch_size = 32, training = False, shuffle_buffer = 2000, prefetch_batches = 1):
-    output_signiture = (tf.TensorSpec(shape = (mel_lines, spectrogram_width), dtype = tf.float16), tf.TensorSpec(shape = (), dtype = tf.int32))
+def dataset_build(
+    data_directory,
+    label_encoder,
+    batch_size=32,
+    training=False,
+    shuffle_buffer=2000
+):
+
+    output_signature = (
+        tf.TensorSpec(
+            shape=(mel_lines, spectrogram_width),
+            dtype=tf.float16
+        ),
+        tf.TensorSpec(
+            shape=(),
+            dtype=tf.int32
+        )
+    )
 
     dataset = tf.data.Dataset.from_generator(
-        lambda: spectrogram_generator(data_directory, label_encoder),
-        output_signature = output_signiture
+        lambda: spectrogram_generator(
+            data_directory,
+            label_encoder
+        ),
+        output_signature=output_signature
     )
 
     if training:
         dataset = dataset.shuffle(shuffle_buffer)
 
-    dataset = dataset.map(transform_to_rgb, num_parallel_calls = tf.data.AUTOTUNE)
-    dataset = dataset.batch(batch_size)
-    dataset = dataset.prefetch(prefetch_batches)
+    dataset = dataset.map(
+        transform_to_rgb,
+        num_parallel_calls=tf.data.AUTOTUNE
+    )
+
+    dataset = dataset.batch(
+        batch_size,
+        drop_remainder=True
+    )
+
+    dataset = dataset.prefetch(
+        tf.data.AUTOTUNE
+    )
 
     return dataset
 

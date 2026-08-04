@@ -38,7 +38,7 @@ The data splitting function now also shows the files that each split has, aswell
 ---- model training file references ----
 [choosing between resnet vs efficientnet](https://medium.com/@enrico.randellini/image-classification-resnet-vs-efficientnet-vs-efficientnet-v2-vs-compact-convolutional-c205838bbf49)
 Ultimately going for EfficientNet as its a bit better and ultimately much lighter to use
+[How to Convert a TensorFlow Model to PyTorch?](https://www.geeksforgeeks.org/deep-learning/how-to-convert-a-tensorflow-model-to-pytorch/)
 
 
 ---- backend file references ----
-Backend will be developed with reactjs
