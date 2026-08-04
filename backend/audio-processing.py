@@ -124,7 +124,7 @@ def process_class(bird_class):
         return bird_class, 0
 
     class_folder = os.path.join(data_directory, bird_class)
-    audio_files = glob.glob(os.path.join(class_folder, "*.wav")) + \ 
+    audio_files = glob.glob(os.path.join(class_folder, "*.wav")) + \
                 glob.glob(os.path.join(class_folder, "*.mp3"))
 
     class_spectrograms = []
