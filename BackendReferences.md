@@ -22,15 +22,16 @@ For the console progress when training, processing audios etc [Tqdm](https://www
 To be able to match the .wav and .mp3 types of files, [Globs](https://gulpjs.com/docs/en/getting-started/explaining-globs/) will be used in the audio process classes function
 
 
----- data parser file ----
-The data parser idea is to pass only one class at a time while training the model. That way its lighter and easier to keep track of the seperate steps of the model creating process
-
-
 ---- data set splitting file ----
 [The Importance of Splitting Datasets into Training, Validation, and Test Sets](https://ruveydakardelcetin.medium.com/the-importance-of-splitting-datasets-into-training-validation-and-test-sets-417caaeae91d)
 
 Creating a seperate data split file. The old project split the data in the exact same file as it was training (the splitting itself took place right before the training) and that took a lot of processing time even tho splitting the data into seperate sets is a one time thing when training a model. Having it happen before the model training allows the training to go faster in terms of speed and also use much less memory.
 The data splitting function now also shows the files that each split has, aswell as which classes have too little samples, that way while testing it i can know going forward which classes will need expanding.
+
+---- data resizing file ----
+
+---- data parser file ----
+The data parser idea is to pass only one class at a time while training the model. That way its lighter and easier to keep track of the seperate steps of the model creating process
 
 
 ---- model training file references ----
