@@ -30,3 +30,5 @@ Day 6: Yesterday i did the model training and the data parsers using tensorflow,
 So a big problem was tensorflow not having GPU support, and due to that it was incredly slow when parsing the classes one by one, taking up to 15+ minutes on an epoch (on a reduced data set for testing purposes, ysing about ~30 classes to test rather than all 260).
 And a deicison was made to redo those 2 entire files and make the model training with PyTorch. Many sources and small tests show that it recognizes my GPU and manages to use it, so that seems like the best option going forward rather than trying to run different setups just to get tensorflow to work and loose time.
 In testing so far atleast it seems that the dataset_split and audio_processing files work good and do their job reliably and fast regardless of the dataset size (more data means a bit more time obviously but theyre fast enough for a single system project).
+
+Day 7:
