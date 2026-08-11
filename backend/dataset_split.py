@@ -75,14 +75,19 @@ def main():
         np.save(train_output, train_set)
         if len(val_set) > 0:
             np.save(val_output, val_set)
+
         if len(test_set) > 0:
             np.save(test_output, test_set)
 
         summary.append((class_name, n, len(train_set), len(val_set), len(test_set)))
 
+    #full listing of every class and its total sample count, sorted lowest first
+    print(f"\nAll classes ({len(summary)}) and their sample counts:")
+    for class_name, n, _, _, _ in sorted(summary, key = lambda s: s[1]):
+        print(f"{class_name}: {n} samples")
 
     if too_few_samples_classes_list:
-        print(f"Classes with too few samples: {too_few_samples_classes}")
+        print(f"\nClasses with too few samples: {too_few_samples_classes}")
 
         for class_name, n in too_few_samples_classes_list:
             print(f"{class_name}: {n} samples")

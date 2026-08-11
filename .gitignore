@@ -11,7 +11,8 @@
 /backend/val_set_resized
 /backend/train_set_resized
 /backend/test_set_resized
-backend/test_predict.py
+/backend/test_predict.py
+/backend/add_samples.py
 
 /test_audios
 
