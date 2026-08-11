@@ -35,3 +35,5 @@ Day 7: Reworking the data parser, aswell as adding a new file: resize_dataset. I
 Starting to build up a proper model training file now too, and from there on its going to get fine tuned and tested/improved further.
 
 Day 7 + 8 combined since i did work on the 7th and then on the 8th day but the model seems to work, still have yet to test it for how accurate it guesses birds but for now it compiles and also runs normally so thats definitely a good start for now. The model also has real time evaluation during its training, and the training itself is in 2 phases: first phsae with a frozen backbone and then 2nd phase unfreezes it to fine tune it.
+
+Also going to be working on a file that will add more samples to my classes. The plan is to use it with the Xeno Canto API to download more classes of the same bird directly from there. WIll try to add more functionality to it like getting only the higher rated audios etc.

@@ -42,5 +42,6 @@ Ultimately going for EfficientNet as its a bit better and ultimately much lighte
 
 [How to use GPU acceleration in PyTorch?](https://www.geeksforgeeks.org/deep-learning/how-to-use-gpu-acceleration-in-pytorch/)
 
+[How I changed CPU to GPU support for my ML Model (Easy Guide)](https://medium.com/@vsquarevaibhavverma/how-i-enabled-gpu-support-for-my-ml-model-easy-guide-ready-f5f455358d6d)
 
 ---- backend file references ----
