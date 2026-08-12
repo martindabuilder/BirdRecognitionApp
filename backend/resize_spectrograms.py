@@ -47,8 +47,8 @@ def main():
         for path in tqdm(class_files, desc = source_directory):
             total_samples += resize_class_file(path, output_directory)
 
-        print("\nTraining splits successfully resized")
-        print("\nEach split is stored in the corresponding folders")
+    print("\nTraining splits successfully resized")
+    print("\nEach split is stored in the corresponding folders")
 
 if __name__ == "__main__":
     main()

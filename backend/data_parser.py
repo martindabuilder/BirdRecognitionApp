@@ -8,7 +8,6 @@ from sklearn.preprocessing import LabelEncoder
 # same values used when creating spectrograms
 mel_lines = 150
 spectrogram_width = 128
-TARGET_SIZE = (160, 160) #target resize for the efficientnet
 
 IMAGENET_MEAN = torch.tensor([0.485, 0.456, 0.406]).view(3, 1, 1)
 IMAGENET_STD = torch.tensor([0.229, 0.224, 0.225]).view(3, 1, 1)
@@ -40,16 +39,14 @@ class SpectrogramDataset(Dataset):
 
     def __getitem__(self, index):
         path, idx, label = self.samples[index]
-        arr = np.load(path, mmap_mode = "r")
-        spec = arr[idx]
+        arr = np.load(path, mmap_mode="r")
+        spec = torch.from_numpy(np.array(arr[idx], dtype=np.float32))
 
-        spec = torch.tensor(np.array(spec), dtype = torch.float32)
         spec = spec.unsqueeze(0)
         spec = spec.repeat(3, 1, 1)
-
         spec = (spec - IMAGENET_MEAN) / IMAGENET_STD
-        
-        return(spec, torch.tensor(label, dtype = torch.long))
+
+        return (spec,torch.tensor(label, dtype=torch.long))
 
 def build_label_encoder(data_directory):
     class_names = sorted(

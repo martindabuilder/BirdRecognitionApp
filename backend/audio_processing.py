@@ -28,8 +28,9 @@ mel_lines = 150 #spectrogram height, measured in n_mels
 spectrogram_width = 128 #spectrogram width
 sample_rate = 16000 #set sample rate for each spectrogram
 audio_duration = 5.0 #seconds per segment
-minimal_active_threshold = 0.5 #the amount of "active" volume in the file
-max_darkness = 0.10 #intensity below 0.10 means the segment gets skipped, it's not active enough (i.e its too quiet/empty)
+
+minimal_active_threshold = 0.25 #the amount of "active" volume in the file
+max_darkness = 0.03 #intensity below 0.10 means the segment gets skipped, it's not active enough (i.e its too quiet/empty)
 
 #storage dtype for the saved spectrograms
 #a float16 format is chosen as it is a healthy middleground between uint8 and float36
@@ -48,35 +49,33 @@ hop_length = segment_samples // spectrogram_width
 
 #splits the audio files into numerous 5s segments for better structured learning 
 #and transforming into a mel spectrogram
-def split_audio(file_path, sr = sample_rate, duration = audio_duration):
-    y, sr = librosa.load(file_path, sr = sr, res_type = "soxr_hq")
+def split_audio(file_path, sr=sample_rate, duration=audio_duration):
+    y, sr = librosa.load(file_path,sr=sr,res_type="soxr_hq")
+
     y, _ = librosa.effects.trim(y)
     segment_length = int(duration * sr)
+    hop_samples = int(2.5 * sr)
     segments = []
-
-    #this segment of the function is used in case a segment is too short
-    #the empty time is filled up with 0s, until the segment reaches a 5s length
-    for start in range(0, len(y), segment_length):
+    for start in range(0, len(y), hop_samples):
         end = start + segment_length
         seg = y[start:end]
-        
         if len(seg) < segment_length:
-            seg = np.pad(seg, (0, segment_length - len(seg)))
+            seg = np.pad(seg,(0, segment_length - len(seg)))
         segments.append(seg)
 
     return segments, sr
 
 #turns the 5s audio segments into a normalized mel spectrogram
 def audio_to_spectrogram(y, sr):
-    spectrogram = librosa.feature.melspectrogram( y = y, sr = sr, n_mels = mel_lines, hop_length = hop_length)
-    spectrogram_db = librosa.power_to_db(spectrogram, ref = np.max)
-    spectrogram_norm = (spectrogram_db - spectrogram_db.min()) / (spectrogram_db.max() - spectrogram_db.min() + 1e-8)
+    spectrogram = librosa.feature.melspectrogram(y=y,sr=sr,n_mels=mel_lines, hop_length=hop_length)
+    spectrogram_db = librosa.power_to_db(spectrogram,ref=np.max,top_db=80)
+    spectrogram_norm = (spectrogram_db + 80.0) / 80.0
+    spectrogram_norm = np.clip( spectrogram_norm, 0.0, 1.0)
 
-    #safety net if the hop_length is off by one or two frames
     if spectrogram_norm.shape[1] != spectrogram_width:
-        spectrogram_norm = cv2.resize(spectrogram_norm, (spectrogram_width, mel_lines))
+        spectrogram_norm = cv2.resize(spectrogram_norm, (spectrogram_width, mel_lines), interpolation=cv2.INTER_LINEAR)
 
-    return spectrogram_norm
+    return spectrogram_norm.astype(np.float32)
 
 #checks if the segment is active enough
 #if it isnt above the threshold it gets skipped
@@ -94,22 +93,21 @@ def spectrogram_too_dark(spectrogram):
 def process_file(file_path):
     try:
         segments, sr = split_audio(file_path)
+        
     except Exception as e:
         print(f"Failed to load {file_path}: {e}")
         return []
 
     results = []
+
     for seg in segments:
         spec = audio_to_spectrogram(seg, sr)
-
-        if not is_seg_active(spec) or spectrogram_too_dark(spec):
-            continue
 
         if STORAGE_DTYPE == "uint8":
             spec = (spec * 255).astype(np.uint8)
         elif STORAGE_DTYPE == "float16":
             spec = spec.astype(np.float16)
-        else: 
+        else:
             spec = spec.astype(np.float32)
 
         results.append(spec)

@@ -28,7 +28,9 @@ To be able to match the .wav and .mp3 types of files, [Globs](https://gulpjs.com
 Creating a seperate data split file. The old project split the data in the exact same file as it was training (the splitting itself took place right before the training) and that took a lot of processing time even tho splitting the data into seperate sets is a one time thing when training a model. Having it happen before the model training allows the training to go faster in terms of speed and also use much less memory.
 The data splitting function now also shows the files that each split has, aswell as which classes have too little samples, that way while testing it i can know going forward which classes will need expanding.
 
+
 ---- data resizing file ----
+
 
 ---- data parser file ----
 The data parser idea is to pass only one class at a time while training the model. That way its lighter and easier to keep track of the seperate steps of the model creating process
@@ -43,5 +45,10 @@ Ultimately going for EfficientNet as its a bit better and ultimately much lighte
 [How to use GPU acceleration in PyTorch?](https://www.geeksforgeeks.org/deep-learning/how-to-use-gpu-acceleration-in-pytorch/)
 
 [How I changed CPU to GPU support for my ML Model (Easy Guide)](https://medium.com/@vsquarevaibhavverma/how-i-enabled-gpu-support-for-my-ml-model-easy-guide-ready-f5f455358d6d)
+
+
+---- add samples file ----
+A dedicated file who's purpose is to extract more classes/more samples for a chosen class. It uses the Xeno Canto v3 API and a dedicated custom API key.
+It has a limit of downloads per request, max of 100 recordings and it only downloads recordings with a A or B rating.
 
 ---- backend file references ----

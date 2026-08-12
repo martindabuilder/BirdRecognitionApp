@@ -6,30 +6,22 @@ import glob
 import numpy as np
 
 dataset = "spectrograms_npy"
-
 test_set_dir = "test_set"
 val_set_dir = "val_set"
 train_set_dir = "train_set"
+os.makedirs(test_set_dir, val_set_dir, train_set_dir, exist_ok = True)
 
-os.makedirs(test_set_dir, exist_ok = True)
-os.makedirs(val_set_dir, exist_ok = True)
-os.makedirs(train_set_dir, exist_ok = True)
-
-TEST_SIZE = 0.15
-VAL_SIZE = 0.15
-TRAIN_SIZE = 0.7
-
-MINIMUM_SAMPLES_PER_CLASS = 50
 RANDOM_SEED = 42
 
 #shuffles and splits a given single class into seperate train, validation and test sets
 def split_each_class(arr, rng):
     n = len(arr)
+
     indices = rng.permutation(n)
     arr = arr[indices]
 
-    train_end = int(n * TRAIN_SIZE)
-    val_end = train_end + int(n * VAL_SIZE)
+    train_end = int(n * 0.70)
+    val_end = int(n * 0.85)
 
     train_set = arr[:train_end]
     val_set = arr[train_end:val_end]
@@ -44,8 +36,6 @@ def main():
     class_files = sorted(glob.glob(os.path.join(dataset, "*.npy")))
     class_files = [f for f in class_files if os.path.basename(f) != "label_encoder_classes.npy"]
 
-    too_few_samples_classes = 0
-    too_few_samples_classes_list = []
     summary = []
 
     for path in class_files:
@@ -56,19 +46,6 @@ def main():
         train_output = os.path.join(train_set_dir, f"{class_name}.npy")
         val_output = os.path.join(val_set_dir, f"{class_name}.npy")
         test_output = os.path.join(test_set_dir, f"{class_name}.npy")
-
-        #if they exist ^, they get skipped
-        if os.path.exists(train_output) and os.path.exists(val_output) and os.path.exists(test_output):
-            continue
-
-        #if the class has too few samples, it gets skipped
-        #and added directly to the train set
-        if n < MINIMUM_SAMPLES_PER_CLASS:
-            np.save(train_output, arr)
-            too_few_samples_classes += 1
-            too_few_samples_classes_list.append((class_name, n))
-            summary.append((class_name, n, n, 0, 0))
-            continue
 
         train_set, val_set, test_set = split_each_class(arr, rng)
 
@@ -85,12 +62,6 @@ def main():
     print(f"\nAll classes ({len(summary)}) and their sample counts:")
     for class_name, n, _, _, _ in sorted(summary, key = lambda s: s[1]):
         print(f"{class_name}: {n} samples")
-
-    if too_few_samples_classes_list:
-        print(f"\nClasses with too few samples: {too_few_samples_classes}")
-
-        for class_name, n in too_few_samples_classes_list:
-            print(f"{class_name}: {n} samples")
 
     #final information after completing the splitting
     total_train_samples = sum([s[2] for s in summary])
