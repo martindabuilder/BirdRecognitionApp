@@ -5,7 +5,6 @@ import torchvision.models as models
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 import numpy as np
-
 from data_parser import SpectrogramDataset, build_label_encoder
 
 def train_model(model,train_loader,val_loader,criterion,optimizer,scheduler,device,epochs,patience,model_directory,scaler):
@@ -17,20 +16,11 @@ def train_model(model,train_loader,val_loader,criterion,optimizer,scheduler,devi
         running_loss = 0.0
         correct = 0
         total = 0
-        progress = tqdm(
-            train_loader,
-            desc=f"Epoch {epoch + 1}/{epochs}"
-        )
+        progress = tqdm(train_loader,desc=f"Epoch {epoch + 1}/{epochs}")
 
         for images, labels in progress:
-            images = images.to(
-                device,
-                non_blocking=True
-            )
-            labels = labels.to(
-                device,
-                non_blocking=True
-            )
+            images = images.to(device,non_blocking=True)
+            labels = labels.to(device,non_blocking=True)
             optimizer.zero_grad(set_to_none=True)
             with torch.autocast(device_type="cuda",enabled=(device.type == "cuda")):
                 outputs = model(images)
@@ -139,7 +129,7 @@ def main():
     if device.type == "cuda":print("GPU:",torch.cuda.get_device_name(0))
 
     BATCH_SIZE = 64
-    EPOCHS = 30
+    EPOCHS = 10
     EPOCH_PATIENCE = 7
     LEARNING_RATE = 1e-4
     WEIGHT_DECAY = 1e-4
@@ -193,13 +183,25 @@ def main():
         nn.Linear(256,num_classes)
     )
 
-    for param in model.parameters():
+    for param in model.features.parameters():
+        param.requires_grad = False
+
+    feature_blocks = list(model.features.children())
+
+    fine_tune_start = int(len(feature_blocks) * 0.6)
+
+    for i, block in enumerate(feature_blocks):
+        if i >= fine_tune_start:
+            for param in block.parameters():
+                param.requires_grad = True
+
+    for param in model.classifier.parameters():
         param.requires_grad = True
 
     model = model.to(device)
 
     optimizer = torch.optim.AdamW(
-        model.parameters(),
+        filter(lambda p: p.requires_grad, model.parameters()),
         lr=LEARNING_RATE,
         weight_decay=WEIGHT_DECAY
     )
