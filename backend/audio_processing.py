@@ -48,6 +48,21 @@ hop_length = segment_samples // spectrogram_width
 
 # ----FUNCTIONS ----
 
+#checks if the segment is active enough
+#if it isnt above the threshold it gets skipped
+def is_seg_active(spectrogram, threshold = 0.05, min_ratio = minimal_active_threshold):
+    active_columns = np.any(spectrogram > threshold, axis = 0)
+    ratio = np.sum(active_columns) / len(active_columns)
+
+    return ratio >= min_ratio
+
+
+#checks for the overall darkness of the spectrogram
+#if its too dark it gets skipped
+def spectrogram_too_dark(spectrogram):
+    return spectrogram.mean() < max_darkness
+
+
 #splits the audio files into numerous 5s segments for better structured learning 
 #and transforming into a mel spectrogram
 def split_audio(file_path, sr=sample_rate, duration=audio_duration):
@@ -80,21 +95,6 @@ def audio_to_spectrogram(y, sr):
     return spectrogram_norm.astype(np.float32)
 
 
-#checks if the segment is active enough
-#if it isnt above the threshold it gets skipped
-def is_seg_active(spectrogram, threshold = 0.05, min_ratio = minimal_active_threshold):
-    active_columns = np.any(spectrogram > threshold, axis = 0)
-    ratio = np.sum(active_columns) / len(active_columns)
-
-    return ratio >= min_ratio
-
-
-#checks for the overall darkness of the spectrogram
-#if its too dark it gets skipped
-def spectrogram_too_dark(spectrogram):
-    return spectrogram.mean() < max_darkness
-
-
 def process_file(file_path):
     try:
         segments, sr = split_audio(file_path)
@@ -103,6 +103,7 @@ def process_file(file_path):
         print(f"Failed to load {file_path}: {e}")
         return []
 
+    file_id = os.path.splitext(os.path.basename(file_path))[0]
     results = []
 
     for seg in segments:
@@ -118,13 +119,14 @@ def process_file(file_path):
         else:
             spec = spec.astype(np.float32)
 
-        results.append(spec)
+        results.append((spec, file_id))
 
     return results
 
 
 def process_class(bird_class):
     out_path = os.path.join(spectrogram_npy_output, f"{bird_class}.npy")
+    sources_path = out_path.replace(".npy", "_sources.npy")
 
     #checks if a class has already been processed, if it has it gets skipped
     if os.path.exists(out_path):
@@ -141,8 +143,11 @@ def process_class(bird_class):
     if not class_spectrograms:
         return bird_class, 0
 
-    arr = np.stack(class_spectrograms)
+    specs, file_ids = zip(*class_spectrograms)
+    arr = np.stack(specs)
     np.save(out_path, arr)
+    np.save(sources_path, np.array(file_ids))
+
     return bird_class, len(class_spectrograms)
 
 

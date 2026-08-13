@@ -13,37 +13,52 @@ os.makedirs(test_set_dir, exist_ok = True)
 os.makedirs(val_set_dir, exist_ok = True)
 os.makedirs(train_set_dir, exist_ok = True)
 
+def split_each_class(arr, file_ids):
+    unique_files = sorted(set(file_ids))
+    n_files = len(unique_files)
 
-#shuffles and splits a given single class into seperate train, validation and test sets
-def split_each_class(arr):
-    n = len(arr)
+    train_end = int(n_files * 0.70)
+    val_end = int(n_files * 0.85)
 
-    train_end = int(n * 0.70)
-    val_end = int(n * 0.85)
+    train_files = set(unique_files[:train_end])
+    val_files = set(unique_files[train_end:val_end])
+    test_files = set(unique_files[val_end:])
 
-    train_set = arr[:train_end]
-    val_set = arr[train_end:val_end]
-    test_set = arr[val_end:]
+    file_ids = np.array(file_ids)
+    train_mask = np.isin(file_ids, list(train_files))
+    val_mask = np.isin(file_ids, list(val_files))
+    test_mask = np.isin(file_ids, list(test_files))
+
+    train_set = arr[train_mask]
+    val_set = arr[val_mask]
+    test_set = arr[test_mask]
 
     return train_set, val_set, test_set
 
 #def main that actually creates the splits and saves them
 def main():
     class_files = sorted(glob.glob(os.path.join(dataset, "*.npy")))
-    class_files = [f for f in class_files if os.path.basename(f) != "label_encoder_classes.npy"]
+    class_files = [
+        f for f in class_files
+        if os.path.basename(f) != "label_encoder_classes.npy"
+        and not f.endswith("_sources.npy")
+    ]
 
     summary = []
 
     for path in class_files:
         class_name = os.path.splitext(os.path.basename(path))[0]
+        sources_path = path.replace(".npy", "_sources.npy")
+
         arr = np.load(path)
+        file_ids = np.load(sources_path, allow_pickle=True)
         n = len(arr)
 
         train_output = os.path.join(train_set_dir, f"{class_name}.npy")
         val_output = os.path.join(val_set_dir, f"{class_name}.npy")
         test_output = os.path.join(test_set_dir, f"{class_name}.npy")
 
-        train_set, val_set, test_set = split_each_class(arr)
+        train_set, val_set, test_set = split_each_class(arr, file_ids)
 
         np.save(train_output, train_set)
         if len(val_set) > 0:

@@ -50,4 +50,4 @@ Day 10: After quite a bit of changing around the model learns better and actuall
 In terms of balancing out the dataset im aiming for each class to have atleast close to 1k samples, will take up quite a bit of space on the disk but thats inevitable when trying to build a model from the ground up. 
 Im slowly starting to design ideas for the front end which ill be starting work on pretty soon, hopefully i get the model fine tuned and working by the next few days so i can start chipping away at the front end.
 Added back all the checks for the spectrograms being too short/too dark in the audio processing functions as i took them out to test a different approach to the model, also adjusted the overlap to be 1s between consecutive segments instead of 2.5.
-Removed the random shuffling of the dataset when splitting it into seperate train/test/validation sets.
+Removed the random shuffling of the dataset when splitting it into seperate train/test/validation sets. Also added to the audio processing/splitting tracking the file IDs so that they get properly seperated into proper splits. That way a single .npy file doesnt get seperated into 2 seperate splits.
