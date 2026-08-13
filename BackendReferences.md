@@ -1,8 +1,8 @@
-File containing all the references and progress on the creation of the backend portion of the project.
+File containing all the references on the creation and of the backend portion of the project. Will contain detailed explanations on what each file does and how it does it, so i can more easily document it for the actual documentation.
 
 For the main backend code and architecture im using [Python](https://www.python.org/)
 
----- audio-processing file references ----
+---- audio-processing file ----
 A lot of the initial audio processing code is pretty similar (if not identical) to the previous version of the project, so that eliviates quite a bit of work at the starting stages atleast, most of the tryharding will likely come with the model training since itll be with more species this time
 
 The original 2 datasets used fior the initial 260 classes when creating the project are:
@@ -50,5 +50,6 @@ Ultimately going for EfficientNet as its a bit better and ultimately much lighte
 ---- add samples file ----
 A dedicated file who's purpose is to extract more classes/more samples for a chosen class. It uses the Xeno Canto v3 API and a dedicated custom API key.
 It has a limit of downloads per request, max of 100 recordings and it only downloads recordings with a A or B rating.
+
 
 ---- backend file references ----

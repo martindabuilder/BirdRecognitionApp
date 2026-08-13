@@ -15,6 +15,3 @@
 /backend/add_samples.py
 
 /test_audios
-
-#ignoring design ideas folder for the frontend
-/frontend/designs

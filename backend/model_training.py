@@ -7,6 +7,19 @@ from tqdm import tqdm
 import numpy as np
 from data_parser import SpectrogramDataset, build_label_encoder
 
+train_set_dir = "train_set_resized"
+val_set_dir = "val_set_resized"
+test_set_dir = "test_set_resized"
+
+BATCH_SIZE = 64
+EPOCHS = 20
+EPOCH_PATIENCE = 7
+LEARNING_RATE = 1e-4
+WEIGHT_DECAY = 1e-4
+
+model_directory = "model"
+os.makedirs(model_directory, exist_ok=True)
+
 def train_model(model,train_loader,val_loader,criterion,optimizer,scheduler,device,epochs,patience,model_directory,scaler):
     best_val_accuracy = 0.0
     epochs_without_improvement = 0
@@ -113,12 +126,6 @@ def evaluate_model(model,test_loader,criterion,device):
     return average_loss, accuracy
 
 def main():
-    train_set_dir = "train_set_resized"
-    val_set_dir = "val_set_resized"
-    test_set_dir = "test_set_resized"
-
-    model_directory = "model"
-    os.makedirs(model_directory, exist_ok=True)
     device = torch.device(
         "cuda"
         if torch.cuda.is_available()
@@ -127,12 +134,6 @@ def main():
 
     print("Using device:",device)
     if device.type == "cuda":print("GPU:",torch.cuda.get_device_name(0))
-
-    BATCH_SIZE = 64
-    EPOCHS = 10
-    EPOCH_PATIENCE = 7
-    LEARNING_RATE = 1e-4
-    WEIGHT_DECAY = 1e-4
 
     label_encoder = build_label_encoder(train_set_dir)
     num_classes = len(label_encoder.classes_)

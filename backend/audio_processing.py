@@ -30,7 +30,7 @@ sample_rate = 16000 #set sample rate for each spectrogram
 audio_duration = 5.0 #seconds per segment
 
 minimal_active_threshold = 0.25 #the amount of "active" volume in the file
-max_darkness = 0.03 #intensity below 0.10 means the segment gets skipped, it's not active enough (i.e its too quiet/empty)
+max_darkness = 0.05 #intensity below .05 means the segment gets skipped, it's not active enough (i.e its too quiet/empty)
 
 #storage dtype for the saved spectrograms
 #a float16 format is chosen as it is a healthy middleground between uint8 and float36
@@ -45,6 +45,7 @@ NUM_WORKERS = min(4, cpu_count())
 segment_samples = int(audio_duration * sample_rate)
 hop_length = segment_samples // spectrogram_width
 
+
 # ----FUNCTIONS ----
 
 #splits the audio files into numerous 5s segments for better structured learning 
@@ -54,7 +55,7 @@ def split_audio(file_path, sr=sample_rate, duration=audio_duration):
 
     y, _ = librosa.effects.trim(y)
     segment_length = int(duration * sr)
-    hop_samples = int(2.5 * sr)
+    hop_samples = int(4.0 * sr) #allows a 1 second overlay between 2 consecutive segments
     segments = []
     for start in range(0, len(y), hop_samples):
         end = start + segment_length
@@ -64,6 +65,7 @@ def split_audio(file_path, sr=sample_rate, duration=audio_duration):
         segments.append(seg)
 
     return segments, sr
+
 
 #turns the 5s audio segments into a normalized mel spectrogram
 def audio_to_spectrogram(y, sr):
@@ -77,6 +79,7 @@ def audio_to_spectrogram(y, sr):
 
     return spectrogram_norm.astype(np.float32)
 
+
 #checks if the segment is active enough
 #if it isnt above the threshold it gets skipped
 def is_seg_active(spectrogram, threshold = 0.05, min_ratio = minimal_active_threshold):
@@ -85,10 +88,12 @@ def is_seg_active(spectrogram, threshold = 0.05, min_ratio = minimal_active_thre
 
     return ratio >= min_ratio
 
+
 #checks for the overall darkness of the spectrogram
 #if its too dark it gets skipped
 def spectrogram_too_dark(spectrogram):
     return spectrogram.mean() < max_darkness
+
 
 def process_file(file_path):
     try:
@@ -103,6 +108,9 @@ def process_file(file_path):
     for seg in segments:
         spec = audio_to_spectrogram(seg, sr)
 
+        if not is_seg_active(spec) or spectrogram_too_dark(spec):
+            continue
+
         if STORAGE_DTYPE == "uint8":
             spec = (spec * 255).astype(np.uint8)
         elif STORAGE_DTYPE == "float16":
@@ -113,6 +121,7 @@ def process_file(file_path):
         results.append(spec)
 
     return results
+
 
 def process_class(bird_class):
     out_path = os.path.join(spectrogram_npy_output, f"{bird_class}.npy")
@@ -136,13 +145,14 @@ def process_class(bird_class):
     np.save(out_path, arr)
     return bird_class, len(class_spectrograms)
 
+
 def main():
     bird_classes = sorted(
         d for d in os.listdir(data_directory)
         if os.path.isdir(os.path.join(data_directory, d))
     )
 
-    print(f"processing {len(bird_classes)}")
+    print(f"Processing {len(bird_classes)}")
 
     with Pool(NUM_WORKERS) as pool:
         results = list(tqdm(
@@ -156,6 +166,7 @@ def main():
     label_encoder = LabelEncoder()
     label_encoder.fit(bird_classes)
     np.save(os.path.join(spectrogram_npy_output, "label_encoder_classes.npy"), label_encoder.classes_)
+
 
 if __name__ == "__main__":
     main()
