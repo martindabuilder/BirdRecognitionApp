@@ -1,3 +1,5 @@
+#File containing the main model training logic
+
 import os
 import torch
 import torch.nn as nn
@@ -12,10 +14,10 @@ val_set_dir = "val_set_resized"
 test_set_dir = "test_set_resized"
 
 BATCH_SIZE = 64
-EPOCHS = 20
+EPOCHS = 30
 EPOCH_PATIENCE = 7
 LEARNING_RATE = 1e-4
-WEIGHT_DECAY = 1e-4
+WEIGHT_DECAY = 5e-4 
 
 model_directory = "model"
 os.makedirs(model_directory, exist_ok=True)
@@ -172,15 +174,15 @@ def main():
         pin_memory=True
     )
 
-    criterion = nn.CrossEntropyLoss()
+    criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
 
     model = models.efficientnet_b0(weights="DEFAULT")
     in_features = (model.classifier[1].in_features)
     model.classifier = nn.Sequential(
-        nn.Dropout(0.3),
+        nn.Dropout(0.4),
         nn.Linear(in_features,256),
         nn.ReLU(),
-        nn.Dropout(0.3),
+        nn.Dropout(0.4),
         nn.Linear(256,num_classes)
     )
 
@@ -188,8 +190,7 @@ def main():
         param.requires_grad = False
 
     feature_blocks = list(model.features.children())
-
-    fine_tune_start = int(len(feature_blocks) * 0.6)
+    fine_tune_start = int(len(feature_blocks) * 0.7)
 
     for i, block in enumerate(feature_blocks):
         if i >= fine_tune_start:
