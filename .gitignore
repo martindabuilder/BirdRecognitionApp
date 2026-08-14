@@ -13,5 +13,6 @@
 /backend/test_set_resized
 /backend/test_predict.py
 /backend/add_samples.py
+/backend/birdnet_teacher
 
 /test_audios

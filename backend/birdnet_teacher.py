@@ -137,12 +137,8 @@ def print_top_predictions(predictions, expected_name=None, n=10):
 def main():
     random.seed(RANDOM_SEED)
     np.random.seed(RANDOM_SEED)
-
-    print("Loading BirdNET 2.4...")
-
     birdnet_model = load( "acoustic", "2.4", "tf")
-
-    print("BirdNET loaded.")
+    print("BirdNET 2.4 loaded.")
 
     taxonomy_df = pd.read_csv(TAXONOMY_PATH)
     code_to_sci = build_code_to_scientific(taxonomy_df)
@@ -183,23 +179,15 @@ def main():
             teacher_matrix[i] = 1.0 / num_classes
             continue
 
-        sample_files = random.sample(audio_files min(FILES_PER_CLASS, len(audio_files)))
-
+        sample_files = random.sample(audio_files, min(FILES_PER_CLASS, len(audio_files)))
         true_scientific_name = our_scientific_names[i]
 
         print( f"\nClass {i + 1}/{num_classes}: {code} -> {true_scientific_name}")
-
-        accumulated = np.zeros(
-            num_classes,
-            dtype=np.float32
-        )
-
+        accumulated = np.zeros(num_classes,dtype=np.float32)
         successful = 0
 
         for file_path in sample_files:
             total_files += 1
-
-            print(f"  Processing: {file_path.name}")
 
             predictions = get_birdnet_species_probs(birdnet_model,file_path)
 
@@ -252,7 +240,7 @@ def main():
     f"Avg max: {max_probabilities.mean():.3%} | "
     f"Min max: {max_probabilities.min():.3%} | "
     f"Max max: {max_probabilities.max():.3%}")
-    
+
     print(f"Saved: {OUTPUT_DIR / 'teacher_probs.npy'}")
     print(f"Saved: {OUTPUT_DIR / 'class_order.npy'}")
 
