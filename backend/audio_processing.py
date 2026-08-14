@@ -106,7 +106,7 @@ def process_file(file_path):
     file_id = os.path.splitext(os.path.basename(file_path))[0]
     results = []
 
-    for seg in segments:
+    for segment_index, seg in enumerate(segments):
         spec = audio_to_spectrogram(seg, sr)
 
         if not is_seg_active(spec) or spectrogram_too_dark(spec):
@@ -119,7 +119,7 @@ def process_file(file_path):
         else:
             spec = spec.astype(np.float32)
 
-        results.append((spec, file_id))
+        results.append((spec, file_id, segment_index))
 
     return results
 
@@ -143,10 +143,11 @@ def process_class(bird_class):
     if not class_spectrograms:
         return bird_class, 0
 
-    specs, file_ids = zip(*class_spectrograms)
+    specs, file_ids, segment_indices = zip(*class_spectrograms)
     arr = np.stack(specs)
-    np.save(out_path, arr)
-    np.save(sources_path, np.array(file_ids))
+    np.save(out_path,arr)
+    np.save( sources_path, np.array(file_ids))
+    np.save(out_path.replace(".npy", "_segments.npy"),np.array(segment_indices, dtype=np.int32))
 
     return bird_class, len(class_spectrograms)
 
