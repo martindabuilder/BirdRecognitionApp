@@ -4,7 +4,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torchvision.models as models
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, WeightedRandomSampler
 from tqdm import tqdm
 
 from data_parser import SpectrogramDataset, build_label_encoder
@@ -213,6 +213,22 @@ def evaluate_model(model,loader,criterion,device):
         100 * correct / total
     )
 
+def create_balanced_sampler(dataset):
+    labels = np.array([sample[2] for sample in dataset.samples])
+
+    class_counts = np.bincount(labels)
+    class_weights = 1.0 / class_counts
+
+    sample_weights = class_weights[labels]
+    sample_weights = torch.as_tensor(sample_weights, dtype=torch.double)
+
+    sampler = WeightedRandomSampler(
+        weights=sample_weights,
+        num_samples=len(sample_weights),
+        replacement=True
+    )
+
+    return sampler
 
 def main():
     device = torch.device(
@@ -254,9 +270,34 @@ def main():
         teacher_probs=teacher_matrix
     )
 
-    train_loader = DataLoader(train_dataset,batch_size=BATCH_SIZE,shuffle=True, num_workers=4, pin_memory=device.type == "cuda",persistent_workers=True)
-    val_loader = DataLoader( val_dataset,batch_size=BATCH_SIZE,shuffle=False, num_workers=2, pin_memory=device.type == "cuda",persistent_workers=True)
-    test_loader = DataLoader( test_dataset,batch_size=BATCH_SIZE,shuffle=False,num_workers=2,pin_memory=device.type == "cuda", persistent_workers=True)
+    train_sampler = create_balanced_sampler(train_dataset)
+
+    train_loader = DataLoader(
+        train_dataset,
+        batch_size=BATCH_SIZE,
+        sampler=train_sampler,
+        num_workers=4,
+        pin_memory=device.type == "cuda",
+        persistent_workers=True
+    )
+
+    val_loader = DataLoader(
+        val_dataset,
+        batch_size=BATCH_SIZE,
+        shuffle=False,
+        num_workers=2,
+        pin_memory=device.type == "cuda",
+        persistent_workers=True
+    )
+
+    test_loader = DataLoader(
+        test_dataset,
+        batch_size=BATCH_SIZE,
+        shuffle=False,
+        num_workers=2,
+        pin_memory=device.type == "cuda",
+        persistent_workers=True
+    )   
 
     criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
     model = models.efficientnet_b0(weights="DEFAULT")

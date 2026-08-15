@@ -14,6 +14,10 @@ os.makedirs(train_set_dir, exist_ok = True)
 
 def split_each_class(arr, file_ids, segment_indices):
     unique_files = sorted(set(file_ids))
+
+    rng = np.random.default_rng(42)
+    rng.shuffle(unique_files)
+
     n_files = len(unique_files)
 
     train_end = int(n_files * 0.70)
@@ -22,7 +26,6 @@ def split_each_class(arr, file_ids, segment_indices):
     train_files = set(unique_files[:train_end])
     val_files = set(unique_files[train_end:val_end])
     test_files = set(unique_files[val_end:])
-
     file_ids = np.asarray(file_ids)
     segment_indices = np.asarray(segment_indices)
 

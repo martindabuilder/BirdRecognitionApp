@@ -14,5 +14,6 @@
 /backend/test_predict.py
 /backend/add_samples.py
 /backend/birdnet_teacher
+/backend/__pycache__
 
 /test_audios

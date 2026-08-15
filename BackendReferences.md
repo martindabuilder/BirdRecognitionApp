@@ -46,6 +46,8 @@ Ultimately going for EfficientNet as its a bit better and ultimately much lighte
 
 [How I changed CPU to GPU support for my ML Model (Easy Guide)](https://medium.com/@vsquarevaibhavverma/how-i-enabled-gpu-support-for-my-ml-model-easy-guide-ready-f5f455358d6d)
 
+[Fine-Tuning BirdNET on Custom Data: Tailoring AI for Local Bird Monitoring](https://medium.com/@guneet.mutreja/fine-tuning-birdnet-on-custom-data-tailoring-ai-for-local-bird-monitoring-0282fe7eaa80)
+
 
 ---- add samples file ----
 A dedicated file who's purpose is to extract more classes/more samples for a chosen class. It uses the Xeno Canto v3 API and a dedicated custom API key.
