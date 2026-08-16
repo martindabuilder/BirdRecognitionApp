@@ -26,7 +26,7 @@ os.makedirs(spectrogram_npy_output, exist_ok = True)
 #spectrogram specifications
 mel_lines = 150 #spectrogram height, measured in n_mels
 spectrogram_width = 128 #spectrogram width
-sample_rate = 16000 #set sample rate for each spectrogram
+sample_rate = 32000 #set sample rate for each spectrogram
 audio_duration = 5.0 #seconds per segment
 
 minimal_active_threshold = 0.25 #the amount of "active" volume in the file
@@ -43,7 +43,7 @@ NUM_WORKERS = min(4, cpu_count())
 
 #used to precompute the lenght of the spectrogram, removing the need of resizing
 segment_samples = int(audio_duration * sample_rate)
-hop_length = segment_samples // spectrogram_width
+hop_length = int(0.020 * sample_rate)
 
 
 # ----FUNCTIONS ----
@@ -70,7 +70,7 @@ def split_audio(file_path, sr=sample_rate, duration=audio_duration):
 
     y, _ = librosa.effects.trim(y)
     segment_length = int(duration * sr)
-    hop_samples = int(4.0 * sr) #allows a 1 second overlay between 2 consecutive segments
+    hop_samples = int(4.0 * sr) #allows a 1 second overlap between 2 consecutive segments
     segments = []
     for start in range(0, len(y), hop_samples):
         end = start + segment_length
@@ -84,13 +84,10 @@ def split_audio(file_path, sr=sample_rate, duration=audio_duration):
 
 #turns the 5s audio segments into a normalized mel spectrogram
 def audio_to_spectrogram(y, sr):
-    spectrogram = librosa.feature.melspectrogram(y=y,sr=sr,n_mels=mel_lines, hop_length=hop_length)
-    spectrogram_db = librosa.power_to_db(spectrogram,ref=np.max,top_db=80)
+    spectrogram = librosa.feature.melspectrogram( y=y, sr=sr, n_fft=2048, hop_length=hop_length, n_mels=mel_lines, fmin=200, fmax=16000, power=2.0)
+    spectrogram_db = librosa.power_to_db( spectrogram, ref=np.max, top_db=80)
     spectrogram_norm = (spectrogram_db + 80.0) / 80.0
     spectrogram_norm = np.clip( spectrogram_norm, 0.0, 1.0)
-
-    if spectrogram_norm.shape[1] != spectrogram_width:
-        spectrogram_norm = cv2.resize(spectrogram_norm, (spectrogram_width, mel_lines), interpolation=cv2.INTER_LINEAR)
 
     return spectrogram_norm.astype(np.float32)
 
@@ -161,10 +158,7 @@ def main():
     print(f"Processing {len(bird_classes)}")
 
     with Pool(NUM_WORKERS) as pool:
-        results = list(tqdm(
-            pool.imap_unordered(process_class, bird_classes),
-            total = len(bird_classes)
-        ))
+        results = list(tqdm( pool.imap_unordered(process_class, bird_classes),total = len(bird_classes)))
 
     total_segments = sum(count for _, count in results)
     

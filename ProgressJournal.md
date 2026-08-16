@@ -53,5 +53,7 @@ Added back all the checks for the spectrograms being too short/too dark in the a
 Removed the random shuffling of the dataset when splitting it into seperate train/test/validation sets. Also added to the audio processing/splitting tracking the file IDs so that they get properly seperated into proper splits. That way a single .npy file doesnt get seperated into 2 seperate splits.
 
 
-day 11: Lots of changes, biggest one is trying to make BirdNet be used as a "teacher" model with knowledge distillation. This is done in an attempt to help the main model learn better, so if it works out this will be of huge help tp the model and training it.
+Day 11: Lots of changes, biggest one is trying to make BirdNet be used as a "teacher" model with knowledge distillation. This is done in an attempt to help the main model learn better, so if it works out this will be of huge help tp the model and training it.
 Added quite a few new files to the dataset aswell trying to balance out the dataset a bit more, still some work need to be done but its much more balanced now. There are a few classes im considering dropping that have too little samples and xeno canto doesnt have any with better audio quality to add onto the dataset, so the list might go down one or two classes as the training goes on.
+
+Day 12: will fill in later but a lot of model touching again, 2 steps forward 1 back

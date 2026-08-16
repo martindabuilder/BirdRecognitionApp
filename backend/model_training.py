@@ -15,10 +15,6 @@ TRAIN_DIR = BASE_DIR / "train_set_resized"
 VAL_DIR = BASE_DIR / "val_set_resized"
 TEST_DIR = BASE_DIR / "test_set_resized"
 
-TEACHER_DIR = BASE_DIR / "birdnet_teacher"
-TEACHER_PROBS = TEACHER_DIR / "teacher_probs.npy"
-TEACHER_CLASSES = TEACHER_DIR / "class_order.npy"
-
 MODEL_DIR = BASE_DIR / "model"
 MODEL_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -28,74 +24,8 @@ PATIENCE = 7
 LEARNING_RATE = 1e-4
 WEIGHT_DECAY = 5e-4
 
-CLASSIFICATION_WEIGHT = 0.7
-DISTILLATION_WEIGHT = 0.3
-TEMPERATURE = 3.0
 
-
-def build_teacher_matrix(label_encoder):
-    teacher_probs = np.load( TEACHER_PROBS).astype(np.float32)
-
-    teacher_classes = np.load(  TEACHER_CLASSES, allow_pickle=True)
-
-    teacher_classes = [str(x) for x in teacher_classes]
-
-    if teacher_probs.ndim != 2:
-        raise ValueError( "teacher_probs.npy must be a 2D matrix.")
-
-    if teacher_probs.shape != (len(teacher_classes),len(teacher_classes)):
-        raise ValueError( "teacher_probs.npy shape does not match class_order.npy.")
-
-    teacher_lookup = {
-        name: i
-        for i, name in enumerate(teacher_classes)
-    }
-
-    student_classes = [
-        str(x)
-        for x in label_encoder.classes_
-    ]
-
-    num_classes = len(student_classes)
-
-    missing = [
-        name
-        for name in student_classes
-        if name not in teacher_lookup
-    ]
-
-    if missing:
-        raise ValueError( f"Student classes missing from teacher classes: {missing}")
-
-    matrix = np.zeros( (num_classes, num_classes),dtype=np.float32)
-
-    for i, student_class in enumerate(student_classes):
-        teacher_row_index = teacher_lookup[student_class]
-        teacher_row = teacher_probs[teacher_row_index]
-
-        for j, target_class in enumerate(student_classes):
-            teacher_column_index = teacher_lookup[target_class]
-            matrix[i, j] = teacher_row[teacher_column_index]
-
-        row_sum = matrix[i].sum()
-
-        if row_sum > 0:
-            matrix[i] /= row_sum
-        else:
-            matrix[i] = 1.0 / num_classes
-
-    return matrix
-
-
-def distillation_loss(student_outputs, teacher_targets):
-    student_log_probs = torch.log_softmax( student_outputs / TEMPERATURE, dim=1 )
-
-    teacher_targets = teacher_targets.clamp_min(1e-8)
-
-    return nn.functional.kl_div(student_log_probs, teacher_targets, reduction="batchmean") * (TEMPERATURE ** 2)
-
-
-def train_model(model,train_loader,val_loader,criterion, optimizer,scheduler,device, scaler):
+def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler, device, scaler):
     best_val_accuracy = -1.0
     epochs_without_improvement = 0
 
@@ -103,45 +33,34 @@ def train_model(model,train_loader,val_loader,criterion, optimizer,scheduler,dev
         model.train()
 
         total_loss = 0.0
-        total_cls_loss = 0.0
-        total_distill_loss = 0.0
-
         correct = 0
         total = 0
 
         progress = tqdm(train_loader, desc=f"Epoch {epoch + 1}/{EPOCHS}")
 
-        for images, labels, teacher_targets in progress:
+        for images, labels in progress:
             images = images.to(device, non_blocking=True)
             labels = labels.to(device, non_blocking=True)
-            teacher_targets = teacher_targets.to( device,non_blocking=True)
 
             optimizer.zero_grad(set_to_none=True)
 
-            with torch.autocast(device_type="cuda",enabled=device.type == "cuda"):
+            with torch.autocast(device_type="cuda", enabled=device.type == "cuda"):
                 outputs = model(images)
-                cls_loss = criterion(outputs,labels)
-                distill_loss = distillation_loss( outputs,teacher_targets)
-                loss = (CLASSIFICATION_WEIGHT * cls_loss + DISTILLATION_WEIGHT * distill_loss)
+                loss = criterion(outputs, labels)
 
             scaler.scale(loss).backward()
             scaler.step(optimizer)
             scaler.update()
 
             total_loss += loss.item()
-            total_cls_loss += cls_loss.item()
-            total_distill_loss += distill_loss.item()
 
             predicted = outputs.argmax(dim=1)
-
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
 
-            progress.set_postfix(loss=f"{loss.item():.4f}",acc=f"{100 * correct / total:.1f}%")
+            progress.set_postfix(loss=f"{loss.item():.4f}", acc=f"{100 * correct / total:.1f}%")
 
         train_loss = total_loss / len(train_loader)
-        train_cls_loss = total_cls_loss / len(train_loader)
-        train_distill_loss = total_distill_loss / len(train_loader)
         train_accuracy = 100 * correct / total
 
         model.eval()
@@ -151,13 +70,13 @@ def train_model(model,train_loader,val_loader,criterion, optimizer,scheduler,dev
         val_total = 0
 
         with torch.no_grad():
-            for images, labels, _ in val_loader:
+            for images, labels in val_loader:
                 images = images.to(device, non_blocking=True)
                 labels = labels.to(device, non_blocking=True)
 
-                with torch.autocast(device_type="cuda",enabled=device.type == "cuda"):
+                with torch.autocast(device_type="cuda", enabled=device.type == "cuda"):
                     outputs = model(images)
-                    loss = criterion( outputs,labels)
+                    loss = criterion(outputs, labels)
 
                 val_loss += loss.item()
                 predicted = outputs.argmax(dim=1)
@@ -170,13 +89,13 @@ def train_model(model,train_loader,val_loader,criterion, optimizer,scheduler,dev
         scheduler.step(val_loss)
 
         print(f"\nEpoch {epoch + 1}/{EPOCHS} | Train loss: {train_loss:.4f} | Train acc: {train_accuracy:.2f}% | Val loss: {val_loss:.4f} | Val acc: {val_accuracy:.2f}%")
-        print(f"Classification: {train_cls_loss:.4f} | Distillation: {train_distill_loss:.4f} | LR: {optimizer.param_groups[0]['lr']:.2e}" )
+        print(f"LR: {optimizer.param_groups[0]['lr']:.2e}")
 
         if val_accuracy > best_val_accuracy:
             best_val_accuracy = val_accuracy
             epochs_without_improvement = 0
 
-            torch.save(model.state_dict(),MODEL_DIR / "best_model.pth")
+            torch.save(model.state_dict(), MODEL_DIR / "best_model.pth")
             print(f"Saved best model: {val_accuracy:.2f}%")
         else:
             epochs_without_improvement += 1
@@ -186,22 +105,23 @@ def train_model(model,train_loader,val_loader,criterion, optimizer,scheduler,dev
             print("Early stopping.")
             break
 
+    return best_val_accuracy
 
-def evaluate_model(model,loader,criterion,device):
+
+def evaluate_model(model, loader, criterion, device):
     model.eval()
-
     total_loss = 0.0
     correct = 0
     total = 0
 
     with torch.no_grad():
-        for images, labels, _ in loader:
+        for images, labels in loader:
             images = images.to(device, non_blocking=True)
             labels = labels.to(device, non_blocking=True)
 
             with torch.autocast(device_type="cuda", enabled=device.type == "cuda"):
                 outputs = model(images)
-                loss = criterion( outputs, labels)
+                loss = criterion(outputs, labels)
 
             total_loss += loss.item()
             predicted = outputs.argmax(dim=1)
@@ -212,6 +132,7 @@ def evaluate_model(model,loader,criterion,device):
         total_loss / len(loader),
         100 * correct / total
     )
+
 
 def create_balanced_sampler(dataset):
     labels = np.array([sample[2] for sample in dataset.samples])
@@ -230,6 +151,7 @@ def create_balanced_sampler(dataset):
 
     return sampler
 
+
 def main():
     device = torch.device(
         "cuda"
@@ -246,29 +168,13 @@ def main():
     num_classes = len(label_encoder.classes_)
 
     print(f"Classes: {num_classes}")
-    np.save(MODEL_DIR / "label_encoder_classes.npy",label_encoder.classes_)
+    np.save(MODEL_DIR / "label_encoder_classes.npy", label_encoder.classes_)
 
-    teacher_matrix = build_teacher_matrix(label_encoder)
+    # no teacher matrix loaded - BirdNET removed for this experiment
 
-    print(f"Teacher matrix: {teacher_matrix.shape}")
-
-    train_dataset = SpectrogramDataset(
-        str(TRAIN_DIR),
-        label_encoder,
-        teacher_probs=teacher_matrix
-    )
-
-    val_dataset = SpectrogramDataset(
-        str(VAL_DIR),
-        label_encoder,
-        teacher_probs=teacher_matrix
-    )
-
-    test_dataset = SpectrogramDataset(
-        str(TEST_DIR),
-        label_encoder,
-        teacher_probs=teacher_matrix
-    )
+    train_dataset = SpectrogramDataset(str(TRAIN_DIR), label_encoder)
+    val_dataset = SpectrogramDataset(str(VAL_DIR), label_encoder)
+    test_dataset = SpectrogramDataset(str(TEST_DIR), label_encoder)
 
     train_sampler = create_balanced_sampler(train_dataset)
 
@@ -297,7 +203,7 @@ def main():
         num_workers=2,
         pin_memory=device.type == "cuda",
         persistent_workers=True
-    )   
+    )
 
     criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
     model = models.efficientnet_b0(weights="DEFAULT")
@@ -314,7 +220,7 @@ def main():
     for param in model.features.parameters():
         param.requires_grad = False
 
-    feature_blocks = list( model.features.children())
+    feature_blocks = list(model.features.children())
     fine_tune_start = int(len(feature_blocks) * 0.7)
 
     for i, block in enumerate(feature_blocks):
@@ -327,20 +233,12 @@ def main():
 
     model = model.to(device)
 
-    optimizer = torch.optim.AdamW(filter(lambda p: p.requires_grad, model.parameters()), lr=LEARNING_RATE, weight_decay=WEIGHT_DECAY )
-    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau( optimizer, mode="min",factor=0.5, patience=2,min_lr=1e-6)
-    scaler = torch.amp.GradScaler("cuda",enabled=device.type == "cuda")
+    optimizer = torch.optim.AdamW(filter(lambda p: p.requires_grad, model.parameters()), lr=LEARNING_RATE, weight_decay=WEIGHT_DECAY)
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode="min", factor=0.5, patience=2, min_lr=1e-6)
+    scaler = torch.amp.GradScaler("cuda", enabled=device.type == "cuda")
 
-    trainable = sum(
-        p.numel()
-        for p in model.parameters()
-        if p.requires_grad
-    )
-
-    total_params = sum(
-        p.numel()
-        for p in model.parameters()
-    )
+    trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    total_params = sum(p.numel() for p in model.parameters())
 
     print(f"Trainable parameters: {trainable:,}/{total_params:,}")
 
@@ -357,13 +255,15 @@ def main():
 
     best_model_path = MODEL_DIR / "best_model.pth"
 
-    model.load_state_dict(torch.load(best_model_path,map_location=device))
+    model.load_state_dict(torch.load(best_model_path, map_location=device))
 
-    test_loss, test_accuracy = evaluate_model( model,test_loader,criterion, device)
+    test_loss, test_accuracy = evaluate_model(model, test_loader, criterion, device)
     print(f"Test loss: {test_loss:.4f} | Test accuracy: {test_accuracy:.2f}%")
-    final_path = (MODEL_DIR /"bird_recognition_effnet.pth")
-    torch.save(model.state_dict(),final_path)
+
+    final_path = MODEL_DIR / "bird_recognition_effnet.pth"
+    torch.save(model.state_dict(), final_path)
     print(f"Model saved to: {final_path}")
+
 
 if __name__ == "__main__":
     main()

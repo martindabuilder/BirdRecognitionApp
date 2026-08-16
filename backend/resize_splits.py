@@ -12,7 +12,7 @@ import shutil
 SOURCE_DIRS = ["train_set", "val_set", "test_set"]
 OUTPUT_SUFFIX = "_resized"
 
-TARGET_SIZE = (160, 160)
+TARGET_SIZE = (224, 224)
 
 def resize_class_file(path, output_dir):
     fname = os.path.basename(path)
