@@ -14,7 +14,6 @@ Day 3: The audio processing function is complete, and for now it seems to work g
 
 
 Day 4: Im building up the structure for the project now, and generally the idea will be:
-
 create spectrograms (audio-processing.py)
 ↓
 splitting the dataset prematurely in train/validation/test sets (dataset_split.py). This way before starting the training i will know which classes also have too few samples to be split up into seperate sets. Making the splitting into a seperate file makes it more memory light as the set splits only need to happen once after all the spectrograms are created.
@@ -45,6 +44,7 @@ Day 7 + 8 combined since i did work on the 7th and then on the 8th day but the m
 Also going to be working on a file that will add more samples to my classes. The plan is to use it with the Xeno Canto API to download more classes of the same bird directly from there. WIll try to add more functionality to it like getting only the higher rated audios etc.
 + day 9 combined because the same work is stretched between the 3 days, but its been mostly tinkering and testing the model. Its accuracy so far has been sadly a bit too low but ill try my best to step it up, might look into trying a different sort of model to see if it yields better results. I have added a function that can easily add more classes/samples to already existing classes only adding up recordings with a rating of A or B. Im trying my best to balance out the classes aswell so that the classes arent completely unbalanced (some classes turned out to have near 20k samples when ran through the audio processing file, meanwhile others only gather 3 or 4). 
 The file that adds samples is put in a gitignore since it contains the Xeno Canto API and a custom API Key, so for the sake of privacy i have hidden it for now.
+
 
 Day 10: After quite a bit of changing around the model learns better and actually classifies birds properly now. It still needs to be fine tuned quite a bit which is what ive been doing today and the dataset has to be balanced a bit more before i start to create a real backend version for it but this is good progress.
 In terms of balancing out the dataset im aiming for each class to have atleast close to 1k samples, will take up quite a bit of space on the disk but thats inevitable when trying to build a model from the ground up. 

@@ -2,6 +2,23 @@ File containing all the references on the creation and of the backend portion of
 
 For the main backend code and architecture im using [Python](https://www.python.org/)
 
+Whoalistic structure of the backend side of the project follows this order:
+Gathering all the audio files in /dataset. All the current files are taken directly from XenoCanto and are withh the highest available rating (A and B). Any more samples to each class are added with the add_samples.py file + the respective class name.
+↓
+Processing each of the classes in the /dataset folder and creating mel spectrograms, saved in a .npy array format (audio_processing.py).
+↓
+Splitting the total spectrogram set into 3 seperate sets: one for training one, for testing and one for validation (dataset_split.py).
+↓
+Resizing the three splits, its done in order to make them fit the preffered EfficientNet size format (resize_splits.py).
+↓
+Once the training set has been created and resized, its ran through the BirdNet teacher file. The concep behind it is that the teacher will be able to learn from the dataset, backed by the already well trained and expansive BirdNet model. This way it becomes a "teacher" to the main model that gets built in the next step.
+↓
+Model training happens with the model_training.py and data_parser.py files respectively. The data parser is used to alleviate the memory use and GPU strain that loading the entire test/train/val sets would put on the machine. With the help of the teacher the EfficientNet model gets trained on the created splits and the teacher's knowledge gets applied. The model code is built in a way where it saves a checkpoint for the current epoch its on and also a best model version. In case accuracy stops increasing and the model plateaus, it has a 7 epoch patience built in, which once it reaches it automatically stops and saves the best model version.
+↓
+Testing the currently created model with the test_predict.py file before actually pushing the model to the frontend portion of the code
+↓
+backend.py where everything gets connected to the front end portion. All the prdicting functions are stored in there.
+
 ---- audio-processing file ----
 A lot of the initial audio processing code is pretty similar (if not identical) to the previous version of the project, so that eliviates quite a bit of work at the starting stages atleast, most of the tryharding will likely come with the model training since itll be with more species this time
 
@@ -24,7 +41,6 @@ To be able to match the .wav and .mp3 types of files, [Globs](https://gulpjs.com
 
 ---- data set splitting file ----
 [The Importance of Splitting Datasets into Training, Validation, and Test Sets](https://ruveydakardelcetin.medium.com/the-importance-of-splitting-datasets-into-training-validation-and-test-sets-417caaeae91d)
-
 Creating a seperate data split file. The old project split the data in the exact same file as it was training (the splitting itself took place right before the training) and that took a lot of processing time even tho splitting the data into seperate sets is a one time thing when training a model. Having it happen before the model training allows the training to go faster in terms of speed and also use much less memory.
 The data splitting function now also shows the files that each split has, aswell as which classes have too little samples, that way while testing it i can know going forward which classes will need expanding.
 
@@ -36,16 +52,15 @@ The data splitting function now also shows the files that each split has, aswell
 The data parser idea is to pass only one class at a time while training the model. That way its lighter and easier to keep track of the seperate steps of the model creating process
 
 
+---- BirdNet teacher file ----
+
+
 ---- model training file references ----
 [choosing between resnet vs efficientnet](https://medium.com/@enrico.randellini/image-classification-resnet-vs-efficientnet-vs-efficientnet-v2-vs-compact-convolutional-c205838bbf49)
 Ultimately going for EfficientNet as its a bit better and ultimately much lighter to use
-
 [How to Convert a TensorFlow Model to PyTorch?](https://www.geeksforgeeks.org/deep-learning/how-to-convert-a-tensorflow-model-to-pytorch/)
-
 [How to use GPU acceleration in PyTorch?](https://www.geeksforgeeks.org/deep-learning/how-to-use-gpu-acceleration-in-pytorch/)
-
 [How I changed CPU to GPU support for my ML Model (Easy Guide)](https://medium.com/@vsquarevaibhavverma/how-i-enabled-gpu-support-for-my-ml-model-easy-guide-ready-f5f455358d6d)
-
 [Fine-Tuning BirdNET on Custom Data: Tailoring AI for Local Bird Monitoring](https://medium.com/@guneet.mutreja/fine-tuning-birdnet-on-custom-data-tailoring-ai-for-local-bird-monitoring-0282fe7eaa80)
 
 
