@@ -23,9 +23,9 @@ EPOCHS = 30
 PATIENCE = 7
 LEARNING_RATE = 1e-4
 WEIGHT_DECAY = 5e-4
+BALANCE_POWER = 0.5
 
-
-def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler, device, scaler):
+def train_model(  model, train_loader, val_loader, criterion, optimizer, scheduler, device, scaler):
     best_val_accuracy = -1.0
     epochs_without_improvement = 0
 
@@ -58,7 +58,10 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
 
-            progress.set_postfix(loss=f"{loss.item():.4f}", acc=f"{100 * correct / total:.1f}%")
+            progress.set_postfix(
+                loss=f"{loss.item():.4f}",
+                acc=f"{100 * correct / total:.1f}%"
+            )
 
         train_loss = total_loss / len(train_loader)
         train_accuracy = 100 * correct / total
@@ -67,6 +70,7 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler
 
         val_loss = 0.0
         val_correct = 0
+        val_top5_correct = 0
         val_total = 0
 
         with torch.no_grad():
@@ -80,26 +84,40 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler
 
                 val_loss += loss.item()
                 predicted = outputs.argmax(dim=1)
-                val_total += labels.size(0)
                 val_correct += (predicted == labels).sum().item()
+                top5_predictions = outputs.topk( 5, dim=1).indices
+                val_top5_correct += (top5_predictions == labels.unsqueeze(1)).any(dim=1).sum().item()
+                val_total += labels.size(0)
 
         val_loss /= len(val_loader)
-        val_accuracy = 100 * val_correct / val_total
+        val_accuracy = (100 * val_correct / val_total)
+        val_top5_accuracy = (100 * val_top5_correct / val_total)
 
         scheduler.step(val_loss)
 
-        print(f"\nEpoch {epoch + 1}/{EPOCHS} | Train loss: {train_loss:.4f} | Train acc: {train_accuracy:.2f}% | Val loss: {val_loss:.4f} | Val acc: {val_accuracy:.2f}%")
+        print(f"\nEpoch {epoch + 1}/{EPOCHS} | Train loss: {train_loss:.4f} | Train acc: {train_accuracy:.2f}% | Val loss: {val_loss:.4f} | "Val acc: {val_accuracy:.2f}% | "Val top-5: {val_top5_accuracy:.2f}%")
         print(f"LR: {optimizer.param_groups[0]['lr']:.2e}")
 
         if val_accuracy > best_val_accuracy:
             best_val_accuracy = val_accuracy
             epochs_without_improvement = 0
-
             torch.save(model.state_dict(), MODEL_DIR / "best_model.pth")
+            checkpoint = {
+                "epoch": epoch + 1,
+                "model_state_dict": model.state_dict(),
+                "optimizer_state_dict": optimizer.state_dict(),
+                "scheduler_state_dict": scheduler.state_dict(),
+                "scaler_state_dict": scaler.state_dict(),
+                "best_val_accuracy": best_val_accuracy,
+            }
+
+            torch.save(checkpoint, MODEL_DIR / "training_checkpoint.pth")
             print(f"Saved best model: {val_accuracy:.2f}%")
+            print("Saved full training checkpoint.")
+
         else:
             epochs_without_improvement += 1
-            print(f"No improvement: {epochs_without_improvement}/{PATIENCE}")
+            print(f"No improvement for {epochs_without_improvement}/{PATIENCE}")
 
         if epochs_without_improvement >= PATIENCE:
             print("Early stopping.")
@@ -107,38 +125,42 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler
 
     return best_val_accuracy
 
-
-def evaluate_model(model, loader, criterion, device):
+def evaluate_model(
+    model, loader, criterion, device):
     model.eval()
     total_loss = 0.0
     correct = 0
+    top5_correct = 0
     total = 0
 
     with torch.no_grad():
         for images, labels in loader:
             images = images.to(device, non_blocking=True)
             labels = labels.to(device, non_blocking=True)
-
             with torch.autocast(device_type="cuda", enabled=device.type == "cuda"):
                 outputs = model(images)
                 loss = criterion(outputs, labels)
 
             total_loss += loss.item()
             predicted = outputs.argmax(dim=1)
-            total += labels.size(0)
             correct += (predicted == labels).sum().item()
+            top5_predictions = outputs.topk(5, dim=1).indices
+            top5_correct += (top5_predictions == labels.unsqueeze(1)).any(dim=1).sum().item()
 
-    return (
-        total_loss / len(loader),
-        100 * correct / total
+            total += labels.size(0)
+
+    return (total_loss / len(loader), 100 * correct / total, 100 * top5_correct / total)
+
+def create_balanced_sampler(dataset,balance_power=0.5):
+    labels = np.array(
+        [
+            sample[2]
+            for sample in dataset.samples
+        ]
     )
 
-
-def create_balanced_sampler(dataset):
-    labels = np.array([sample[2] for sample in dataset.samples])
-
     class_counts = np.bincount(labels)
-    class_weights = 1.0 / class_counts
+    class_weights = 1.0 / (class_counts ** balance_power)
 
     sample_weights = class_weights[labels]
     sample_weights = torch.as_tensor(sample_weights, dtype=torch.double)
@@ -150,7 +172,6 @@ def create_balanced_sampler(dataset):
     )
 
     return sampler
-
 
 def main():
     device = torch.device(
@@ -167,47 +188,30 @@ def main():
     label_encoder = build_label_encoder(str(TRAIN_DIR))
     num_classes = len(label_encoder.classes_)
 
-    print(f"Classes: {num_classes}")
     np.save(MODEL_DIR / "label_encoder_classes.npy", label_encoder.classes_)
-
-    # no teacher matrix loaded - BirdNET removed for this experiment
 
     train_dataset = SpectrogramDataset(str(TRAIN_DIR), label_encoder)
     val_dataset = SpectrogramDataset(str(VAL_DIR), label_encoder)
     test_dataset = SpectrogramDataset(str(TEST_DIR), label_encoder)
 
-    train_sampler = create_balanced_sampler(train_dataset)
 
-    train_loader = DataLoader(
+    print(f"\nFinal number of classes: {num_classes}")
+    print(f"\nTrain samples: {len(train_dataset)}")
+    print(f"\nValidation samples: {len(val_dataset)}")
+    print(f"\nTest samples: {len(test_dataset)}")
+
+    train_sampler = create_balanced_sampler(
         train_dataset,
-        batch_size=BATCH_SIZE,
-        sampler=train_sampler,
-        num_workers=4,
-        pin_memory=device.type == "cuda",
-        persistent_workers=True
+        balance_power=BALANCE_POWER
     )
 
-    val_loader = DataLoader(
-        val_dataset,
-        batch_size=BATCH_SIZE,
-        shuffle=False,
-        num_workers=2,
-        pin_memory=device.type == "cuda",
-        persistent_workers=True
-    )
-
-    test_loader = DataLoader(
-        test_dataset,
-        batch_size=BATCH_SIZE,
-        shuffle=False,
-        num_workers=2,
-        pin_memory=device.type == "cuda",
-        persistent_workers=True
-    )
+    train_loader = DataLoader( train_dataset, batch_size=BATCH_SIZE, sampler=train_sampler, num_workers=4, pin_memory=device.type == "cuda", persistent_workers=True)
+    val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE, shuffle=False, num_workers=2, pin_memory=device.type == "cuda", persistent_workers=True)
+    test_loader = DataLoader( test_dataset, batch_size=BATCH_SIZE, shuffle=False, num_workers=2, pin_memory=device.type == "cuda", persistent_workers=True)
 
     criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
     model = models.efficientnet_b0(weights="DEFAULT")
-    in_features = model.classifier[1].in_features
+    in_features = (model.classifier[1].in_features)
 
     model.classifier = nn.Sequential(
         nn.Dropout(0.4),
@@ -233,14 +237,26 @@ def main():
 
     model = model.to(device)
 
-    optimizer = torch.optim.AdamW(filter(lambda p: p.requires_grad, model.parameters()), lr=LEARNING_RATE, weight_decay=WEIGHT_DECAY)
+    optimizer = torch.optim.AdamW(
+        filter(lambda p: p.requires_grad, model.parameters()),
+        lr=LEARNING_RATE,
+        weight_decay=WEIGHT_DECAY
+    )
+
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode="min", factor=0.5, patience=2, min_lr=1e-6)
     scaler = torch.amp.GradScaler("cuda", enabled=device.type == "cuda")
+    trainable = sum(
+        p.numel()
+        for p in model.parameters()
+        if p.requires_grad
+    )
 
-    trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
-    total_params = sum(p.numel() for p in model.parameters())
+    total_params = sum(
+        p.numel()
+        for p in model.parameters()
+    )
 
-    print(f"Trainable parameters: {trainable:,}/{total_params:,}")
+    print(f"\nTrainable parameters: {trainable:,}/{total_params:,}")
 
     train_model(
         model,
@@ -253,17 +269,22 @@ def main():
         scaler
     )
 
-    best_model_path = MODEL_DIR / "best_model.pth"
+    best_model_path = (MODEL_DIR / "best_model.pth")
+
+    if not best_model_path.exists():
+        print("Error: best_model.pth was not created.")
+        return
 
     model.load_state_dict(torch.load(best_model_path, map_location=device))
 
-    test_loss, test_accuracy = evaluate_model(model, test_loader, criterion, device)
-    print(f"Test loss: {test_loss:.4f} | Test accuracy: {test_accuracy:.2f}%")
+    test_loss, test_accuracy, test_top5 = evaluate_model( model, test_loader, criterion, device)
+    print(f"Test loss: {test_loss:.4f}")
+    print(f"Test top-1 accuracy: {test_accuracy:.2f}%")
+    print(f"Test top-5 accuracy: {test_top5:.2f}%")
 
-    final_path = MODEL_DIR / "bird_recognition_effnet.pth"
-    torch.save(model.state_dict(), final_path)
-    print(f"Model saved to: {final_path}")
-
+    final_path = (MODEL_DIR /"bird_recognition_effnet.pth")
+    torch.save(model.state_dict(),final_path)
+    print(f"\nModel saved to: {final_path}")
 
 if __name__ == "__main__":
     main()

@@ -56,4 +56,14 @@ Removed the random shuffling of the dataset when splitting it into seperate trai
 Day 11: Lots of changes, biggest one is trying to make BirdNet be used as a "teacher" model with knowledge distillation. This is done in an attempt to help the main model learn better, so if it works out this will be of huge help tp the model and training it.
 Added quite a few new files to the dataset aswell trying to balance out the dataset a bit more, still some work need to be done but its much more balanced now. There are a few classes im considering dropping that have too little samples and xeno canto doesnt have any with better audio quality to add onto the dataset, so the list might go down one or two classes as the training goes on.
 
-Day 12: will fill in later but a lot of model touching again, 2 steps forward 1 back
+
+Day 12: Spent most of the day downloading more samples and testing out ResNet50 alongside the teacher model. Learning with the teacher gave a slightly better result but its accuracy and validations loss/accuracy is still too low. Certain tests with the model seemed to go well but its still not sure at all with the classifications, so the coming days will be trying to get its accuracy as up as best as i could, and slowly start to build up the front end too.
+
+
+Day 13: Switched back from ResNet to EfficientNet as the better results ResNet gave were mostly because i balanced out the dataset before testing it. The dataset is now even more balanced so EfficientNet on a new run gave substantially better results. Got rid of the distillation from the teacher aswell for this test run and the validation accuracy peaked at 51.91% which is a pretty big improvement over the 40 to barely 42% it gave before. The model seems to be getting more confident in its results aswell which is an improvement, even tho i still want it to classify given test audios with atleast 50% certainty before i start shifting focus to the frontend.
+A big part of the model doing better is because the spectrograms are now processed with 32k sample rate, rather than the 16k one before, that gives them a lot more detail and makes it easier for the model to learn their patterns.
+The model training itself is a bit more balanced now as it has power balancing included in it, that way classes with lower sample size dont get swallowed by bigger ones.
+The balancing of the dataset gave pretty substantial results so ill look into the lower sample sized classes and consider removing most classes under 500 samples as i cant expand them in any way sadly as xeno canto has no more recordings for them, but that will depend on if the model performs again better tomorrow with the hopefully added teacher back into the training mix.
+
+
+Day 14: Trying to bring back the teacher distillation approach again but this time with a more robust teacher that is better trained. First test run for the teacher is with a higher files per class count now with 20 for each class (it was 5 before) and a bigger top predicted classes (20 now, was 10 before).
