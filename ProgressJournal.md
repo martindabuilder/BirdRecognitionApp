@@ -67,3 +67,5 @@ The balancing of the dataset gave pretty substantial results so ill look into th
 
 
 Day 14: Trying to bring back the teacher distillation approach again but this time with a more robust teacher that is better trained. First test run for the teacher is with a higher files per class count now with 20 for each class (it was 5 before) and a bigger top predicted classes (20 now, was 10 before).
+
+Day 15: A big problem with the project is that the model training itself and the teacher now just take a long while to get done. But thats an inevitable part when im training on so many classes and samples. Today was mostly finetuning the teacher and model training again, its a bit better than before but still a long way to go. Im planning on upping the files per class for the teacher up to 50 potentially a 100 if it performs better with 50 per class. 

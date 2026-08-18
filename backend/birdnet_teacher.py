@@ -15,7 +15,7 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 CHECKPOINT = 5
 FILES_PER_CLASS = 20
 RANDOM_SEED = 42
-N_WORKERS = 1
+N_WORKERS = 4
 BATCH_SIZE = 1
 TOP_K = 20
 
@@ -167,9 +167,7 @@ def main():
     our_scientific_names = []
 
     for code in bird_classes:
-        name = normalise_name(
-            code_to_sci.get(code)
-        )
+        name = normalise_name(code_to_sci.get(code))
 
         our_scientific_names.append(name)
         print(f"{code} -> {name}")
@@ -190,10 +188,7 @@ def main():
         print(f"Resuming from class {start_index + 1}/{num_classes}.")
 
     else:
-        teacher_matrix = np.zeros(
-            (num_classes, num_classes),
-            dtype=np.float32
-        )
+        teacher_matrix = np.zeros((num_classes, num_classes), dtype=np.float32)
 
         start_index = 0
 

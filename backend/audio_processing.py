@@ -25,7 +25,6 @@ os.makedirs(spectrogram_npy_output, exist_ok = True)
 
 #spectrogram specifications
 mel_lines = 150 #spectrogram height, measured in n_mels
-spectrogram_width = 128 #spectrogram width
 sample_rate = 32000 #set sample rate for each spectrogram
 audio_duration = 5.0 #seconds per segment
 
@@ -130,8 +129,12 @@ def process_class(bird_class):
         return bird_class, 0
 
     class_folder = os.path.join(data_directory, bird_class)
-    audio_files = glob.glob(os.path.join(class_folder, "*.wav")) + \
-                glob.glob(os.path.join(class_folder, "*.mp3"))
+    audio_files = (
+        glob.glob(os.path.join(class_folder, "*.wav"))
+        + glob.glob(os.path.join(class_folder, "*.WAV"))
+        + glob.glob(os.path.join(class_folder, "*.mp3"))
+        + glob.glob(os.path.join(class_folder, "*.MP3"))
+    )
 
     class_spectrograms = []
     for f in audio_files:

@@ -15,6 +15,13 @@ TRAIN_DIR = BASE_DIR / "train_set_resized"
 VAL_DIR = BASE_DIR / "val_set_resized"
 TEST_DIR = BASE_DIR / "test_set_resized"
 
+TEACHER_DIR = BASE_DIR / "birdnet_teacher"
+TEACHER_PROBS = TEACHER_DIR / "teacher_probs.npy"
+TEACHER_CLASSES = TEACHER_DIR / "class_order.npy"
+
+DISTILLATION_ALPHA = 0.3
+DISTILLATION_TEMPERATURE = 3.0
+
 MODEL_DIR = BASE_DIR / "model"
 MODEL_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -38,15 +45,25 @@ def train_model(  model, train_loader, val_loader, criterion, optimizer, schedul
 
         progress = tqdm(train_loader, desc=f"Epoch {epoch + 1}/{EPOCHS}")
 
-        for images, labels in progress:
-            images = images.to(device, non_blocking=True)
-            labels = labels.to(device, non_blocking=True)
+        for images, labels, teacher_targets in progress:
+            images = images.to(device, non_blocking = True)
+            labels = labels.to(device, non_blocking = True)
+            teacher_targets = teacher_targets.to(device, non_blocking = True)
 
-            optimizer.zero_grad(set_to_none=True)
+            optimizer.zero_grad(set_to_none = True)
 
-            with torch.autocast(device_type="cuda", enabled=device.type == "cuda"):
+            with torch.autocast(device_type = "cuda", enabled=device.type == "cuda"):
                 outputs = model(images)
-                loss = criterion(outputs, labels)
+                hard_loss = criterion(outputs, labels)
+                temperature = DISTILLATION_TEMPERATURE
+
+                student_log_probs = torch.log_softmax(outputs / temperature, dim=1)
+
+                teacher_probs_soft = teacher_targets.pow(1.0 / temperature)
+                teacher_probs_soft = (teacher_probs_soft / teacher_probs_soft.sum( dim=1, keepdim=True))
+
+                soft_loss = torch.nn.functional.kl_div(student_log_probs, teacher_probs_soft, reduction="batchmean") * (temperature ** 2)
+                loss = ((1.0 - DISTILLATION_ALPHA) * hard_loss + DISTILLATION_ALPHA * soft_loss)
 
             scaler.scale(loss).backward()
             scaler.step(optimizer)
@@ -75,8 +92,8 @@ def train_model(  model, train_loader, val_loader, criterion, optimizer, schedul
 
         with torch.no_grad():
             for images, labels in val_loader:
-                images = images.to(device, non_blocking=True)
-                labels = labels.to(device, non_blocking=True)
+                images = images.to(device, non_blocking = True)
+                labels = labels.to(device, non_blocking = True)
 
                 with torch.autocast(device_type="cuda", enabled=device.type == "cuda"):
                     outputs = model(images)
@@ -95,7 +112,15 @@ def train_model(  model, train_loader, val_loader, criterion, optimizer, schedul
 
         scheduler.step(val_loss)
 
-        print(f"\nEpoch {epoch + 1}/{EPOCHS} | Train loss: {train_loss:.4f} | Train acc: {train_accuracy:.2f}% | Val loss: {val_loss:.4f} | "Val acc: {val_accuracy:.2f}% | "Val top-5: {val_top5_accuracy:.2f}%")
+        print(
+            f"\nEpoch {epoch + 1}/{EPOCHS} | "
+            f"Train loss: {train_loss:.4f} | "
+            f"Train acc: {train_accuracy:.2f}% | "
+            f"Val loss: {val_loss:.4f} | "
+            f"Val acc: {val_accuracy:.2f}% | "
+            f"Val top-5: {val_top5_accuracy:.2f}%"
+        )
+
         print(f"LR: {optimizer.param_groups[0]['lr']:.2e}")
 
         if val_accuracy > best_val_accuracy:
@@ -112,8 +137,7 @@ def train_model(  model, train_loader, val_loader, criterion, optimizer, schedul
             }
 
             torch.save(checkpoint, MODEL_DIR / "training_checkpoint.pth")
-            print(f"Saved best model: {val_accuracy:.2f}%")
-            print("Saved full training checkpoint.")
+            print(f"Saved best model: {val_accuracy:.2f}%, saved full training checkpoint.")
 
         else:
             epochs_without_improvement += 1
@@ -187,13 +211,22 @@ def main():
 
     label_encoder = build_label_encoder(str(TRAIN_DIR))
     num_classes = len(label_encoder.classes_)
+    teacher_probs = np.load(TEACHER_PROBS)
+    teacher_classes = np.load(TEACHER_CLASSES, allow_pickle=True)
 
-    np.save(MODEL_DIR / "label_encoder_classes.npy", label_encoder.classes_)
+    print(f"Teacher matrix loaded: {teacher_probs.shape}")
+    print(f"Teacher probability range: {teacher_probs.min():.6f} - {teacher_probs.max():.6f}")
+    print(f"Teacher row sums: {teacher_probs.sum(axis=1).min():.6f} - {teacher_probs.sum(axis=1).max():.6f}")
 
-    train_dataset = SpectrogramDataset(str(TRAIN_DIR), label_encoder)
+    if teacher_probs.shape != (num_classes, num_classes):
+        raise ValueError(f"Teacher matrix shape {teacher_probs.shape} does not match {num_classes} classes.")
+
+    if not np.array_equal(teacher_classes, label_encoder.classes_):
+        raise ValueError("Teacher class order does not match training class order.")
+
+    train_dataset = SpectrogramDataset(str(TRAIN_DIR), label_encoder, teacher_probs)
     val_dataset = SpectrogramDataset(str(VAL_DIR), label_encoder)
     test_dataset = SpectrogramDataset(str(TEST_DIR), label_encoder)
-
 
     print(f"\nFinal number of classes: {num_classes}")
     print(f"\nTrain samples: {len(train_dataset)}")
@@ -225,7 +258,7 @@ def main():
         param.requires_grad = False
 
     feature_blocks = list(model.features.children())
-    fine_tune_start = int(len(feature_blocks) * 0.7)
+    fine_tune_start = int(len(feature_blocks) * 0.5)
 
     for i, block in enumerate(feature_blocks):
         if i >= fine_tune_start:
@@ -257,17 +290,7 @@ def main():
     )
 
     print(f"\nTrainable parameters: {trainable:,}/{total_params:,}")
-
-    train_model(
-        model,
-        train_loader,
-        val_loader,
-        criterion,
-        optimizer,
-        scheduler,
-        device,
-        scaler
-    )
+    train_model(model, train_loader, val_loader, criterion, optimizer, scheduler, device, scaler)
 
     best_model_path = (MODEL_DIR / "best_model.pth")
 

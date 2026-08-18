@@ -10,9 +10,14 @@ IMAGENET_STD = torch.tensor([0.229, 0.224, 0.225]).view(3, 1, 1)
 
 
 class SpectrogramDataset(Dataset):
-    def __init__(self, data_directory, label_encoder, teacher_probs=None):
+    def __init__(self, data_directory, label_encoder, teacher_probs = None):
         self.samples = []
         self.teacher_probs = teacher_probs
+
+        if teacher_probs is not None:
+            if teacher_probs.shape != (len(label_encoder.classes_), len(label_encoder.classes_)):
+                raise ValueError(f"Teacher matrix shape {teacher_probs.shape} does not match {len(label_encoder.classes_)} classes.")
+
         files = sorted(glob.glob(os.path.join(data_directory, "*.npy")))
 
         for path in files:
