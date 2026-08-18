@@ -13,7 +13,7 @@ OUTPUT_DIR = BASE_DIR / "birdnet_teacher"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 CHECKPOINT = 5
-FILES_PER_CLASS = 20
+FILES_PER_CLASS = 50
 RANDOM_SEED = 42
 N_WORKERS = 4
 BATCH_SIZE = 1

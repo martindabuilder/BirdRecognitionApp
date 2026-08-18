@@ -1,7 +1,3 @@
-#File that gets ran once before the model training
-#idea behind it is to resize the spectrograms in 160x160 before the training, rather than during it
-#that way the training process is a bit faster and more organized
-
 import os
 import glob
 import numpy as np
@@ -11,7 +7,6 @@ import shutil
 
 SOURCE_DIRS = ["train_set", "val_set", "test_set"]
 OUTPUT_SUFFIX = "_resized"
-
 TARGET_SIZE = (224, 224)
 
 def resize_class_file(path, output_dir):
@@ -24,7 +19,7 @@ def resize_class_file(path, output_dir):
     arr = np.load(path)
     n = arr.shape[0]
 
-    resized = np.empty((n, TARGET_SIZE[0], TARGET_SIZE[1]),dtype=np.float16)
+    resized = np.empty((n, TARGET_SIZE[0], TARGET_SIZE[1]), dtype=np.float16)
 
     for i in range(n):
         resized[i] = cv2.resize(
@@ -36,7 +31,6 @@ def resize_class_file(path, output_dir):
 
     return n
 
-
 def copy_metadata(path, output_dir):
     fname = os.path.basename(path)
     out_path = os.path.join(output_dir, fname)
@@ -44,20 +38,17 @@ def copy_metadata(path, output_dir):
     if not os.path.exists(out_path):
         shutil.copy2(path, out_path)
 
+def delete_originals(path, sources_path, segments_path):
+    for file in [path, sources_path, segments_path]:
+        if os.path.exists(file):
+            os.remove(file)
 
 def main():
     for source_directory in SOURCE_DIRS:
         output_directory = source_directory + OUTPUT_SUFFIX
         os.makedirs(output_directory, exist_ok=True)
 
-        class_files = sorted(
-            glob.glob(
-                os.path.join(
-                    source_directory,
-                    "*.npy"
-                )
-            )
-        )
+        class_files = sorted(glob.glob(os.path.join(source_directory, "*.npy")))
 
         class_files = [
             f for f in class_files
@@ -68,29 +59,25 @@ def main():
 
         total_samples = 0
 
-        for path in tqdm(
-            class_files,
-            desc=source_directory
-        ):
-            total_samples += resize_class_file(
-                path,
-                output_directory
-            )
+        for path in tqdm(class_files, desc = source_directory):
+            total_samples += resize_class_file(path, output_directory)
 
             sources_path = path.replace(".npy", "_sources.npy")
             segments_path = path.replace(".npy", "_segments.npy")
 
-            if os.path.exists(sources_path):
-                copy_metadata(
-                    sources_path,
-                    output_directory
-                )
+            copy_metadata(sources_path, output_directory)
+            copy_metadata(segments_path, output_directory)
 
-            if os.path.exists(segments_path):
-                copy_metadata(
-                    segments_path,
-                    output_directory
-                )
+            delete_originals(path, sources_path, segments_path)
+
+        label_encoder_path = os.path.join(source_directory, "label_encoder_classes.npy")
+
+        if os.path.exists(label_encoder_path):
+            copy_metadata(label_encoder_path, output_directory)
+            os.remove(label_encoder_path)
+
+        if os.path.exists(source_directory):
+            os.rmdir(source_directory)
 
         print(f"{source_directory}: {total_samples} samples")
 
