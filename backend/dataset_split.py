@@ -64,15 +64,11 @@ def main():
         segments_path = path.replace(".npy","_segments.npy")
 
         if not os.path.exists(sources_path):
-            print(
-                f"WARNING: Missing sources file for {class_name}"
-            )
+            print(f"WARNING: Missing sources file for {class_name}")
             continue
 
         if not os.path.exists(segments_path):
-            print(
-                f"WARNING: Missing segments file for {class_name}"
-            )
+            print(f"WARNING: Missing segments file for {class_name}")
             continue
 
         arr = np.load(path)
@@ -85,50 +81,36 @@ def main():
         if len(arr) != len(segment_indices):
             raise ValueError(f"{class_name}: spectrogram count, ({len(arr)}) does not match segment count, ({len(segment_indices)}).")
 
-        (
-            train_set,
-            val_set,
-            test_set,
-            train_sources,
-            val_sources,
-            test_sources,
-            train_segments,
-            val_segments,
-            test_segments
-        ) = split_each_class(
-            arr,
-            file_ids,
-            segment_indices
-        )
+        (train_set, val_set,test_set, train_sources, val_sources, test_sources, train_segments, val_segments, test_segments
+        ) = split_each_class(arr, file_ids, segment_indices)
 
         train_output = os.path.join( train_set_dir,f"{class_name}.npy")
         val_output = os.path.join(val_set_dir, f"{class_name}.npy")
         test_output = os.path.join(test_set_dir,f"{class_name}.npy")
 
-        np.save( train_output, train_set )
-        np.save( train_output.replace( ".npy","_sources.npy" ),train_sources)
-        np.save(train_output.replace(".npy","_segments.npy"),train_segments)
+        np.save(train_output, train_set )
+        np.save(train_output.replace(".npy","_sources.npy" ), train_sources)
+        np.save(train_output.replace(".npy","_segments.npy"), train_segments)
 
         if len(val_set) > 0:
             np.save(val_output,val_set)
-            np.save(val_output.replace( ".npy","_sources.npy"),val_sources )
-            np.save(val_output.replace(".npy","_segments.npy"),val_segments)
+            np.save(val_output.replace( ".npy","_sources.npy"), val_sources )
+            np.save(val_output.replace(".npy","_segments.npy"), val_segments)
 
         if len(test_set) > 0:
             np.save(test_output,test_set)
-            np.save(test_output.replace(".npy","_sources.npy"),test_sources)
-            np.save(test_output.replace(".npy","_segments.npy"),test_segments)
+            np.save(test_output.replace(".npy","_sources.npy"), test_sources)
+            np.save(test_output.replace(".npy","_segments.npy"), test_segments)
 
         summary.append((class_name,len(arr),len(train_set),len(val_set),len(test_set)))
-
-    print(f"\nAll classes ({len(summary)}) and their sample counts:")
-
-    for class_name, total, train, val, test in sorted(summary,key=lambda x: x[1]):
-        print(f"{class_name}: {total} samples | train={train}, val={val}, test={test}")
 
     total_train = sum(x[2] for x in summary)
     total_val = sum(x[3] for x in summary)
     total_test = sum(x[4] for x in summary)
+
+    print(f"\nAll classes ({len(summary)}) and their sample counts:")
+    for class_name, total, train, val, test in sorted(summary,key=lambda x: x[1]):
+        print(f"{class_name}: {total} samples | train={train}, val={val}, test={test}")
 
     print(f"\nTotal train: {total_train} Total val: {total_val} Total test: {total_test}")
 

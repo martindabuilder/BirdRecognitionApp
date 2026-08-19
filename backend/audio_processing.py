@@ -2,6 +2,9 @@
 #before training the model on them
 
 import os
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
+
 import librosa
 import numpy as np
 import matplotlib.pyplot as plt
@@ -83,8 +86,8 @@ def split_audio(file_path, sr=sample_rate, duration=audio_duration):
 
 #turns the 5s audio segments into a normalized mel spectrogram
 def audio_to_spectrogram(y, sr):
-    spectrogram = librosa.feature.melspectrogram( y=y, sr=sr, n_fft=2048, hop_length=hop_length, n_mels=mel_lines, fmin=200, fmax=16000, power=2.0)
-    spectrogram_db = librosa.power_to_db( spectrogram, ref=np.max, top_db=80)
+    spectrogram = librosa.feature.melspectrogram(y = y, sr = sr, n_fft = 2048, hop_length = hop_length, n_mels = mel_lines, fmin = 200, fmax = 16000, power = 2.0)
+    spectrogram_db = librosa.power_to_db(spectrogram, ref = np.max, top_db=80)
     spectrogram_norm = (spectrogram_db + 80.0) / 80.0
     spectrogram_norm = np.clip( spectrogram_norm, 0.0, 1.0)
 

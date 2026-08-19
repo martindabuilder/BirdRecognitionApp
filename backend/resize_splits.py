@@ -22,13 +22,9 @@ def resize_class_file(path, output_dir):
     resized = np.empty((n, TARGET_SIZE[0], TARGET_SIZE[1]), dtype=np.float16)
 
     for i in range(n):
-        resized[i] = cv2.resize(
-            arr[i].astype(np.float32),
-            (TARGET_SIZE[1], TARGET_SIZE[0]),
-            interpolation=cv2.INTER_LINEAR
-        ).astype(np.float16)
+        resized[i] = cv2.resize(arr[i].astype(np.float32), (TARGET_SIZE[1], TARGET_SIZE[0]), interpolation=cv2.INTER_LINEAR).astype(np.float16)
+        
     np.save(out_path, resized)
-
     return n
 
 def copy_metadata(path, output_dir):
