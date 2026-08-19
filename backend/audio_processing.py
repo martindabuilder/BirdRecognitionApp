@@ -67,13 +67,14 @@ def spectrogram_too_dark(spectrogram):
 
 #splits the audio files into numerous 5s segments for better structured learning 
 #and transforming into a mel spectrogram
-def split_audio(file_path, sr=sample_rate, duration=audio_duration):
-    y, sr = librosa.load(file_path,sr=sr,res_type="soxr_hq")
+def split_audio(file_path, sr = sample_rate, duration = audio_duration):
+    y, sr = librosa.load(file_path,sr = sr,res_type = "soxr_hq")
 
     y, _ = librosa.effects.trim(y)
     segment_length = int(duration * sr)
     hop_samples = int(4.0 * sr) #allows a 1 second overlap between 2 consecutive segments
     segments = []
+    
     for start in range(0, len(y), hop_samples):
         end = start + segment_length
         seg = y[start:end]
