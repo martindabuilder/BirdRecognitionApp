@@ -41,7 +41,7 @@ STORAGE_DTYPE = "float16"
 #i have chosen to use 4 of the available cores on my computer for the processing
 #in case you want to test and run this locally, never go above the amount you actually have
 #(i would even suggest your cores - 1 just in case)
-NUM_WORKERS = min(4, cpu_count())
+NUM_WORKERS = min(6, cpu_count())
 
 #used to precompute the lenght of the spectrogram, removing the need of resizing
 segment_samples = int(audio_duration * sample_rate)
