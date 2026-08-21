@@ -31,8 +31,8 @@ mel_lines = 150 #spectrogram height, measured in n_mels
 sample_rate = 32000 #set sample rate for each spectrogram
 audio_duration = 5.0 #seconds per segment
 
-minimal_active_threshold = 0.25 #the amount of "active" volume in the file
-max_darkness = 0.05 #intensity below .05 means the segment gets skipped, it's not active enough (i.e its too quiet/empty)
+minimal_active_threshold = 0.30 #the amount of "active" volume in the file
+max_darkness = 0.15 #intensity below .15 means the segment gets skipped, it's not active enough (i.e its too quiet/empty)
 
 #storage dtype for the saved spectrograms
 #a float16 format is chosen as it is a healthy middleground between uint8 and float36

@@ -16,10 +16,10 @@ OUTPUT_DIR = BASE_DIR / "birdnet_teacher"
 OUTPUT_DIR.mkdir(parents = True, exist_ok = True)
 
 CHECKPOINT = 5
-FILES_PER_CLASS = 25
+FILES_PER_CLASS = 30
 RANDOM_SEED = 42
-N_WORKERS = 4
-PREDICT_BATCH_SIZE = 5
+N_WORKERS = 6
+PREDICT_BATCH_SIZE = 6
 TOP_K = 20
 
 CHECKPOINT_MATRIX = (OUTPUT_DIR / "teacher_matrix_checkpoint.npy")
