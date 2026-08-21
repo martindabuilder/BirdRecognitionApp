@@ -19,7 +19,7 @@ TEACHER_DIR = BASE_DIR / "birdnet_teacher"
 TEACHER_PROBS = TEACHER_DIR / "teacher_probs.npy"
 TEACHER_CLASSES = TEACHER_DIR / "class_order.npy"
 
-DISTILLATION_ALPHA = 0.3
+DISTILLATION_ALPHA = 0.0
 DISTILLATION_TEMPERATURE = 3.0
 
 MODEL_DIR = BASE_DIR / "model"
@@ -278,7 +278,7 @@ def main():
         persistent_workers=True
     )
 
-    criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
+    criterion = nn.CrossEntropyLoss(label_smoothing=0.0)
     model = models.efficientnet_b0(weights="DEFAULT")
     in_features = (model.classifier[1].in_features)
 

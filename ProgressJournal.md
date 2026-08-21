@@ -68,8 +68,12 @@ The balancing of the dataset gave pretty substantial results so ill look into th
 
 Day 14: Trying to bring back the teacher distillation approach again but this time with a more robust teacher that is better trained. First test run for the teacher is with a higher files per class count now with 20 for each class (it was 5 before) and a bigger top predicted classes (20 now, was 10 before).
 
+
 Day 15: A big problem with the project is that the model training itself and the teacher now just take a long while to get done. But thats an inevitable part when im training on so many classes and samples. Today was mostly finetuning the teacher and model training again, its a bit better than before but still a long way to go. Im planning on upping the files per class for the teacher up to 50 potentially a 100 if it performs better with 50 per class. 
 
-Day 16: Will give a better update later but basically mostly work focusing on the teacher model and improvements there, aswell as touching up the model training again. Will need to rebalance the dataset a bit again, might get rid of some more classes ill see 
 
-Day 17: Mostly teacher and model training, improvements to the dataset split again.
+Day 16: Dataset was rebalanced again a bit as some classes were removed, i dont want to risk having the model be trained on classes with 100 and then 5000 samples. The overall sample count did get quite a bit bigger (almost doubling going from 280k to 500k samples in total) so training and preprocessing time did get a bit longer but sadly thats the reality of it when it comes down to having limited tech with projects like these. The teacher got and model got retouched a little bit, the gap between test/val accuracy is slowly closing in but there is still work to do. 
+
+Day 17: Mostly teacher and model training, improvements to the dataset split again, retraining the teacher again a bit and testing how the training goes with/without distillation and the more stable teacher. Im thinking if i bring it up to 50 maybe 75 samples per teacher and improve it further it could seriously help the model overall. Looking at the run with and the run without it although the accuract is roughly the same (although the 2nd run got -2% on the val accuracy which is quite substantial) the teacher prevented the model to overfit too quickly, letting it learn gradually the data, so going forward ill improve the teacher. 
+Big idea i want to try is SpecAugment since its a pretty valuable technique in audio processing spheres that i havent tried yet, if properly implemented it could really help close the gap between train/val accuracy.
+But the model overall is performing fine enough i think, im just trying to focus up my energy to make it as best as i could.
