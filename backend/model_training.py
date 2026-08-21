@@ -23,7 +23,8 @@ DISTILLATION_ALPHA = 0.3
 DISTILLATION_TEMPERATURE = 3.0
 
 MODEL_DIR = BASE_DIR / "model"
-MODEL_DIR.mkdir(parents=True, exist_ok=True)
+MODEL_DIR.mkdir(parents = True, exist_ok = True)
+label_encoder_path = MODEL_DIR / "label_encoder_classes.npy"
 
 BATCH_SIZE = 128
 EPOCHS = 30
@@ -155,7 +156,7 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler
             break
 
     return best_val_accuracy
-    
+
 def evaluate_model(model, loader, criterion, device):
     model.eval()
     total_loss = 0.0
@@ -219,6 +220,9 @@ def main():
         print(f"GPU: {torch.cuda.get_device_name(0)}")
 
     label_encoder = build_label_encoder(str(TRAIN_DIR))
+    np.save(label_encoder_path,label_encoder.classes_)
+    print(f"Label encoder classes file saved to: {label_encoder_path}")
+
     num_classes = len(label_encoder.classes_)
     teacher_probs = np.load(TEACHER_PROBS)
     teacher_classes = np.load(TEACHER_CLASSES, allow_pickle=True)
