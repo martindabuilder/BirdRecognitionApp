@@ -51,7 +51,10 @@ The data splitting function now also shows the files that each split has, aswell
 
 ---- SpecAugment file ----
 [text](https://sh-tsang.medium.com/brief-review-specaugment-a-simple-data-augmentation-method-for-automatic-speech-recognition-1ceddfe24e2d)
-
+[text](https://www.researchgate.net/figure/Data-augmentation-specAugment_fig3_382027607)
+[text](https://docs.pytorch.org/audio/stable/tutorials/audio_feature_augmentation_tutorial.html)
+[text](https://research.google/blog/specaugment-a-new-data-augmentation-method-for-automatic-speech-recognition/)
+[text](https://www.semanticscholar.org/paper/SpecAugment%3A-A-Simple-Data-Augmentation-Method-for-Park-Chan/b0fae9fbb4e580d92395eabafe73e317ae6510e3)
 
 ---- data resizing file ----
 A seperate file that resizes the three seperate sets of data before parsing them to the model training. aAs im using EfficientNetB0, it expects files with a 224x224 size, so resizing the spectrograms doesnt create a loss of information/data and also helps the EfficientNet training be done to the standards.
