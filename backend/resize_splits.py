@@ -32,7 +32,7 @@ def copy_metadata(path, output_dir):
         shutil.copy2(path, out_path)
 
 
- def resize_class_file(path, output_dir):
+def resize_class_file(path, output_dir):
     fname = os.path.basename(path)
     out_path = os.path.join(output_dir, fname)
 
@@ -80,14 +80,40 @@ def resize_train_sets(path, output_dir):
         combined_segments = normal_segments
         combined_sources = normal_sources
 
+    out_path = os.path.join(output_dir, fname)
+
+    np.save(out_path, combined)
+    np.save(out_path.replace(".npy", "_sources.npy"), combined_sources)
+    np.save(out_path.replace(".npy", "_segments.npy"), combined_segments)
+
+    return len(combined)
 
 
 def main():
     #resizing the combined augmented and non augmented training sets
+    os.makedirs(train_output_dir, exist_ok = True)
+    train_files = sorted(glob.glob(os.path.join(original_train_dir, "*.npy")))
+    train_files = [
+        f for f in train_files
+        if os.path.basename(f) != "label_encoder_classes.npy"
+        and not f.endswith("_sources.npy")
+        and not f.endswith("_segments.npy")
+    ]
+    
+    total_train = 0
+
+    for path in tqdm(train_files, desc = "train_set"):
+        total_train += resize_train_sets(path, train_output_dir)
+
+    label_encoder_path = os.path.join(original_train_dir, "label_encoder_classes.npy")
+
+    if os.path.exists(label_encoder_path):
+        copy_metadata(label_encoder_path, train_output_dir)
+
 
     #resizing val/test sets
-    for source_directory in SOURCE_DIRS:
-        output_directory = source_directory + OUTPUT_SUFFIX
+    for source_directory in source_dirs:
+        output_directory = source_directory + output_suffix
         os.makedirs(output_directory, exist_ok = True)
 
         class_files = sorted(glob.glob(os.path.join(source_directory, "*.npy")))
@@ -113,12 +139,18 @@ def main():
 
         label_encoder_path = os.path.join(source_directory, "label_encoder_classes.npy")
 
-        if os.path.exists(label_encoder_path):
-            copy_metadata(label_encoder_path, output_directory)
-            os.remove(label_encoder_path)
 
+    #deleting the original splits if the resize was sucessful
+    #done in order to save memory
+    if os.path.exists(original_train_dir):
+        shutil.rmtree(original_train_dir)
+
+    if os.path.exists(aug_train_dir):
+        shutil.rmtree(aug_train_dir)
+
+    for source_directory in source_dirs:
         if os.path.exists(source_directory):
-            os.rmdir(source_directory)
+            shutil.rmtree(source_directory)
 
     print("\nTraining splits successfully resized.")
 
