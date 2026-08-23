@@ -1,6 +1,5 @@
-from pathlib import Path
-
 import numpy as np
+from pathlib import Path
 import torch
 import torch.nn as nn
 import torchvision.models as models
@@ -24,7 +23,7 @@ DISTILLATION_TEMPERATURE = 3.0
 
 MODEL_DIR = BASE_DIR / "model"
 MODEL_DIR.mkdir(parents = True, exist_ok = True)
-label_encoder_path = MODEL_DIR / "label_encoder_classes.npy"
+LABEL_ENCODER_PATH = MODEL_DIR / "label_encoder_classes.npy"
 
 BATCH_SIZE = 128
 EPOCHS = 30
@@ -221,7 +220,7 @@ def main():
 
     label_encoder = build_label_encoder(str(TRAIN_DIR))
     np.save(label_encoder_path,label_encoder.classes_)
-    print(f"Label encoder classes file saved to: {label_encoder_path}")
+    print(f"Label encoder classes file saved to: {LABEL_ENCODER_PATH}")
 
     num_classes = len(label_encoder.classes_)
     teacher_probs = np.load(TEACHER_PROBS)

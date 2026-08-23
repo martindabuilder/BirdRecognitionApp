@@ -14,7 +14,8 @@
 /backend/test_set_resized
 /backend/test_predict.py
 /backend/add_samples.py
+
+#ignoring the teacher and test audios
 /backend/birdnet_teacher
 /backend/__pycache__
-
 /test_audios
