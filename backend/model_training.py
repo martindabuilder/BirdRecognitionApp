@@ -70,13 +70,13 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, scheduler
 
             total_loss += loss.item()
 
-            predicted = outputs.argmax(dim=1)
+            predicted = outputs.argmax(dim = 1)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
 
             progress.set_postfix(
-                loss=f"{loss.item():.4f}",
-                acc=f"{100 * correct / total:.1f}%"
+                loss = f"{loss.item():.4f}",
+                acc = f"{100 * correct / total:.1f}%"
             )
 
         train_loss = total_loss / len(train_loader)

@@ -51,7 +51,7 @@ def prepare_spectrogram(spectrogram):
 #---- Audio processing related functions ----
 #preprocessing, which is done in the same way as preprocessing.py
 def split_audio(file_path, sr = SAMPLE_RATE, duration = AUDIO_DURATION):
-    y, sr = librosa.load(file_path,sr = sr, res_type ="soxr_hq")
+    y, sr = librosa.load(file_path, sr = sr, res_type = "soxr_hq")
 
     y, _ = librosa.effects.trim(y)
     segment_length = int(duration * sr)
@@ -80,7 +80,7 @@ def audio_to_spectrogram(y, sr):
 
 
 #---- Model loading and performance functions
-
+#Loads the pre-trained model with our custom weights
 def load_model():
     classes = np.load(label_encoder_path, allow_pickle = True)
     num_classes = len(classes)
@@ -102,9 +102,26 @@ def load_model():
     return model, classes
 
 
+#Used to predict the file uploaded by the user, regardless of if its from device or recording
 def predict_uploaded_file(file_path):
     segments, sr = split_audio(file_path)
     inputs = []
+
+    for segment in segments:
+        spectrogram = audio_to_spectrogram(segment, sr)
+
+        if spectrogram_too_dark(spectrogram):
+            continue
+
+        if not is_seg_active(spectrogram):
+            continue
+
+        inputs.apped(prepare_spectrogram(spectrogram))
+
+    if not inputs:
+        raise ValueError("No usable audio segments were generated.")
+
+    
 
 #---- FastAPI portion of the backend ----
 @app.post("/predict")

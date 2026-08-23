@@ -24,6 +24,8 @@ backend.py where everything gets connected to the front end portion. All the prd
 
 ---- FILE INFORMATION AND REFERENCES ----
 
+[Python constants](https://realpython.com/python-constants/#:~:text=Because%20Python%20constants%20are%20just,constants%20use%20uppercase%20letters%20only.)
+
 ---- audio-processing file ----
 A lot of the initial audio processing code is pretty similar to the previous version of the project, but it does go on to a deeper level of processing data compared to before.
 
