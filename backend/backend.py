@@ -3,16 +3,19 @@ import numpy as np
 import librosa
 import torchvision.models as models
 import torch.nn as nn
+import torch
+from pathlib import Path
 
 #---- FastApi related imports ----
 from fastapi import FastAPI, HTTPException, File, UploadFile
 
-app = FastAPI(title = "Bird Recognition")
 
 #---- Model related paths and data ----
-model_directory = "model"
-model_path = os.path.join(model_directory, "best_model.pth")
-label_encoder_path = os.path.join(model_directory, "label_encoder_classes.npy")
+BASE_DIR = Path(__file__).resolve().parent
+MODEL_DIR = BASE_DIR / "model"
+MODEL_PATH = MODEL_DIR / "best_model.pth"
+LABEL_ENCODER_PATH = MODEL_DIR / "label_encoder_classes.npy"
+
 IMAGENET_MEAN = torch.tensor([0.485, 0.456, 0.406]).view(3, 1, 1)
 IMAGENET_STD = torch.tensor([0.229, 0.224, 0.225]).view(3, 1, 1)
 
@@ -30,7 +33,7 @@ HOP_LENGTH = int(0.020 * SAMPLE_RATE)
 DEVICE = torch.device("cpu")
 
 
-#---- filtering functions ----
+#---- Filtering functions ----
 #checks if the segment is active enough
 #if it isnt above the threshold it gets skipped
 def is_seg_active(spectrogram, threshold = 0.05, min_ratio = MINIMAL_ACTIVE_THRESHOLD):
@@ -38,11 +41,15 @@ def is_seg_active(spectrogram, threshold = 0.05, min_ratio = MINIMAL_ACTIVE_THRE
     ratio = np.sum(active_columns) / len(active_columns)
     return ratio >= min_ratio
 
+
 #checks for the overall darkness of the spectrogram, if its too dark it gets skipped
 def spectrogram_too_dark(spectrogram):
     return spectrogram.mean() < MAX_DARKNESS
 
+
+#Transform the spectrogram into a 
 def prepare_spectrogram(spectrogram):
+    spectrogram = torch.from_numpy(spectrogram)
     spectrogram = spectrogram.unsqueeze(0).repeat(3, 1, 1)
     spectrogram = (spectrogram - IMAGENET_MEAN) / IMAGENET_STD
     return spectrogram
@@ -67,6 +74,7 @@ def split_audio(file_path, sr = SAMPLE_RATE, duration = AUDIO_DURATION):
 
     return segments, sr
 
+
 #turns the 5s audio segments into a normalized mel spectrogram
 def audio_to_spectrogram(y, sr):
     spectrogram = librosa.feature.melspectrogram(y = y, sr = sr, n_fft = 2048, 
@@ -82,7 +90,7 @@ def audio_to_spectrogram(y, sr):
 #---- Model loading and performance functions
 #Loads the pre-trained model with our custom weights
 def load_model():
-    classes = np.load(label_encoder_path, allow_pickle = True)
+    classes = np.load(LABEL_ENCODER_PATH, allow_pickle = True)
     num_classes = len(classes)
 
     model = models.efficientnet_b0(weights = None)
@@ -96,10 +104,15 @@ def load_model():
         nn.Linear(256, num_classes)
     )
 
-    model.load_state_dict(torch.load(model_path, weights_only = True))
+    model.load_state_dict(torch.load(MODEL_PATH, map_location = DEVICE, weights_only = True))
+    model.to(DEVICE)
     model.eval()
 
     return model, classes
+
+
+#Once the backend starts the model gets automatically loaded
+model, classes = load_model()
 
 
 #Used to predict the file uploaded by the user, regardless of if its from device or recording
@@ -116,12 +129,32 @@ def predict_uploaded_file(file_path):
         if not is_seg_active(spectrogram):
             continue
 
-        inputs.apped(prepare_spectrogram(spectrogram))
+        inputs.append(prepare_spectrogram(spectrogram))
 
     if not inputs:
         raise ValueError("No usable audio segments were generated.")
 
-    
+    batch = torch.stack(inputs).to(DEVICE)
+
+    with torch.no_grad():
+        outputs = model(batch)
+        probabilities = torch.softmax(outputs, dim = 1)
+
+    mean_probs = probabilities.mean(dim = 0)
+
+    top_picks = min(5, len(classes))
+    values, indices = torch.topk(mean_probs, top_picks)
+
+    predictions = []
+
+    for value, index in zip(values, indices):
+        predictions.append({
+            "species" : str(classes[index.item()]),
+            "probabilities" : float(value.item())
+        })
+
+    return predictions
 
 #---- FastAPI portion of the backend ----
+app = FastAPI(title = "Bird Recognition")
 @app.post("/predict")
