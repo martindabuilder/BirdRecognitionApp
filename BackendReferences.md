@@ -85,3 +85,5 @@ It has a limit of downloads per request, a maximum set recordings based on how m
 
 
 ---- backend file references ----
+[First Steps FastApi](https://fastapi.tiangolo.com/tutorial/first-steps/)
+Frr the connection between the front and backend i will be using [FastApi](https://fastapi.tiangolo.com/tutorial/) 

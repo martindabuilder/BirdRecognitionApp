@@ -1,41 +1,47 @@
 import os
-import torch
+import numpy as np
+import librosa
+import torchvision.models as models
 
+#---- FastApi related imports ----
+from fastapi import FastAPI, HTTPException, File
+
+app = FastAPI(title = "Bird Recognition")
+
+#---- Model related paths ----
 model_directory = "model"
 model_path = os.path.join(model_directory, "best_model.pth")
 label_encoder_path = os.path.join(model_directory, "label_encoder_classes.npy")
 
-#specifications that must match the same used beforehand
-#i.e in the training and preprocessing
-mel_lines = 150 #spectrogram height, measured in n_mels
-sample_rate = 32000 #set sample rate for each spectrogram
-audio_duration = 5.0 #seconds per segment
+#settings that must match the same used beforehand during the preprocessing
+MEL_LINES = 150 #spectrogram height, measured in n_mels
+SAMPLE_RATE = 32000 #set sample rate for each spectrogram
+AUDIO_DURATION = 5.0 #seconds per segment
 
-max_darkness = 0.05 #intensity below .05 means the segment gets skipped, it's not active enough (i.e its too quiet/empty)
-minimal_active_threshold = 0.25 #the amount of "active" volume in the file
+MAX_DARKNESS = 0.05 #intensity below .05 means the segment gets skipped(i.e its too quiet/empty)
+MINIMAL_ACTIVE_THRESHOLD = 0.25 #the amount of "active" volume in the file
 
-segment_samples = int(audio_duration * sample_rate)
-hop_length = int(0.020 * sample_rate)
+SEGMENT_SAMPLES = int(AUDIO_DURATION * SAMPLE_RATE)
+HOP_LENGTH = int(0.020 * SAMPLE_RATE)
 
 
-# ---- FUNCTIONS ----
-
+#---- filtering functions ----
 #checks if the segment is active enough
 #if it isnt above the threshold it gets skipped
-def is_seg_active(spectrogram, threshold = 0.05, min_ratio = minimal_active_threshold):
+def is_seg_active(spectrogram, threshold = 0.05, min_ratio = MINIMAL_ACTIVE_THRESHOLD):
     active_columns = np.any(spectrogram > threshold, axis = 0)
     ratio = np.sum(active_columns) / len(active_columns)
 
     return ratio >= min_ratio
 
-
-#checks for the overall darkness of the spectrogram
-#if its too dark it gets skipped
+#checks for the overall darkness of the spectrogram, if its too dark it gets skipped
 def spectrogram_too_dark(spectrogram):
     return spectrogram.mean() < max_darkness
 
 
-def split_audio(file_path, sr = sample_rate, duration = audio_duration):
+#---- Audio processing related functions ----
+#preprocessing, which is done in the same way as preprocessing.py
+def split_audio(file_path, sr = SAMPLE_RATE, duration = AUDIO_DURATION):
     y, sr = librosa.load(file_path,sr = sr, res_type ="soxr_hq")
 
     y, _ = librosa.effects.trim(y)
@@ -52,23 +58,28 @@ def split_audio(file_path, sr = sample_rate, duration = audio_duration):
 
     return segments, sr
 
-
-
 #turns the 5s audio segments into a normalized mel spectrogram
 def audio_to_spectrogram(y, sr):
     spectrogram = librosa.feature.melspectrogram(y = y, sr = sr, n_fft = 2048, hop_length = hop_length, n_mels = mel_lines, fmin = 200, fmax = 16000, power = 2.0)
     spectrogram_db = librosa.power_to_db(spectrogram, ref = np.max, top_db=80)
     spectrogram_norm = (spectrogram_db + 80.0) / 80.0
     spectrogram_norm = np.clip( spectrogram_norm, 0.0, 1.0)
-
     return spectrogram_norm.astype(np.float32)
 
 
-def process_file(file_path):
+#---- Model loading and performance functions
 
 def load_model():
+    classes = np.load(label_encoder_path, allow_pickle = True)
 
-def predict():
+
+def predict_file(file_path):
+    segments, sr = split_audio(file_path)
+    predictions = []
+
+
+def main():
+    
 
 if __name__ == "__main__":
     main()

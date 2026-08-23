@@ -16,10 +16,10 @@ OUTPUT_DIR = BASE_DIR / "birdnet_teacher"
 OUTPUT_DIR.mkdir(parents = True, exist_ok = True)
 
 CHECKPOINT = 5
-FILES_PER_CLASS = 30
+FILES_PER_CLASS = 60
 RANDOM_SEED = 42
 N_WORKERS = 6
-PREDICT_BATCH_SIZE = 6
+PREDICT_BATCH_SIZE = 3
 TOP_K = 20
 
 CHECKPOINT_MATRIX = (OUTPUT_DIR / "teacher_matrix_checkpoint.npy")
@@ -463,7 +463,7 @@ def main():
 
     print(
         f"\nTeacher generation complete"
-        f"\nClasses: {num_classes}, files: {successful_files}/{total_files}W"
+        f"\nClasses: {num_classes}, files: {successful_files}/{total_files}"
         f"\nExpected: {expected_found_count}/{successful_files}"
         f"Matrix: {teacher_matrix.shape}"
         f"\nAvg max: {max_probabilities.mean():.3%} | Min max: {max_probabilities.min():.3%} | Max max: {max_probabilities.max():.3%}"

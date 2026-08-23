@@ -28,7 +28,7 @@ label_encoder_path = MODEL_DIR / "label_encoder_classes.npy"
 
 BATCH_SIZE = 128
 EPOCHS = 30
-PATIENCE = 5
+PATIENCE = 3
 LEARNING_RATE = 1e-4
 WEIGHT_DECAY = 5e-4
 BALANCE_POWER = 0.5
