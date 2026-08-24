@@ -1,0 +1,8 @@
+.main-section {
+    background-color: #f1d08b;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}

@@ -1,0 +1,18 @@
+.predict-buttons {
+    gap: 15px;
+    display: flex;
+}
+
+.predict-button{
+    color:rgb(122, 180, 230);
+    border: 3px solid rgb(106, 104, 60);
+    border-radius: 10%;
+    padding: 2px;
+}
+
+.audio-predict-button{
+    color:rgb(122, 180, 230);
+    border: 3px solid rgb(106, 104, 60);
+    border-radius: 10%;
+    padding: 2px;
+}
