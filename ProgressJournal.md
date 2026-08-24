@@ -72,3 +72,7 @@ Overfitting is still present sadly so im doing my best to mitigate it in some wa
 
 Day 19: Upped the teacher's files per class up to a 100 while i start working on the front end portion properly.
 Working on the proper Python + FastAPI backend file. Halfway done today, will attempt to finish it off fully the next day.
+
+Day 20: Started work on the frontend side of things + the connection between the frontend and FastAPI. Design isnt much currently but its getting worked on.
+Will do some work tomorrow on actually getting the model to print out bird information from the predictions. Afterwards we get to designin.
+Teacher is still learning with the 100 files per class rate, it will legit take 2 full days to train fully.

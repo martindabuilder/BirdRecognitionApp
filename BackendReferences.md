@@ -93,3 +93,5 @@ For the connection between the front and backend i will be using
 [FastAPI for AI: Build an AI Endpoint in 30 Minutes](https://www.youtube.com/watch?v=uDUfZyNXFX0)
 [text](https://medium.com/@Dev_sammie/integrating-machine-learning-models-into-frontend-applications-36e849ec1e7f) 
 [How to redirect the user back to the home page using FastAPI, after submitting an HTML form?](https://stackoverflow.com/questions/70690454/how-to-redirect-the-user-back-to-the-home-page-using-fastapi-after-submitting-a)
+
+Using fastAPI, the user will be able to call the model and have it classify the audio its getting.
