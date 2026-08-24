@@ -219,7 +219,7 @@ def main():
         print(f"GPU: {torch.cuda.get_device_name(0)}")
 
     label_encoder = build_label_encoder(str(TRAIN_DIR))
-    np.save(label_encoder_path,label_encoder.classes_)
+    np.save(LABEL_ENCODER_PATH, label_encoder.classes_)
     print(f"Label encoder classes file saved to: {LABEL_ENCODER_PATH}")
 
     num_classes = len(label_encoder.classes_)
