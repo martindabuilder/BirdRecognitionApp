@@ -157,4 +157,13 @@ def predict_uploaded_file(file_path):
 
 #---- FastAPI portion of the backend ----
 app = FastAPI(title = "Bird Recognition")
-@app.post("/predict")
+
+#Main portion of the site
+@app.get("/")
+def home():
+    return {"message" : "Bird Recognition FastAPI endpoint is running"}
+
+#Sends through the information from the model predictions.
+@app.get("/predict")
+def predict():
+    return {"message" : "Predictions endpoint was reached."}
