@@ -1,10 +1,9 @@
-import "../PredictButton/predict_buttons.css"
-import "./microphone_predict_button.css"
+import "./buttons.css"
 
 function MicrophonePredictButton(){
     return (
         <div className = "predict-buttons">
-            <button className = "microphone-predict-button">
+            <button className = "predict-button">
                 Record audio.
             </button>
         </div>

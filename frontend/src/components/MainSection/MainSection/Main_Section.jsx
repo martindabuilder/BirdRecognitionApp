@@ -2,8 +2,8 @@ import "./main_section.css"
 
 import TitleBar from "../TitleBar/TitleBar.jsx"
 
-import MicrophonePredictButton from "../MicrophonePredictButton/Microphone_Predict_Button.jsx"
-import PredictButton from "../PredictButton/Predict_Button.jsx"
+import MicrophonePredictButton from "../PredictButtons/Microphone_Predict_Button.jsx"
+import PredictButton from "../PredictButtons/Predict_Button.jsx"
 
 
 function MainSection(){

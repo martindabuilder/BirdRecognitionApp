@@ -1,12 +1,12 @@
-.microphone-predict-button{
+.predict-button{
     background-color:rgb(218, 201, 76);
     border: 3px solid rgb(220, 141, 50);
-    border-radius: 10%;
+    border-radius: 20px;
     padding: 10px;
 
     width: 450px;
     height: 250px;
 
     text-align: center;
-
 }
+

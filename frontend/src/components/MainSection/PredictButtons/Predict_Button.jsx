@@ -1,4 +1,4 @@
-import "./predict_buttons.css"
+import "./buttons.css"
 
 function PredictButton(){
     async function handlePredict(){

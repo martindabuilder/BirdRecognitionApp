@@ -1,6 +1,6 @@
 import "./index.css"
 
-import MainSection from "./components/PredictSection/MainSection/Main_Section.jsx"
+import MainSection from "./components/MainSection/MainSection/Main_Section.jsx"
 
 function App() {
     return(
