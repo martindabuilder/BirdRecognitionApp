@@ -1,13 +1,12 @@
 .main-section {
-    background-color: #f1d08b;
+    background-color: #203d4f;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     min-height: 100vh;
 }
 
 .predict-buttons {
-    gap: 15px;
+    gap: 35px;
     display: flex;
 }
