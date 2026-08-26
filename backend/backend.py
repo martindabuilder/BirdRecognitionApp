@@ -5,6 +5,7 @@ import torchvision.models as models
 import torch.nn as nn
 import torch
 from pathlib import Path
+import cv2
 
 #---- FastApi related imports ----
 from fastapi import FastAPI, HTTPException, File, UploadFile
@@ -24,11 +25,13 @@ MEL_LINES = 150 #spectrogram height, measured in n_mels
 SAMPLE_RATE = 32000 #set sample rate for each spectrogram
 AUDIO_DURATION = 5.0 #seconds per segment
 
-MAX_DARKNESS = 0.05 #intensity below .05 means the segment gets skipped(i.e its too quiet/empty)
-MINIMAL_ACTIVE_THRESHOLD = 0.25 #the amount of "active" volume in the file
+MAX_DARKNESS = 0.15 #intensity below .05 means the segment gets skipped(i.e its too quiet/empty)
+MINIMAL_ACTIVE_THRESHOLD = 0.30 #the amount of "active" volume in the file
 
 SEGMENT_SAMPLES = int(AUDIO_DURATION * SAMPLE_RATE)
 HOP_LENGTH = int(0.020 * SAMPLE_RATE)
+
+TARGET_SIZE = (224, 224)
 
 DEVICE = torch.device("cpu")
 
@@ -47,11 +50,12 @@ def spectrogram_too_dark(spectrogram):
     return spectrogram.mean() < MAX_DARKNESS
 
 
-#Transform the spectrogram into a 
 def prepare_spectrogram(spectrogram):
+    spectrogram = cv2.resize(spectrogram.astype(np.float32), (TARGET_SIZE[1], TARGET_SIZE[0]),interpolation=cv2.INTER_LINEAR)
     spectrogram = torch.from_numpy(spectrogram)
     spectrogram = spectrogram.unsqueeze(0).repeat(3, 1, 1)
     spectrogram = (spectrogram - IMAGENET_MEAN) / IMAGENET_STD
+
     return spectrogram
 
 
@@ -154,6 +158,18 @@ def predict_uploaded_file(file_path):
         })
 
     return predictions
+
+
+#Testing portion to see if the model gets correctly loaded and predicts
+if __name__ == "__main__":
+    audio_file = BASE_DIR.parent/"test_audios"/"XC490773comnig.mp3"
+    predictions = predict_uploaded_file(audio_file)
+
+    print("\nPredictions:")
+    for prediction in predictions:
+        print(f"{prediction['species']}: {prediction['probabilities']:.2%}")
+
+
 
 #---- FastAPI portion of the backend ----
 app = FastAPI(title = "Bird Recognition")
