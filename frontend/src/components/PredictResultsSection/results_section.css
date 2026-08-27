@@ -5,3 +5,10 @@
     align-items: center;
     min-height: 100vh;
 }
+
+.escape-button {
+    height: 100px;
+    width: 100px;
+    position: relative;
+    
+}

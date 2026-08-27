@@ -76,3 +76,7 @@ Working on the proper Python + FastAPI backend file. Halfway done today, will at
 Day 20: Started work on the frontend side of things + the connection between the frontend and FastAPI. Design isnt much currently but its getting worked on.
 Will do some work tomorrow on actually getting the model to print out bird information from the predictions. Afterwards we get to designin.
 Teacher is still learning with the 100 files per class rate, it will legit take 2 full days to train fully.
+
+Day 21: A concept idea of the frontend if being worked on now to test out the connection between the frontend and fastAPI with the backend, its still rough idea so the frontend itself will be polished more (and made to look good on mobile later on) but for now getting the connections between the mutiple parts of the project right is a good start. 
+Improved the backend file itself and it properly returns the spectrograms + top 5 results from the uploaded file.
+Visually tinkering with the small frontend portion aswell, even tho buttons layout etc will be fixed and concepted around better in the next day or two.
