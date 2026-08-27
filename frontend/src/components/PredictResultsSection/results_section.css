@@ -1,8 +1,9 @@
 .results-section {
     display: flex;
-    flex-direction: column;
     align-items: center;
+    justify-content: center;
     min-height: 100vh;
+    overflow: hidden;
 }
 
 .escape-button {
@@ -11,3 +12,26 @@
     position: relative;
     
 }
+
+.bird-photo-container {
+    border-radius: 5%;
+}
+
+.total-results-container {
+    overflow-y: auto;
+}
+
+.main-confidence {}
+
+.top4-predictions {}
+
+.spectrogram-segments {
+    overflow-x: hidden;
+    display: flex;
+}
+
+.spectrogram-segments img {
+    flex-shrink: 0;
+}
+
+.habitat-map {}

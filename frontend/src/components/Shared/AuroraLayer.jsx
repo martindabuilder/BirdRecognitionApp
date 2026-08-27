@@ -4,6 +4,7 @@ function AuroraLayer() {
             <div className="aurora-blob" />
             <div className="aurora-blob" />
             <div className="aurora-blob" />
+            <div className="aurora-blob" />
         </div>
     );
 }

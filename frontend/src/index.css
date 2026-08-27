@@ -77,6 +77,16 @@ html {
   animation: aurora-move-c 34s ease-in-out infinite, aurora-morph-c 1s ease-in-out infinite;
 }
 
+.aurora-blob:nth-child(4) {
+  width: 55%;
+  height: 42%;
+  top: -10%;
+  left: -10%;
+  background: var(--aurora-c3);
+  border-radius: 65% 35% 15% 85% / 30% 70% 25% 75%;
+  animation: aurora-move-c 34s ease-in-out infinite, aurora-morph-c 1s ease-in-out infinite;
+}
+
 @keyframes aurora-morph-a {
   0% { border-radius: 25% 75% 80% 20% / 65% 30% 70% 35%; }
   33% { border-radius: 70% 30% 25% 75% / 40% 65% 30% 60%; }
@@ -92,6 +102,13 @@ html {
 }
 
 @keyframes aurora-morph-c {
+  0% { border-radius: 65% 35% 15% 85% / 30% 70% 25% 75%; }
+  33% { border-radius: 20% 80% 65% 35% / 70% 25% 60% 30%; }
+  66% { border-radius: 50% 50% 35% 65% / 45% 55% 40% 70%; }
+  100% { border-radius: 65% 35% 15% 85% / 30% 70% 25% 75%; }
+}
+
+@keyframes aurora-morph-d {
   0% { border-radius: 65% 35% 15% 85% / 30% 70% 25% 75%; }
   33% { border-radius: 20% 80% 65% 35% / 70% 25% 60% 30%; }
   66% { border-radius: 50% 50% 35% 65% / 45% 55% 40% 70%; }
@@ -116,11 +133,19 @@ html {
   70% { transform: translate(-6%, 2%) scale(1.12); }
 }
 
+@keyframes aurora-move-d {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  40% { transform: translate(5%, -4%) scale(1.05); }
+  70% { transform: translate(-6%, 2%) scale(1.12); }
+}
+
 .main-theme {
   --aurora-base: #0b4e78;
   --aurora-c1: #4dff00;
   --aurora-c2: #009dff;
   --aurora-c3: #ff0000;
+
+  --aurora-c4: #0037ff;
   color: #009dff;
 }
 
@@ -129,5 +154,7 @@ html {
   --aurora-c1: #ff0000;
   --aurora-c2: #00ff55;
   --aurora-c3: #0015ff;
+
+  --aurora-c4: #ff0000;
   color: #ff0000;
 }
