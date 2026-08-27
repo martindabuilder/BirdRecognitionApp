@@ -1,4 +1,3 @@
-import os
 import numpy as np
 import librosa
 import torchvision.models as models
@@ -6,9 +5,13 @@ import torch.nn as nn
 import torch
 from pathlib import Path
 import cv2
+import base64
+import matplotlib.pyplot as plt
+from io import BytesIO
 
 #---- FastApi related imports ----
 from fastapi import FastAPI, HTTPException, File, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 
 
 #---- Model related paths and data ----
@@ -123,6 +126,7 @@ model, classes = load_model()
 def predict_uploaded_file(file_path):
     segments, sr = split_audio(file_path)
     inputs = []
+    spectrograms = []
 
     for segment in segments:
         spectrogram = audio_to_spectrogram(segment, sr)
@@ -134,6 +138,7 @@ def predict_uploaded_file(file_path):
             continue
 
         inputs.append(prepare_spectrogram(spectrogram))
+        spectrograms.append(spectrogram)
 
     if not inputs:
         raise ValueError("No usable audio segments were generated.")
@@ -157,29 +162,72 @@ def predict_uploaded_file(file_path):
             "probabilities" : float(value.item())
         })
 
-    return predictions
+    return predictions, spectrograms
 
 
-#Testing portion to see if the model gets correctly loaded and predicts
-if __name__ == "__main__":
-    audio_file = BASE_DIR.parent/"test_audios"/"XC490773comnig.mp3"
-    predictions = predict_uploaded_file(audio_file)
+def spectrogram_to_base64(spectrogram):
+    buffer = BytesIO()
+    plt.figure(figsize = (10, 4))
+    plt.imshow(spectrogram, aspect="auto", origin="lower")
+    plt.axis("off")
+    plt.savefig(buffer, format = "png", bbox_inches = "tight", pad_inches = 0)
+    plt.close()
+    buffer.seek(0)
 
-    print("\nPredictions:")
-    for prediction in predictions:
-        print(f"{prediction['species']}: {prediction['probabilities']:.2%}")
+    return base64.b64encode(buffer.read()).decode("utf-8")
 
 
 
 #---- FastAPI portion of the backend ----
 app = FastAPI(title = "Bird Recognition")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 #Main portion of the site
 @app.get("/")
 def home():
     return {"message" : "Bird Recognition FastAPI endpoint is running"}
 
-#Sends through the information from the model predictions.
-@app.get("/predict")
-def predict():
-    return {"message" : "Predictions endpoint was reached."}
+
+#Receives an audio file and runs it through the model
+@app.post("/predict")
+async def results(file: UploadFile = File(...)):
+    if not file.filename:
+        raise HTTPException(status_code=400, detail="No file was uploaded.")
+
+    temp_file = BASE_DIR / f"temp_{file.filename}"
+
+    try:
+        contents = await file.read()
+        with open(temp_file, "wb") as f:
+            f.write(contents)
+
+        predictions, spectrograms = predict_uploaded_file(temp_file)
+        spectrogram_images = []
+
+        for spectrogram in spectrograms:
+            image = spectrogram_to_base64(spectrogram)
+
+            spectrogram_images.append(image)
+
+        return {
+            "filename": file.filename,
+            "predictions": predictions,
+            "spectrograms": spectrogram_images
+        }
+
+    except ValueError as e:
+        raise HTTPException(status_code = 400, detail = str(e))
+
+    except Exception as e:
+        raise HTTPException(status_code = 500, detail = f"Prediction failed: {str(e)}")
+
+    finally:
+        if temp_file.exists():
+            temp_file.unlink()
