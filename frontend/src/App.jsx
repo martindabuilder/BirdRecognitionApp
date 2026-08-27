@@ -6,6 +6,7 @@ import BirdList from "./components/BirdListSection/Bird_Section.jsx"
 import InfoSection from "./components/InfoSection/Info_Section.jsx"
 
 import TitleBar from "./components/Shared/TitleBar.jsx"
+import AuroraLayer from "./components/Shared/AuroraLayer.jsx"
 
 import "./index.css"
 
@@ -16,6 +17,7 @@ function AppWrapper(){
 
     return (
         <div className={`app ${isResultsPage ? "results-theme" : "main-theme"}`}>
+            <AuroraLayer />
             <Routes>
                 <Route path = "/" element = {<MainSection />}/>
                 <Route path = "/results" element = {<ResultsSection />}/>
