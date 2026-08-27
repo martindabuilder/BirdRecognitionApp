@@ -17,13 +17,16 @@ function AppWrapper(){
 
     return (
         <div className={`app ${isResultsPage ? "results-theme" : "main-theme"}`}>
-            <AuroraLayer />
-            <Routes>
-                <Route path = "/" element = {<MainSection />}/>
-                <Route path = "/results" element = {<ResultsSection />}/>
-                <Route path = "/birdlist" element = {<BirdList />}/>
-                <Route path = "/information" element = {<InfoSection />}/>
-            </Routes>
+            <TitleBar />
+            <div className = "app-content">
+                <AuroraLayer />
+                <Routes>
+                    <Route path = "/" element = {<MainSection />}/>
+                    <Route path = "/results" element = {<ResultsSection />}/>
+                    <Route path = "/birdlist" element = {<BirdList />}/>
+                    <Route path = "/information" element = {<InfoSection />}/>
+                </Routes>
+            </div>
         </div>
     )
 }
@@ -32,7 +35,6 @@ function AppWrapper(){
 function App() {
     return (
         <>
-            <TitleBar />
             <BrowserRouter>
                 <AppWrapper />
             </BrowserRouter>

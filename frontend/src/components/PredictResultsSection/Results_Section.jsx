@@ -11,12 +11,37 @@ function ResultsSection(){
 
     if(!result){}
 
+    const predictions = result.predictions || []
+
     return (
         <section className="results-section">
-            <button className = "escape-button" onClick = {goHome}>
+
+            <button className="escape-button" onClick={goHome}>
                 go back lol
             </button>
 
+            <div className="bird-photo-container">
+                birb
+            </div>
+
+            <div className="total-results-container">
+                <div className="main-confidence">
+                    main result
+                </div>
+
+                <div className="top4-predictions">
+                    top 4
+                </div>
+
+                <div className="spectrogram-segments">
+                    spectrograms
+                </div>
+
+                <div className="habitat-map">
+                    map info
+                </div>
+            </div>
+            
         </section>
     )
 } 

@@ -13,25 +13,54 @@
     
 }
 
-.bird-photo-container {
-    border-radius: 5%;
-}
-
 .total-results-container {
     overflow-y: auto;
+    height: 90vh;
+    padding: 20px;
+
+    align-items: center;
+    justify-content: center;
+    flex: grid;
+    z-index: 10;
 }
 
-.main-confidence {}
+.total-results-container::-webkit-scrollbar {
+    display: none;
+}
 
-.top4-predictions {}
+.bird-photo-container {
+    border-radius: 5%;
+    width: 500px;
+    height: 500px;
+    background-color: rgb(3, 47, 32);
+}
+
+.main-confidence {
+    width: 700px;
+    height: 350px;
+    background-color: rgb(255, 251, 127);
+}
+
+.top4-predictions {
+    width: 700px;
+    height: 350px;
+    background-color: rgb(255, 127, 217);
+}
 
 .spectrogram-segments {
     overflow-x: hidden;
     display: flex;
+    width: 700px;
+    height: 350px;
+    background-color: aquamarine;
 }
 
 .spectrogram-segments img {
     flex-shrink: 0;
 }
 
-.habitat-map {}
+.habitat-map {
+    width: 700px;
+    height: 350px;
+    background-color: rgb(127, 255, 136);
+}
