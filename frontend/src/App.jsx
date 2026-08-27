@@ -1,22 +1,40 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
-
-import "./index.css"
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom"
 
 import MainSection from "./components/MainSection/MainSection/Main_Section.jsx"
 import ResultsSection from "./components/PredictResultsSection/Results_Section.jsx"
 import BirdList from "./components/BirdListSection/Bird_Section.jsx"
 import InfoSection from "./components/InfoSection/Info_Section.jsx"
 
-function App() {
+import TitleBar from "./components/Shared/TitleBar.jsx"
+
+import "./index.css"
+
+
+function AppWrapper(){
+    const location = useLocation()
+    const isResultsPage = location.pathname === "/results"
+
     return (
-        <BrowserRouter>
+        <div className={`app ${isResultsPage ? "results-theme" : "main-theme"}`}>
             <Routes>
                 <Route path = "/" element = {<MainSection />}/>
                 <Route path = "/results" element = {<ResultsSection />}/>
-                <Route path = "/bird/list" element = {<BirdList />}/>
+                <Route path = "/birdlist" element = {<BirdList />}/>
                 <Route path = "/information" element = {<InfoSection />}/>
             </Routes>
-        </BrowserRouter>
+        </div>
+    )
+}
+
+
+function App() {
+    return (
+        <>
+            <TitleBar />
+            <BrowserRouter>
+                <AppWrapper />
+            </BrowserRouter>
+        </>
     )
 }
 
