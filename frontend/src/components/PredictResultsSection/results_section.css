@@ -2,37 +2,48 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
+    gap: 24px;
+    height: 100%;
     overflow: hidden;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .escape-button {
-    height: 100px;
-    width: 100px;
-    position: relative;
-    
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    height: 44px;
+    width: auto;
+    padding: 0 16px;
+}
+
+.bird-photo-container {
+    flex-shrink: 0;
+    border-radius: 5%;
+    width: 500px;
+    height: 500px;
+    overflow: hidden;
+    background-color: rgb(3, 47, 32);
+}
+
+.bird-photo-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .total-results-container {
-    overflow-y: auto;
-    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    height: 500px;
+    overflow-y: scroll;
     padding: 20px;
-
-    align-items: center;
-    justify-content: center;
-    flex: grid;
-    z-index: 10;
 }
 
 .total-results-container::-webkit-scrollbar {
     display: none;
-}
-
-.bird-photo-container {
-    border-radius: 5%;
-    width: 500px;
-    height: 500px;
-    background-color: rgb(3, 47, 32);
 }
 
 .main-confidence {
@@ -43,7 +54,7 @@
 
 .top4-predictions {
     width: 700px;
-    height: 350px;
+    height: 700px;
     background-color: rgb(255, 127, 217);
 }
 
@@ -61,6 +72,6 @@
 
 .habitat-map {
     width: 700px;
-    height: 350px;
+    height: 2050px;
     background-color: rgb(127, 255, 136);
 }
