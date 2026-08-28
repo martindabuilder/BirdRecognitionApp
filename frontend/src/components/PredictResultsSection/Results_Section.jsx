@@ -28,7 +28,8 @@ function ResultsSection(){
         <section className="results-section">
 
             <button className="escape-button" onClick={goHome}>
-                go back lol
+                <span></span>
+                <span></span>
             </button>
 
             <div className="bird-photo-container">
