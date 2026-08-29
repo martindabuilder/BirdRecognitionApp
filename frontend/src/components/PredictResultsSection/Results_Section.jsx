@@ -11,7 +11,6 @@ function ResultsSection(){
     function goHome(){navigate("/")}
 
     function handleSpectrogramScroll(e) {
-        e.preventDefault()
         e.stopPropagation()
         e.currentTarget.scrollLeft += e.deltaY
         e.currentTarget.scrollLeft += e.deltaX
@@ -56,6 +55,7 @@ function ResultsSection(){
                 {topSpecies && (
                     <div className = "main-confidence stroke-text">
                         <h3>{topSpecies.species}</h3>
+                        <p className = "scientific-name"> <i> {topSpecies.scientificName} </i> </p>
                         <p>Confidence: {(topSpecies.probabilities * 100).toFixed(2)}%</p>
                     </div>
                 )}

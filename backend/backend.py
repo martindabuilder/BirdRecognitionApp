@@ -8,6 +8,7 @@ import cv2
 import base64
 import matplotlib.pyplot as plt
 from io import BytesIO
+import csv
 
 #---- FastApi related imports ----
 from fastapi import FastAPI, HTTPException, File, UploadFile
@@ -19,6 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent
 MODEL_DIR = BASE_DIR / "model"
 MODEL_PATH = MODEL_DIR / "best_model.pth"
 LABEL_ENCODER_PATH = MODEL_DIR / "label_encoder_classes.npy"
+BIRD_CSV_PATH = BASE_DIR.parent / "dataset" / "eBird_taxonomy_v2025-4.csv"
 
 IMAGENET_MEAN = torch.tensor([0.485, 0.456, 0.406]).view(3, 1, 1)
 IMAGENET_STD = torch.tensor([0.229, 0.224, 0.225]).view(3, 1, 1)
@@ -37,6 +39,35 @@ HOP_LENGTH = int(0.020 * SAMPLE_RATE)
 TARGET_SIZE = (224, 224)
 
 DEVICE = torch.device("cpu")
+
+
+#---- Functions related to visual presentation in the frontend ----
+#Saves and pushes the spectrogram segments for the predicted file
+def spectrogram_to_base64(spectrogram):
+    buffer = BytesIO()
+    plt.figure(figsize = (10, 4))
+    plt.imshow(spectrogram, aspect="auto", origin="lower")
+    plt.axis("off")
+    plt.savefig(buffer, format = "png", bbox_inches = "tight", pad_inches = 0)
+    plt.close()
+    buffer.seek(0)
+
+    return base64.b64encode(buffer.read()).decode("utf-8")
+
+#Loads the actual bird name against its scientific code
+def load_bird_info():
+    bird_info = {}
+
+    with open(BIRD_CSV_PATH, newline = "", encoding = "utf-8-sig") as file:
+        reader = csv.DictReader(file)
+
+        for row in reader:
+            code = row["SPECIES_CODE"]
+            bird_info[code] = {"common_name" : row["PRIMARY_COM_NAME"], "scientific_name" : row["SCI_NAME"]}
+
+    return bird_info
+
+BIRD_INFO = load_bird_info()
 
 
 #---- Filtering functions ----
@@ -157,24 +188,17 @@ def predict_uploaded_file(file_path):
     predictions = []
 
     for value, index in zip(values, indices):
+        code = str(classes[index.item()])
+        bird = BIRD_INFO.get(code)
+
         predictions.append({
-            "species" : str(classes[index.item()]),
-            "probabilities" : float(value.item())
+            "species": bird["common_name"] if bird else code,
+            "scientificName": bird["scientific_name"] if bird else None,
+            "label": code,
+            "probabilities": float(value.item())
         })
 
     return predictions, spectrograms
-
-
-def spectrogram_to_base64(spectrogram):
-    buffer = BytesIO()
-    plt.figure(figsize = (10, 4))
-    plt.imshow(spectrogram, aspect="auto", origin="lower")
-    plt.axis("off")
-    plt.savefig(buffer, format = "png", bbox_inches = "tight", pad_inches = 0)
-    plt.close()
-    buffer.seek(0)
-
-    return base64.b64encode(buffer.read()).decode("utf-8")
 
 
 
