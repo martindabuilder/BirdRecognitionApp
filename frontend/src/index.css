@@ -36,9 +36,7 @@ html, body {
     overflow: hidden;
 }
 
-
-
-
+/* Gradient moving background section */
 .app > *:not(.aurora-layer) {
   position: relative;
   z-index: 1;
@@ -49,33 +47,33 @@ html, body {
   inset: -20%;
   z-index: 0;
   pointer-events: none;
-  filter: blur(60px);
+  filter: blur(65px);
   opacity: 0.65;
 }
 .aurora-blob {
   position: absolute;
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
   transition: background-color 1.2s ease;
 }
 
 .aurora-blob:nth-child(1) {
-  width: 60%;
-  height: 45%;
-  bottom: -10%;
+  width: 77%;
+  height: 75%;
+  bottom: -20%;
   right: -10%;
   background: var(--aurora-c1);
   border-radius: 25% 75% 80% 20% / 65% 30% 70% 35%;
-  animation: aurora-move-a 22s ease-in-out infinite, aurora-morph-a 1s ease-in-out infinite;
+  animation: aurora-move-a 22s ease-in-out infinite, aurora-morph-a 5s ease-in-out infinite;
 }
 
 .aurora-blob:nth-child(2) {
-  width: 50%;
-  height: 40%;
+  width: 60%;
+  height: 45%;
   bottom: -5%;
   right: -15%;
   background: var(--aurora-c2);
   border-radius: 78% 22% 30% 70% / 25% 75% 20% 80%;
-  animation: aurora-move-b 28s ease-in-out infinite, aurora-morph-b 1s ease-in-out infinite;
+  animation: aurora-move-b 20s ease-in-out infinite, aurora-morph-b 10s ease-in-out infinite;
 }
 
 .aurora-blob:nth-child(3) {
@@ -85,40 +83,60 @@ html, body {
   right: 5%;
   background: var(--aurora-c3);
   border-radius: 65% 35% 15% 85% / 30% 70% 25% 75%;
-  animation: aurora-move-c 34s ease-in-out infinite, aurora-morph-c 1s ease-in-out infinite;
+  animation: aurora-move-c 20s ease-in-out infinite, aurora-morph-c 6s ease-in-out infinite;
 }
 
 .aurora-blob:nth-child(4) {
   width: 55%;
   height: 42%;
-  top: -10%;
-  left: -10%;
-  background: var(--aurora-c3);
+  bottom: -15%;
+  right: 5%;
+  background: var(--aurora-c4);
   border-radius: 65% 35% 15% 85% / 30% 70% 25% 75%;
-  animation: aurora-move-c 34s ease-in-out infinite, aurora-morph-c 1s ease-in-out infinite;
+  animation: aurora-move-d 20s ease-in-out infinite, aurora-morph-d 6s ease-in-out infinite;
 }
 
+/* blobs on the top left */
+.aurora-blob:nth-child(5) {
+  width: 90%;
+  height: 60%;
+  top: -5%;
+  left: -35%;
+  background: var(--aurora-c5);
+  border-radius: 65% 35% 15% 85% / 30% 70% 25% 75%;
+  animation: aurora-move-e 20s ease-in-out infinite, aurora-morph-e 6s ease-in-out infinite;
+}
+
+.aurora-blob:nth-child(6) {
+  width: 67%;
+  height: 45%;
+  top: -15%;
+  left: -25%;
+  background: var(--aurora-c6);
+  border-radius: 65% 35% 15% 85% / 30% 70% 25% 75%;
+  animation: aurora-move-f 20s ease-in-out infinite, aurora-morph-f 6s ease-in-out infinite;
+}
+
+/* morph section */
+/* morphs on the bottom right */
 @keyframes aurora-morph-a {
   0% { border-radius: 25% 75% 80% 20% / 65% 30% 70% 35%; }
   33% { border-radius: 70% 30% 25% 75% / 40% 65% 30% 60%; }
   66% { border-radius: 45% 55% 60% 40% / 75% 25% 55% 45%; }
   100% { border-radius: 25% 75% 80% 20% / 65% 30% 70% 35%; }
 }
-
 @keyframes aurora-morph-b {
   0% { border-radius: 78% 22% 30% 70% / 25% 75% 20% 80%; }
   33% { border-radius: 30% 70% 75% 25% / 60% 35% 65% 40%; }
   66% { border-radius: 55% 45% 40% 60% / 35% 70% 45% 65%; }
   100% { border-radius: 78% 22% 30% 70% / 25% 75% 20% 80%; }
 }
-
 @keyframes aurora-morph-c {
   0% { border-radius: 65% 35% 15% 85% / 30% 70% 25% 75%; }
   33% { border-radius: 20% 80% 65% 35% / 70% 25% 60% 30%; }
   66% { border-radius: 50% 50% 35% 65% / 45% 55% 40% 70%; }
   100% { border-radius: 65% 35% 15% 85% / 30% 70% 25% 75%; }
 }
-
 @keyframes aurora-morph-d {
   0% { border-radius: 65% 35% 15% 85% / 30% 70% 25% 75%; }
   33% { border-radius: 20% 80% 65% 35% / 70% 25% 60% 30%; }
@@ -126,45 +144,70 @@ html, body {
   100% { border-radius: 65% 35% 15% 85% / 30% 70% 25% 75%; }
 }
 
+/* morphs on the top left */
+@keyframes aurora-morph-e {
+  0% { border-radius: 65% 35% 15% 85% / 30% 70% 25% 75%; }
+  33% { border-radius: 20% 80% 65% 35% / 70% 25% 60% 30%; }
+  66% { border-radius: 50% 50% 35% 65% / 45% 55% 40% 70%; }
+  100% { border-radius: 65% 35% 15% 85% / 30% 70% 25% 75%; }
+}
+@keyframes aurora-morph-f {
+  0% { border-radius: 65% 35% 15% 85% / 30% 70% 25% 75%; }
+  33% { border-radius: 20% 80% 65% 35% / 70% 25% 60% 30%; }
+  66% { border-radius: 50% 50% 35% 65% / 45% 55% 40% 70%; }
+  100% { border-radius: 65% 35% 15% 85% / 30% 70% 25% 75%; }
+}
 
+/* movement animations */
+/* moves on the bottom right side */
 @keyframes aurora-move-a {
   0%, 100% { transform: translate(0, 0) scale(1); }
   33% { transform: translate(6%, 3%) scale(1.1); }
   66% { transform: translate(-4%, -2%) scale(0.95); }
 }
-
 @keyframes aurora-move-b {
   0%, 100% { transform: translate(0, 0) scale(1); }
   50% { transform: translate(-8%, -3%) scale(1.08); }
 }
-
 @keyframes aurora-move-c {
   0%, 100% { transform: translate(0, 0) scale(1); }
   40% { transform: translate(5%, -4%) scale(1.05); }
   70% { transform: translate(-6%, 2%) scale(1.12); }
 }
-
 @keyframes aurora-move-d {
   0%, 100% { transform: translate(0, 0) scale(1); }
   40% { transform: translate(5%, -4%) scale(1.05); }
   70% { transform: translate(-6%, 2%) scale(1.12); }
 }
 
-.main-theme {
-  --aurora-base: #0b4e78;
-  --aurora-c1: #4dff00;
-  --aurora-c2: #009dff;
-  --aurora-c3: #ff0000;
-
-  --aurora-c4: #0037ff;
-  color: #009dff;
+/* moves on the top left side */
+@keyframes aurora-move-e {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  40% { transform: translate(5%, -4%) scale(1.05); }
+  70% { transform: translate(-6%, 2%) scale(1.12); }
+}
+@keyframes aurora-move-f {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  40% { transform: translate(5%, -4%) scale(1.05); }
+  70% { transform: translate(-6%, 2%) scale(1.12); }
 }
 
-.results-theme {
-  --aurora-base: #bfcd41;
-  --aurora-c1: #ff0000;
-  --aurora-c2: #00ff55;
-  --aurora-c3: #0015ff;
+/* main page background */
+.main-theme {
+  --aurora-base: linear-gradient(90deg, #072430 0%, #134740 100%);
+  --aurora-c1: #0e6443;
+  --aurora-c2: #509a2d;
+  --aurora-c3: #b0c749;
+  --aurora-c4: #eaf969;
 
-  --aurora-c4: #ff0000;
+  --aurora-c5: #010911;
+  --aurora-c6: #011821;
+}
+
+/* results page background */
+.results-theme {
+  --aurora-base: #236c5a;
+  --aurora-c1: #bfcd41;
+  --aurora-c2: #bfcd41;
+  --aurora-c3: #bfcd41;
 }
