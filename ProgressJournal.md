@@ -82,5 +82,8 @@ Improved the backend file itself and it properly returns the spectrograms + top 
 Visually tinkering with the small frontend portion aswell, even tho buttons layout etc will be fixed and concepted around better in the next day or two.
 
 Day 22: Small front end work, mostly connecting the results to the front end and developing the results section.
+The results section now properly displays the information that it got from the backend, and now it shows % of confidence, and soon will have spectrogams + habitat location output for the bird its predicting.
 
-Day 23: Overall frontend shaping up a bit more. Worked more on the bacgkround gradient background and gave it actual colors that match closer to the concept sketches. The results section is shaping up a bit more aswell, now the result "boxes" are a bit more in line with what i have in mind 
+Day 23: Overall frontend shaping up a bit more. Worked more on the bacgkround gradient background and gave it actual colors that match closer to the concept sketches. The results section is shaping up a bit more aswell, now the result "boxes" are a bit more in line with what i have in mind .
+Work on the title bar as it now has a proper button that opens and closes a side menu that will redirect to bird info or full info about the project.
+The results section now has proper scientific and common names for the displayed bird, and the spectrogram output now is scrollable, so the user will be able to scroll through the spectrogram output of the code.
