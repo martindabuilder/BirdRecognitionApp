@@ -96,6 +96,7 @@ html, body {
   animation: aurora-move-d 20s ease-in-out infinite, aurora-morph-d 6s ease-in-out infinite;
 }
 
+
 /* blobs on the top left */
 .aurora-blob:nth-child(5) {
   width: 90%;
@@ -116,6 +117,7 @@ html, body {
   border-radius: 65% 35% 15% 85% / 30% 70% 25% 75%;
   animation: aurora-move-f 20s ease-in-out infinite, aurora-morph-f 6s ease-in-out infinite;
 }
+
 
 /* morph section */
 /* morphs on the bottom right */
@@ -144,6 +146,7 @@ html, body {
   100% { border-radius: 65% 35% 15% 85% / 30% 70% 25% 75%; }
 }
 
+
 /* morphs on the top left */
 @keyframes aurora-morph-e {
   0% { border-radius: 65% 35% 15% 85% / 30% 70% 25% 75%; }
@@ -157,6 +160,7 @@ html, body {
   66% { border-radius: 50% 50% 35% 65% / 45% 55% 40% 70%; }
   100% { border-radius: 65% 35% 15% 85% / 30% 70% 25% 75%; }
 }
+
 
 /* movement animations */
 /* moves on the bottom right side */
@@ -180,6 +184,7 @@ html, body {
   70% { transform: translate(-6%, 2%) scale(1.12); }
 }
 
+
 /* moves on the top left side */
 @keyframes aurora-move-e {
   0%, 100% { transform: translate(0, 0) scale(1); }
@@ -191,6 +196,7 @@ html, body {
   40% { transform: translate(5%, -4%) scale(1.05); }
   70% { transform: translate(-6%, 2%) scale(1.12); }
 }
+
 
 /* main page background */
 .main-theme {

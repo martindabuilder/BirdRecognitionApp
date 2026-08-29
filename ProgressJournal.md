@@ -81,6 +81,6 @@ Day 21: A concept idea of the frontend if being worked on now to test out the co
 Improved the backend file itself and it properly returns the spectrograms + top 5 results from the uploaded file.
 Visually tinkering with the small frontend portion aswell, even tho buttons layout etc will be fixed and concepted around better in the next day or two.
 
-Day 22: Small front end work, mostly connecting the results to the front end and developing the results section
+Day 22: Small front end work, mostly connecting the results to the front end and developing the results section.
 
-Day 23:
+Day 23: Overall frontend shaping up a bit more. Worked more on the bacgkround gradient background and gave it actual colors that match closer to the concept sketches. The results section is shaping up a bit more aswell, now the result "boxes" are a bit more in line with what i have in mind 

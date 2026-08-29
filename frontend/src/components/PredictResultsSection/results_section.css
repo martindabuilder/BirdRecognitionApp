@@ -1,11 +1,32 @@
+.warning-section {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
 .results-section {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 24px;
+    gap: 30px;
     height: 100%;
     padding: 20px;
     box-sizing: border-box;
+}
+
+.results-title {
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    color: rgb(218, 230, 188);
+    -webkit-text-stroke: 3px #0c7345;
+    paint-order: stroke fill;
 }
 
 .bird-photo-container {
@@ -38,49 +59,78 @@
 }
 .total-results-container::-webkit-scrollbar {display: none;}
 
-.results-header {
-    color: #dbdd67;
+
+/* text results border */
+.stroke-text {
+    color: rgb(218, 230, 188);
+    -webkit-text-stroke: 3px #0c7345;
+    paint-order: stroke fill;
 }
+
 
 /* Shared base code for all the result cards */
 .main-confidence,
 .top4-predictions,
-.spectrogram-segments,
+.spectrogram-segments-wrapper,
 .habitat-map {
     flex-shrink: 0;
     width: 700px;
     min-height: 200px;
+    padding: 20px;
+    box-sizing: border-box;
 
     font-family: 'Courier New', Courier, monospace;
-
     background: linear-gradient(180deg, #1b6a48 0%, #dbdd67 100%);
-
     border-radius: 20px;
     border: 10px solid #dbdd67;
+}
+
+
+/* Headers for the different result segments */
+.top4-header,
+.spectrogram-header,
+.habitat-header {
+    flex-shrink: 0;
+    margin-bottom: 14px;
+    font-weight: 700;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
 }
 
 .main-confidence {
     height: auto;
 }
 
-.top4-predictions {
+
+/* spectrogram results */
+.spectrogram-segments-wrapper {
+    height: auto;
 }
-.top4-header {}
 
 .spectrogram-segments {
-    overflow-x: hidden;
     display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    height: 130px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    cursor: grab;
+    overscroll-behavior: contain;
 }
-.spectrogram-segments img {flex-shrink: 0;}
 
-.spectrogram-header {}
+.spectrogram-segments::-webkit-scrollbar {display: none;}
 
-.habitat-map {
+.spectrogram-segments img {
+    flex: 0 0 auto;
+    height: 130px;
+    width: auto;
 }
-.habitat-header {}
+
 
 /* Escape button related css */
-
 .escape-button {
     position: absolute;
     top: 20px;

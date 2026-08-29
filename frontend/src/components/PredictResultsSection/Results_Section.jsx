@@ -10,13 +10,22 @@ function ResultsSection(){
 
     function goHome(){navigate("/")}
 
+    function handleSpectrogramScroll(e) {
+        e.preventDefault()
+        e.stopPropagation()
+        e.currentTarget.scrollLeft += e.deltaY
+        e.currentTarget.scrollLeft += e.deltaX
+    }
+
     if (!result) {
         return (
-            <section className="results-section">
-                <h1>No results found</h1>
+            <section className = "warning-section">
+                <h1 className = "stroke-text">No uploaded results.</h1>
+                <h1 className = "stroke-text">Go back to the main page, and try again.</h1>
                 <button className="escape-button" onClick={goHome}>
-                    go back lol
-                </button>
+                    <span></span>
+                    <span></span>
+            </button>
             </section>
         )
     }
@@ -31,8 +40,10 @@ function ResultsSection(){
                 <span></span>
                 <span></span>
             </button>
-            <h3> Prediction results </h3>
-            <div className="bird-photo-container">
+
+            <h3 className = "results-title">Predicted as</h3>
+
+            <div className = "bird-photo-container">
                 {topSpecies && (
                     <BirdPhoto
                         commonName = {topSpecies.species}
@@ -41,30 +52,37 @@ function ResultsSection(){
                 )}
             </div>
 
-            <div className="total-results-container">
+            <div className = "total-results-container stroke-text">
                 {topSpecies && (
-                    <div className="main-confidence">
+                    <div className = "main-confidence stroke-text">
                         <h3>{topSpecies.species}</h3>
                         <p>Confidence: {(topSpecies.probabilities * 100).toFixed(2)}%</p>
                     </div>
                 )}
 
-                <div className="top4-predictions">
-                    {predictions.slice(1, 5).map((prediction, index) => (
-                        <div className="prediction" key = {prediction.species}>
-                            <span> {index + 1}. {prediction.species}</span>
-                            <span> {(prediction.probabilities * 100).toFixed(2)}%</span>
+                <div className = "top4-predictions stroke-text">
+                    <h4 className = "top4-header"> Closest predictions </h4>
+                    {predictions.slice(1, 5).map((prediction) => (
+                        <div className = "prediction" key = {prediction.species}>
+                            <span> {prediction.species} </span>
+                            <span> {(prediction.probabilities * 100).toFixed(2)}% </span>
                         </div>
                     ))}
                 </div>
 
-                <div className="spectrogram-segments">
-                    {result.spectrograms.map((spectrogram, index) => (
-                        <img key = {index} src = {`data:image/png;base64,${spectrogram}`} alt = {`Spectrogram segment ${index + 1}`}/>
-                    ))}
+                <div className = "spectrogram-segments-wrapper stroke-text">
+                    <h4 className = "spectrogram-header"> {result.spectrograms.length} spectrogram segments </h4>
+                    <div className = "spectrogram-segments" onWheel={handleSpectrogramScroll}>
+                        {result.spectrograms.map((spectrogram, index) => (
+                            <img key = {index} src = {`data:image/png;base64,${spectrogram}`} alt = {`Spectrogram segment ${index + 1}`}/>
+                        ))}
+                    </div>
                 </div>
 
                 <div className = "habitat-map">
+                    <h3 className = "habitat-header stroke-text">
+                        Habitat Location
+                    </h3>
                     map info
                 </div>
             </div>
