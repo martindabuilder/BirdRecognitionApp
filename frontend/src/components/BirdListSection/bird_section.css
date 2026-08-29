@@ -1,7 +1,7 @@
 .list-section {
     background-color: #a0daff;
     display: flex;
-    flex-direction: column;
+    flex-direction: grid;
     align-items: center;
     min-height: 100vh;
 }

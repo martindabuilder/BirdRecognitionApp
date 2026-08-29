@@ -1,3 +1,5 @@
+import BirdPhoto from "../Shared/BirdPhoto.jsx"
+
 import "./bird_section.css"
 
 function BirdList(){

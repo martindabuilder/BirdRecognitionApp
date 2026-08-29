@@ -1,10 +1,12 @@
 .title-bar{
+    position: relative;
     background: linear-gradient(90deg, #cb9483, #ca481d);
     height: 60px;
     width: 100%;
     display: flex;
     align-items: center;
     padding:0 24px;
+    gap: 24px;
     box-sizing: border-box;
     font-family: 'Fraunces', serif;
     font-size: 1.4rem;
@@ -13,8 +15,70 @@
     z-index: 10;
 }
 
-.sidebar-button{}
+.project-title {
+    color: rgb(255, 0, 0);
+}
+
+
+/* Button that opens the sidebar */
+.sidebar-button {
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    z-index: 15;
+}
+
+.sidebar-button span {
+    display: block;
+    width: 30px;
+    height: 4px;
+    background: rgb(10, 78, 59);
+    border-radius: 3px;
+    box-shadow: 0 0 0 2px rgb(213, 228, 130);
+    transition: transform 0.2s ease;
+}
 
 .info-button{}
 
 .list-button{}
+
+
+/* Section containing the info and list buttons */
+.side-menu-section {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 350px;
+    height: 100vh;
+    background-color: orange;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-sizing: border-box;
+    transform: translateX(-100%);
+    transition: transform 5s ease;
+    z-index: 11;
+}
+
+.side-menu-section.open {
+    transform: translateX(0);
+}
+
+.close-sidebarmenu-button {
+
+}
+
+.close-sidebarmenu-button span {
+
+}
+
+
+/* blurring the background when opening the sidebar */
+.menu-blur {}

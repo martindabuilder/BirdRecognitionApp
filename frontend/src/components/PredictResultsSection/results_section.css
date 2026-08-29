@@ -63,7 +63,7 @@
 /* text results border */
 .stroke-text {
     color: rgb(218, 230, 188);
-    -webkit-text-stroke: 3px #0c7345;
+    -webkit-text-stroke: 3px #53941a;
     paint-order: stroke fill;
 }
 
@@ -80,7 +80,7 @@
     box-sizing: border-box;
 
     font-family: 'Courier New', Courier, monospace;
-    background: linear-gradient(180deg, #1b6a48 0%, #dbdd67 100%);
+    background: linear-gradient(180deg, #145f62 0%, #dbdd67 100%);
     border-radius: 20px;
     border: 10px solid #dbdd67;
 }
@@ -151,6 +151,7 @@
     height: 3px;
     background: rgb(10, 78, 59);
     border-radius: 3px;
+    box-shadow: 0 0 0 2px rgb(203, 230, 116);
 }
 
 .escape-button span:first-child {transform: rotate(45deg);}
