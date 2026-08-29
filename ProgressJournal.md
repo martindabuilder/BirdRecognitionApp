@@ -80,3 +80,5 @@ Teacher is still learning with the 100 files per class rate, it will legit take 
 Day 21: A concept idea of the frontend if being worked on now to test out the connection between the frontend and fastAPI with the backend, its still rough idea so the frontend itself will be polished more (and made to look good on mobile later on) but for now getting the connections between the mutiple parts of the project right is a good start. 
 Improved the backend file itself and it properly returns the spectrograms + top 5 results from the uploaded file.
 Visually tinkering with the small frontend portion aswell, even tho buttons layout etc will be fixed and concepted around better in the next day or two.
+
+Day 22:
