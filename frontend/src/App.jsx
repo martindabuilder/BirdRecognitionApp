@@ -20,12 +20,14 @@ function AppWrapper(){
             <TitleBar />
             <div className = "app-content">
                 <AuroraLayer />
-                <Routes>
-                    <Route path = "/" element = {<MainSection />}/>
-                    <Route path = "/results" element = {<ResultsSection />}/>
-                    <Route path = "/birdlist" element = {<BirdList />}/>
-                    <Route path = "/information" element = {<InfoSection />}/>
-                </Routes>
+                <div className = "page-content">
+                    <Routes>
+                        <Route path = "/" element = {<MainSection />}/>
+                        <Route path = "/results" element = {<ResultsSection />}/>
+                        <Route path = "/birdlist" element = {<BirdList />}/>
+                        <Route path = "/information" element = {<InfoSection />}/>
+                    </Routes>
+                </div>
             </div>
         </div>
     )

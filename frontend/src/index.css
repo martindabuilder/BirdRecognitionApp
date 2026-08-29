@@ -36,10 +36,10 @@ html, body {
     overflow: hidden;
 }
 
-/* Gradient moving background section */
-.app > *:not(.aurora-layer) {
-  position: relative;
-  z-index: 1;
+.page-content {
+    position: relative;
+    z-index: 1;
+    height: 100%;
 }
 
 .aurora-layer {

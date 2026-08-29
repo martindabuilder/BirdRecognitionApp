@@ -38,6 +38,10 @@
 }
 .total-results-container::-webkit-scrollbar {display: none;}
 
+.results-header {
+    color: #dbdd67;
+}
+
 /* Shared base code for all the result cards */
 .main-confidence,
 .top4-predictions,
@@ -46,6 +50,8 @@
     flex-shrink: 0;
     width: 700px;
     min-height: 200px;
+
+    font-family: 'Courier New', Courier, monospace;
 
     background: linear-gradient(180deg, #1b6a48 0%, #dbdd67 100%);
 
@@ -59,6 +65,7 @@
 
 .top4-predictions {
 }
+.top4-header {}
 
 .spectrogram-segments {
     overflow-x: hidden;
@@ -66,8 +73,11 @@
 }
 .spectrogram-segments img {flex-shrink: 0;}
 
+.spectrogram-header {}
+
 .habitat-map {
 }
+.habitat-header {}
 
 /* Escape button related css */
 

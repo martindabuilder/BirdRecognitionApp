@@ -31,7 +31,7 @@ function ResultsSection(){
                 <span></span>
                 <span></span>
             </button>
-
+            <h3> Prediction results </h3>
             <div className="bird-photo-container">
                 {topSpecies && (
                     <BirdPhoto
@@ -50,7 +50,7 @@ function ResultsSection(){
                 )}
 
                 <div className="top4-predictions">
-                    {predictions.slice(0, 4).map((prediction, index) => (
+                    {predictions.slice(1, 5).map((prediction, index) => (
                         <div className="prediction" key = {prediction.species}>
                             <span> {index + 1}. {prediction.species}</span>
                             <span> {(prediction.probabilities * 100).toFixed(2)}%</span>
