@@ -1,6 +1,5 @@
 .title-bar {
     position: relative;
-    background: linear-gradient(90deg, #f1ec58, #b45b35);  /* the "default" gradient, plain static value */
     height: 60px;
     width: 100%;
     display: flex;
@@ -13,28 +12,39 @@
     font-weight: 600;
     z-index: 10;
     overflow: hidden;
+    isolation: isolate;
 }
 
-.title-bar::after {
-    content: "";
+.title-gradient {
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, #d3eb93, #a6e86c);
     opacity: 0;
-    transition: opacity 1.2s ease;
-    z-index: -1;
     pointer-events: none;
+    transition: opacity 1.2s ease;
 }
-.results-theme .title-bar::after { opacity: 1; }
+
+.main-gradient { background: linear-gradient( 90deg, #f1ec58, #b45b35); }
+.results-gradient { background: linear-gradient( 90deg, #bed26e, #7cacc5); }
+.birdlist-gradient { background: linear-gradient(90deg, #94de7b, #bba32c); }
+.info-gradient { background: linear-gradient(90deg, #120373, #7b8600); }
+
+/* active colors for the title bar */
+.main-theme .main-gradient { opacity: 1; }
+.results-theme .results-gradient { opacity: 1; }
+.birdlist-theme .birdlist-gradient { opacity: 1; }
+.info-theme .info-gradient { opacity: 1; }
+
 
 /* title bar text */
 .project-title {
     color: rgb(11, 71, 68);
+    z-index: 11;
 }
 
 
 /* Button that opens the sidebar */
 .sidebar-button {
+    position: relative;
     width: 44px;
     height: 44px;
     background: transparent;
@@ -84,7 +94,7 @@
     transform: translateX(0);
 }
 
-/* information =and bird list section buttons */
+/* information and bird list section buttons */
 .info-button,
 .list-button {
     width: 100%;

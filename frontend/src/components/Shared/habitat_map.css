@@ -10,4 +10,32 @@
     height: 100%;
 }
 
+.leaflet-control-attribution {
+    background: #dbdd67 !important;
+    color: #f0f0e9 !important;
+    font-size: 7px !important;
+    padding: 2px 6px !important;
+    border-radius: 6px 0 0 0;
+    backdrop-filter: blur(3px);
+}
+
+.leaflet-control-attribution a {
+    color: rgba(210, 237, 170, 0.85) !important;
+}
+
+/* Zoom controls */
+.leaflet-control-zoom a {
+    background: rgb(255, 0, 0) !important;
+    color: rgb(252, 252, 252) !important;
+    border: 2px solid rgb(123, 255, 0) !important;
+    border-radius: 6px !important;
+}
+
+.leaflet-control-zoom a:hover {
+    background: rgb(25, 0, 255) !important;
+    color: rgb(247, 0, 255) !important;
+}
+
+
+/* photo in case the habitat map could not be loaded */
 .habitat-fallback {}

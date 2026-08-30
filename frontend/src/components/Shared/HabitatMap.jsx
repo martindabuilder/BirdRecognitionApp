@@ -48,25 +48,28 @@ function HabitatMap({scientificName}) {
     return (
         <div className="habitat-map-container">
             <MapContainer
-            center={[30, 10]}
-            zoom={2}
-            minZoom={2}
-            maxZoom={8}
-            scrollWheelZoom={true}
-            className="leaflet-habitat-map"
+                center={[30, 10]}
+                zoom={2}
+                minZoom={2}
+                maxZoom={8}
+                scrollWheelZoom={true}
+                className="leaflet-habitat-map"
             >
 
             <TileLayer
-                attribution='&copy; OpenStreetMap contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                minZoom={0}
+                maxZoom={18}
+                attribution='&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.{ext}"
+                ext="png"
             />
 
             <TileLayer
                 attribution='&copy; iNaturalist'
                 url={`https://api.inaturalist.org/v1/taxon_ranges/${taxonID}/{z}/{x}/{y}.png`}
-                opacity={0.6}
+                opacity={0.8}
             />
-
+            
             </MapContainer>
         </div>
     )

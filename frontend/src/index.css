@@ -212,10 +212,14 @@ html, body {
 
 /* results page background */
 .results-theme {
-  --aurora-base: linear-gradient(90deg, #072430 0%, #134740 100%);
-  --aurora-c1: #b80000;
-  --aurora-c2: #4143cd;
-  --aurora-c3: #41cd51;
+  --aurora-base: linear-gradient(90deg, #15526c 0%, #25ae95 100%);
+  --aurora-c1: #26c286;
+  --aurora-c2: #46c26f;
+  --aurora-c3: #6cd459;
+  --aurora-c4: #eff48c;
+
+  --aurora-c5: #1d6e6e;
+  --aurora-c6: #146265;
 }
 
 .birdlist-theme {}
