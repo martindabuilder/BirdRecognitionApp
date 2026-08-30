@@ -1,5 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom"
 import BirdPhoto from "../Shared/BirdPhoto.jsx"
+import HabitatMap from "../Shared/HabitatMap.jsx"
+
 
 import "./results_section.css"
 
@@ -87,9 +89,10 @@ function ResultsSection(){
 
                 <div className = "habitat-map">
                     <h3 className = "habitat-header stroke-text">
-                        Habitat Location
+                        Expected habitat location
                     </h3>
-                    map info
+
+                    {topSpecies && ( <HabitatMap scientificName={topSpecies.scientificName} /> )}
                 </div>
             </div>
 
