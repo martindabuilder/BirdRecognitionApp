@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import fallBackImage from "../../assets/fallbackimage.jpg"
+
 import "./bird_photo.css";
 
 function BirdPhoto({ commonName, scientificName }) {

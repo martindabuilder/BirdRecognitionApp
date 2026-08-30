@@ -71,6 +71,7 @@
 /* Shared base code for all the result cards */
 .main-confidence,
 .top4-predictions,
+.uploaded-audio-file,
 .spectrogram-segments-wrapper,
 .habitat-map {
     flex-shrink: 0;
@@ -88,6 +89,7 @@
 
 /* Headers for the different result segments */
 .top4-header,
+.uploaded-audio-file-header,
 .spectrogram-header,
 .habitat-header {
     flex-shrink: 0;
@@ -97,10 +99,6 @@
     font-size: 1rem;
     text-transform: uppercase;
     letter-spacing: 0.1rem;
-}
-
-.main-confidence {
-    height: auto;
 }
 
 

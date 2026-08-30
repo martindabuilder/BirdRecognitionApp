@@ -70,6 +70,12 @@ function ResultsSection(){
                     ))}
                 </div>
 
+                <div className = "uploaded-audio-file">
+                    <h3 className = ".uploaded-audio-file-header stroke-text">
+                        Uploaded audio file.
+                    </h3>
+                </div>
+
                 <div className = "spectrogram-segments-wrapper stroke-text">
                     <h4 className = "spectrogram-header"> {result.spectrograms.length} spectrogram segments </h4>
                     <div className = "spectrogram-segments" onWheel={handleSpectrogramScroll}>
