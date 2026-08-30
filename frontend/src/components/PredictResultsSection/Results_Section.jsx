@@ -73,9 +73,13 @@ function ResultsSection(){
                 </div>
 
                 <div className = "uploaded-audio-file">
-                    <h3 className = ".uploaded-audio-file-header stroke-text">
+                    <h3 className = "uploaded-audio-file-header stroke-text">
                         Uploaded audio file.
                     </h3>
+
+                    {result.audio && (
+                        <audio className = "audio-player" controls src = {`data:${result.audioType};base64,${result.audio}`}/>
+                    )}
                 </div>
 
                 <div className = "spectrogram-segments-wrapper stroke-text">

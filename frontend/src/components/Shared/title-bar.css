@@ -25,7 +25,7 @@
 
 .main-gradient { background: linear-gradient( 90deg, #f1ec58, #b45b35); }
 .results-gradient { background: linear-gradient( 90deg, #bed26e, #7cacc5); }
-.birdlist-gradient { background: linear-gradient(90deg, #94de7b, #bba32c); }
+.birdlist-gradient { background: linear-gradient(90deg, #ff0000, #9b8411); }
 .info-gradient { background: linear-gradient(90deg, #120373, #7b8600); }
 
 /* active colors for the title bar */

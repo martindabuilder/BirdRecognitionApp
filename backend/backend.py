@@ -240,10 +240,14 @@ async def results(file: UploadFile = File(...)):
 
             spectrogram_images.append(image)
 
+        audio_base64 = base64.b64encode(contents).decode("utf-8")
+
         return {
             "filename": file.filename,
             "predictions": predictions,
-            "spectrograms": spectrogram_images
+            "spectrograms": spectrogram_images,
+            "audio": audio_base64,
+            "audioType": file.content_type
         }
 
     except ValueError as e:

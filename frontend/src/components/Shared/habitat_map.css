@@ -25,16 +25,18 @@
 
 /* Zoom controls */
 .leaflet-control-zoom a {
-    background: rgb(255, 0, 0) !important;
-    color: rgb(252, 252, 252) !important;
-    border: 2px solid rgb(123, 255, 0) !important;
+    background: rgb(69, 160, 168) !important;
+    color: rgb(156, 221, 218) !important;
+    border: 2px solid rgb(91, 199, 184) !important;
     border-radius: 6px !important;
 }
 
 .leaflet-control-zoom a:hover {
-    background: rgb(25, 0, 255) !important;
-    color: rgb(247, 0, 255) !important;
+    background: rgb(92, 194, 204) !important;
+    color: rgb(232, 237, 209) !important;
 }
+
+
 
 
 /* photo in case the habitat map could not be loaded */
