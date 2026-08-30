@@ -15,5 +15,13 @@ References used when creating this part of the project
 ---- TEXT RELATED REFERENCES ----
 https://stackoverflow.com/questions/4919076/outline-effect-to-text
 
+---- BIRD PHOTOS ----
+[Wikimedia commons](https://commons.wikimedia.org/wiki/Main_Page) is used to fetch the corresponding bird photos, without the need to download naything locally.
+
 for potential future use
 [GBIF API reference](https://techdocs.gbif.org/en/openapi/)
+
+
+
+---- THINGS TO PUT IN THE SECTION OF LIST OF SOUCES ----
+[Wikimedia commons](https://commons.wikimedia.org/wiki/Main_Page)

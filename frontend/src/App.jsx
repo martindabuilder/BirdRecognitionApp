@@ -13,10 +13,17 @@ import "./index.css"
 
 function AppWrapper(){
     const location = useLocation()
-    const isResultsPage = location.pathname === "/results"
+    const pageTheme =
+        location.pathname === "/results"
+            ? "results-theme"
+            : location.pathname === "/birdlist"
+            ? "birdlist-theme"
+            : location.pathname === "/information"
+            ? "info-theme"
+            : "main-theme"
 
     return (
-        <div className={`app ${isResultsPage ? "results-theme" : "main-theme"}`}>
+        <div className = {`app ${pageTheme}`}>
             <TitleBar />
             <div className = "app-content">
                 <AuroraLayer />

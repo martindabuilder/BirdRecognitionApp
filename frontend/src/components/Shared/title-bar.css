@@ -1,20 +1,33 @@
-.title-bar{
+.title-bar {
     position: relative;
-    background: linear-gradient(90deg, #cb9483, #ca481d);
+    background: linear-gradient(90deg, #f1ec58, #b45b35);  /* the "default" gradient, plain static value */
     height: 60px;
     width: 100%;
     display: flex;
     align-items: center;
-    padding:0 24px;
+    padding: 0 24px;
     gap: 24px;
     box-sizing: border-box;
     font-family: 'Fraunces', serif;
     font-size: 1.4rem;
     font-weight: 600;
-    background: linear-gradient(90deg,#94de7b 0%, #d8b93d 100%);
     z-index: 10;
+    overflow: hidden;
 }
 
+.title-bar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, #d3eb93, #a6e86c);
+    opacity: 0;
+    transition: opacity 1.2s ease;
+    z-index: -1;
+    pointer-events: none;
+}
+.results-theme .title-bar::after { opacity: 1; }
+
+/* title bar text */
 .project-title {
     color: rgb(11, 71, 68);
 }
@@ -53,7 +66,6 @@
 /* Section containing the info and list buttons */
 .side-menu-section {
     position: fixed;
-    top: 60;
     left: 0;
     width: 350px;
     height: 100vh;
