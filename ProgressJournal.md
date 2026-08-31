@@ -91,3 +91,7 @@ Now in the results page amongst the results is also displayed the audio file the
 Birds now have a corresponding high quality photo of them show up once the prediction has finished.
 Fixes and improvements visually to the title bar and page swotching so it happens in a nice visual way.
 Still need to shape up the bird list and sources section of the project but those should be simple enough to do during the next couple days alongside finishing touches to the main and results section. Will need to work on proper page-to-page transitions aswell.
+
+Day 25: A bit more visual work on the title bar.
+Started working on the bird list section, will need to build a seperate function to get all the bird photos at once as to avoid overloading wikimedia with 200+ API requests every time the page loads. Added a custom audio player for the results section so the user can play the audio they uploaded to the app directly from the site.
+The full list function is still a bit rough and the css is pretty basic but its going to get the job done for testing it for now.

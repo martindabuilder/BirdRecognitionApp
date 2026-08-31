@@ -7,6 +7,8 @@ import "./title-bar.css"
 function TitleBar(){
     const [menuOpen, setMenuOpen] = useState(false)
     const navigate = useNavigate()
+    const location = useLocation()
+
     const currentPage =
         location.pathname === "/results"
             ? "results"
@@ -49,12 +51,12 @@ function TitleBar(){
         <div className = {`menu-blur ${menuOpen ? "open" : ""}`}></div>
 
         <div className = {`side-menu-section ${menuOpen ? "open" : ""}`}>
-            <button className = "list-button" onClick = {goToBirdList}>
-                List of birds.
+            <button className = "list-button" onClick = {goToSources}>
+                Sources.
             </button>
 
-            <button className = "info-button" onClick = {goToSources}>
-                Sources.
+            <button className = "sources-button" onClick = {goToBirdList}>
+                List of birds.
             </button>
         </div>
 

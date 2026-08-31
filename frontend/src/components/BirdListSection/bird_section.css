@@ -1,9 +1,48 @@
-.list-section {
-    display: flex;
-    flex-direction: grid;
-    align-items: center;
-    justify-content: center;
+.bird-list-section {
+    position: relative;
+    width: 100%;
     min-height: 100vh;
-    z-index: 10;
-
+    padding: 100px 50px 50px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
+
+.bird-list-title {
+    margin: 20px 0 40px;
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15rem;
+}
+
+.bird-list {
+    width: 100%;
+    max-width: 1400px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+
+.bird-card {
+    min-width: 0;
+    box-sizing: border-box;
+    background: #9e396a;
+    border-radius: 20px;
+    text-align: center;
+}
+
+.bird-card-photo {}
+
+.bird-card-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.bird-card h2 {}
+
+.back-button {}

@@ -94,8 +94,8 @@
     transform: translateX(0);
 }
 
-/* information and bird list section buttons */
-.info-button,
+/* sources and bird list section buttons */
+.sources-button,
 .list-button {
     width: 100%;
     padding: 15px 25px;
@@ -113,7 +113,7 @@
         padding-left 0.2s ease;
 }
 
-.info-button:hover,
+.sources-button:hover,
 .list-button:hover {
     color: rgb(24, 141, 92);
     background: linear-gradient(170deg,#dedc61 0%, #dce1a3 80%);

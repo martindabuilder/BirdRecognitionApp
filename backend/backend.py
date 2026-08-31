@@ -259,3 +259,21 @@ async def results(file: UploadFile = File(...)):
     finally:
         if temp_file.exists():
             temp_file.unlink()
+
+# List of all the available birds in the project
+@app.get("/birds")
+def get_birds():
+    birds = []
+
+    for bird_class in classes:
+        code = str(bird_class)
+        bird = BIRD_INFO.get(code)
+
+        if bird:
+            birds.append({
+                "label": code,
+                "commonName": bird["common_name"],
+                "scientificName": bird["scientific_name"]
+            })
+
+    return birds
