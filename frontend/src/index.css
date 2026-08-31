@@ -222,6 +222,18 @@ html, body {
   --aurora-c6: #146265;
 }
 
-.birdlist-theme {}
+.birdlist-theme {
+  --aurora-base: linear-gradient(90deg, #ce507e 0%, #ae7d49 100%);
+  --aurora-c1: #ff0080;
+  --aurora-c2: #ffd000;
+  --aurora-c3: #e1ff00;
+  --aurora-c4: #f4e38c;
 
-.info-theme {}
+  --aurora-c5: #6e1d4a;
+  --aurora-c6: #65144a;
+}
+
+.info-theme {
+  --aurora-base: linear-gradient(90deg, #4182a0 0%, #55afbb 100%);
+
+}

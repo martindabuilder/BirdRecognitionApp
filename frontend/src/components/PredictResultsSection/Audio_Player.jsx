@@ -11,6 +11,7 @@ function AudioPlayer({ src }) {
     const [isPlaying, setIsPlaying] = useState(false)
     const [currentTime, setCurrentTime] = useState(0)
     const [audioDuration, setAudioDuration] = useState(0)
+    const [volume, setVolume] = useState(1)
 
 
     function handleMetadata(){
@@ -47,6 +48,12 @@ function AudioPlayer({ src }) {
         const minutes = Math.floor(time / 60)
         const seconds = Math.floor(time % 60)
         return `${minutes}:${seconds.toString().padStart(2, "0")}`
+    }
+
+    function handleVolumeChange(e) {
+        const newVolume = Number(e.target.value)
+        audioRef.current.volume = newVolume
+        setVolume(newVolume)
     }
 
     return(
@@ -92,6 +99,26 @@ function AudioPlayer({ src }) {
             <span className = "audio-time">
                 {formatTime(audioDuration)}
             </span>
+
+            <span className = "volume-icon">
+                V
+            </span>
+
+            <div className = "volume-wrapper">
+                <input
+                    className = "volume-slider"
+                    type = "range"
+                    min = "0"
+                    max = "1"
+                    step = "0.01"
+                    value = {volume}
+                    onChange = {handleVolumeChange}
+                    style = {{
+                        "--volume": `${volume * 100}%`
+                    }}
+                    aria-label = "Volume"
+                />
+            </div>
         </div>
     )
 
