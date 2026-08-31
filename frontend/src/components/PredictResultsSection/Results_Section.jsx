@@ -1,6 +1,8 @@
 import { useLocation, useNavigate } from "react-router-dom"
+
 import BirdPhoto from "../Shared/BirdPhoto.jsx"
 import HabitatMap from "../Shared/HabitatMap.jsx"
+import AudioPlayer from "./Audio_Player.jsx"
 
 
 import "./results_section.css"
@@ -31,6 +33,7 @@ function ResultsSection(){
         )
     }
 
+    /* prediction result related constants */
     const predictions = result.predictions || []
     const topSpecies = predictions[0]
 
@@ -71,14 +74,16 @@ function ResultsSection(){
                         </div>
                     ))}
                 </div>
-
-                <div className = "uploaded-audio-file">
-                    <h3 className = "uploaded-audio-file-header stroke-text">
-                        Uploaded audio file.
+                
+                <div className="custom-audio-player stroke-text">
+                    <h3 className="custom-audio-player-header">
+                        Uploaded audio
                     </h3>
 
                     {result.audio && (
-                        <audio className = "audio-player" controls src = {`data:${result.audioType};base64,${result.audio}`}/>
+                        <AudioPlayer
+                            src={`data:${result.audioType};base64,${result.audio}`}
+                        />
                     )}
                 </div>
 
