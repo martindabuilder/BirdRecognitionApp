@@ -86,4 +86,8 @@ Day 23: Overall frontend shaping up a bit more. Worked more on the bacgkround gr
 Work on the title bar as it now has a proper button that opens and closes a side menu that will redirect to bird info or full info about the project.
 The results section now has proper scientific and common names for the displayed bird, and the spectrogram output now is scrollable, so the user will be able to scroll through the spectrogram output of the code.
 
-Day 24:
+Day 24: More frontend shaping up.
+Now in the results page amongst the results is also displayed the audio file the user used to try the model, alongside a Leaflet iNaturalist map that marks where the bird species' habitat is. 
+Birds now have a corresponding high quality photo of them show up once the prediction has finished.
+Fixes and improvements visually to the title bar and page swotching so it happens in a nice visual way.
+Still need to shape up the bird list and sources section of the project but those should be simple enough to do during the next couple days alongside finishing touches to the main and results section. Will need to work on proper page-to-page transitions aswell.
