@@ -96,4 +96,8 @@ Day 25: A bit more visual work on the title bar.
 Started working on the bird list section, will need to build a seperate function to get all the bird photos at once as to avoid overloading wikimedia with 200+ API requests every time the page loads. Added a custom audio player for the results section so the user can play the audio they uploaded to the app directly from the site.
 The full list function is still a bit rough and the css is pretty basic but its going to get the job done for testing it for now.
 
-Day 26:
+Day 26: Mostly finished up the css for the bird list section, might touch up the colors a bit more but in general its done, will do small adjustments to it once the custom scroll bar (mentioned a bit later) is done so ill need to add some more css and wrappers etc. But the section is mostly done.
+Redid the exit button a bit so now its a reusable element between all the sections when needed. Its colors are customizeable between the sections aswell.
+Started work on a custom scroll bar that will also be reusable between all the sections, with different colors for each again just like the exit button. Still needs proper implementation but the base code is there.
+
+Day 27:
