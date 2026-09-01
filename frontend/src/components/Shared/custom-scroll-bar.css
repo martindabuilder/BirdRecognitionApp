@@ -1,0 +1,31 @@
+.custom-scroll-bar-track {
+    --scroll-track: rgba(170, 212, 92, 0.25);
+    --scroll-thumb: rgb(10, 78, 59);
+    --scroll-thumb-hover: rgb(203, 230, 116);
+
+    position: absolute;
+    top: 0;
+    right: 4px;
+    width: 8px;
+    height: 100%;
+    background: var(--scroll-track);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.custom-scroll-bar-thumb {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    background: var(--scroll-thumb);
+    border-radius: 10px;
+
+    transition:
+        background 0.2s ease-in-out,
+        width 0.2s ease-in-out;
+}
+
+.custom-scroll-bar-track:hover .custom-scroll-bar-thumb {
+    background: var(--scroll-thumb-hover);
+    width: 12px;
+}

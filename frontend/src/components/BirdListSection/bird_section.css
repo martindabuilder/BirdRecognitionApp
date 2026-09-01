@@ -3,6 +3,12 @@
     --escape-color: rgb(226, 131, 58);
     --escape-outline: rgb(238, 206, 44);
 
+    /* section specific scroll wheer colors */
+    --scroll-track: rgba(238, 206, 44, 0.25);
+    --scroll-thumb: rgb(226, 131, 58);
+    --scroll-thumb-hover: rgb(238, 206, 44);
+
+
     position: relative;
     width: 100%;
     min-height: 100%;
@@ -93,9 +99,6 @@
 .bird-card:hover::before {opacity: 1;}
 .bird-card:hover .bird-card-photo img {transform: scale(1.05);}
 
-
-/* back button css effects */
-.back-button {}
 
 /* responsive image section */
 @media (max-width: 1100px) {.bird-list {grid-template-columns: repeat(3, minmax(0, 1fr));}}

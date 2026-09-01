@@ -72,11 +72,7 @@ function ResultsSection(){
                         Uploaded audio
                     </h3>
 
-                    {result.audio && (
-                        <AudioPlayer
-                            src={`data:${result.audioType};base64,${result.audio}`}
-                        />
-                    )}
+                    {result.audio && (<AudioPlayer src={`data:${result.audioType};base64,${result.audio}`}/>)}
                 </div>
 
                 <div className = "spectrogram-segments-wrapper stroke-text">
@@ -93,7 +89,7 @@ function ResultsSection(){
                         Expected habitat location
                     </h3>
 
-                    {topSpecies && ( <HabitatMap scientificName={topSpecies.scientificName} /> )}
+                    {topSpecies && (<HabitatMap scientificName = {topSpecies.scientificName}/>)}
                 </div>
             </div>
 

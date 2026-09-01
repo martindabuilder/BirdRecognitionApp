@@ -1,15 +1,15 @@
 import { useNavigate } from "react-router-dom"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 
 import BirdPhoto from "../Shared/BirdPhoto.jsx"
 import EscapeButton from "../Shared/Escape_Button.jsx"
+import CustomScrollBar from "../Shared/Scrollbar.jsx"
 
 import "./bird_section.css"
 
 /* Function that fetches corresponding photos for all the bird classes availabe */
 function BirdList(){
-    const navigate = useNavigate()
-
+    const listRef = useRef(null)
     const [birds, setBirds] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
@@ -17,10 +17,7 @@ function BirdList(){
     useEffect(() => {
         fetch("http://127.0.0.1:8000/birds")
             .then(response => {
-                if (!response.ok) {
-                    throw new Error("Failed to fetch birds")
-                }
-
+                if (!response.ok) {throw new Error("Failed to fetch birds")}
                 return response.json()
             })
             .then(data => {
@@ -37,6 +34,8 @@ function BirdList(){
     return (
         <section className = "bird-list-section">
             <EscapeButton />
+
+            {/*<CustomScrollBar scrollRef={listRef} />*/}
 
             <h1 className = "bird-list-title"> Available Birds. </h1>
 
