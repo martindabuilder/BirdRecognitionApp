@@ -2,9 +2,11 @@ import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 
 import BirdPhoto from "../Shared/BirdPhoto.jsx"
+import EscapeButton from "../Shared/Escape_Button.jsx"
+
 import "./bird_section.css"
 
-
+/* Function that fetches corresponding photos for all the bird classes availabe */
 function BirdList(){
     const navigate = useNavigate()
 
@@ -34,25 +36,16 @@ function BirdList(){
 
     return (
         <section className = "bird-list-section">
-            <button className = "back-button" onClick={() => navigate("/")}>
-                go back home
-            </button>
+            <EscapeButton />
 
-            <h1 classNam = "bird-list-title">
-                Available Birds.
-            </h1>
+            <h1 className = "bird-list-title"> Available Birds. </h1>
 
             {loading && ( <p>Loading birds...</p> )}
 
-            {error && (
-                <p>
-                    Failed to load bird information.
-                </p>
-            )}
+            {error && (<p> Failed to load bird information. </p>)}
 
             {!loading && !error && (
                 <div className = "bird-list">
-
                     {birds.map((bird) => (
                         <div className = "bird-card" key={bird.label}>
                             <div className = "bird-card-photo">
@@ -64,12 +57,11 @@ function BirdList(){
 
                             <h2> {bird.commonName} </h2> 
                             <p> <i>{bird.scientificName}</i> </p>
+
                         </div>
                     ))}
-
                 </div>
             )}
-
         </section>
     )
 }

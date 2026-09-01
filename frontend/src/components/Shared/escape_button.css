@@ -1,0 +1,37 @@
+.escape-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 44px;
+    height: 44px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.escape-button span {
+    position: absolute;
+    width: 28px;
+    height: 3px;
+    background: var(--escape-color);
+    border-radius: 3px;
+    box-shadow: 0 0 0 2px var(--escape-outline);
+    transition: transform 0.2s ease-in-out;
+}
+
+.escape-button span:first-child {transform: rotate(45deg);}
+.escape-button span:last-child {transform: rotate(-45deg);}
+.escape-button:hover span:first-child {transform: rotate(45deg) scale(1.15);}
+.escape-button:hover span:last-child {transform: rotate(-45deg) scale(1.15);}
+
+/* Fade the entire X out */
+.escape-button-exit {
+    opacity: 0;
+    pointer-events: none;
+}

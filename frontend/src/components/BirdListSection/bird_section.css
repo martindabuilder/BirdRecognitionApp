@@ -1,4 +1,8 @@
 .bird-list-section {
+    /* section specific button colors */
+    --escape-color: rgb(226, 131, 58);
+    --escape-outline: rgb(238, 206, 44);
+
     position: relative;
     width: 100%;
     min-height: 100%;

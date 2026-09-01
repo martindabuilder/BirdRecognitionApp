@@ -1,18 +1,15 @@
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 
 import BirdPhoto from "../Shared/BirdPhoto.jsx"
 import HabitatMap from "../Shared/HabitatMap.jsx"
 import AudioPlayer from "./Audio_Player.jsx"
-
+import EscapeButton from "../Shared/Escape_Button.jsx"
 
 import "./results_section.css"
 
 function ResultsSection(){
-    const navigate = useNavigate()
     const location = useLocation()
     const result = location.state
-
-    function goHome(){navigate("/")}
 
     function handleSpectrogramScroll(e) {
         e.stopPropagation()
@@ -22,13 +19,11 @@ function ResultsSection(){
 
     if (!result) {
         return (
-            <section className = "warning-section">
-                <h1 className = "stroke-text">No uploaded results.</h1>
-                <h1 className = "stroke-text">Go back to the main page, and try again.</h1>
-                <button className="escape-button" onClick={goHome}>
-                    <span></span>
-                    <span></span>
-            </button>
+            <section className="warning-section">
+                <h1 className="stroke-text">No uploaded results.</h1>
+                <h1 className="stroke-text">Go back to the main page, and try again.</h1>
+
+                <EscapeButton />
             </section>
         )
     }
@@ -40,10 +35,7 @@ function ResultsSection(){
     return (
         <section className="results-section">
 
-            <button className="escape-button" onClick={goHome}>
-                <span></span>
-                <span></span>
-            </button>
+            <EscapeButton/>
 
             <h3 className = "results-title">Predicted as</h3>
 
