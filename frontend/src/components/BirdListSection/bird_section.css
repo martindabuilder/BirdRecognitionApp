@@ -1,9 +1,8 @@
 .bird-list-section {
     position: relative;
     width: 100%;
-    min-height: 100vh;
-    padding: 100px 50px 50px;
-    box-sizing: border-box;
+    min-height: 100%;
+    padding: 50px 50px 80px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -14,35 +13,91 @@
     font-size: 2.5rem;
     text-transform: uppercase;
     letter-spacing: 0.15rem;
+    color: #ecccc2;
 }
 
 .bird-list {
     width: 100%;
     max-width: 1400px;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 25px;
     padding: 20px;
-    box-sizing: border-box;
 }
 
 
 .bird-card {
     min-width: 0;
-    box-sizing: border-box;
-    background: #9e396a;
+    overflow: hidden;
+    position: relative;
+    background: linear-gradient(145deg, #a42626, #edbb4d);
+    border: 2px solid rgb(188, 179, 112);
     border-radius: 20px;
     text-align: center;
+    transition: transform 0.4s ease;
 }
 
-.bird-card-photo {}
+.bird-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(145deg, #d42d2d, #eedc69);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+}
+
+.bird-card-photo,
+.bird-card h2,
+.bird-card p {
+    position: relative;
+    z-index: 1;
+}
+
+.bird-card-photo {
+    width: 100%;
+    height: 260px;
+    overflow: hidden;
+    background: #450b16;
+}
 
 .bird-card-photo img {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.4s ease;
 }
 
-.bird-card h2 {}
+.bird-card h2 {
+    margin: 18px 12px 6px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #fff4e5;
+}
 
+
+.bird-card p {
+    margin: 0 12px 20px;
+    font-size: 0.95rem;
+    color: rgba(255, 239, 215, 0.75);
+}
+
+
+/* hover effects */
+.bird-card:hover {transform: translateY(-6px);}
+.bird-card:hover::before {opacity: 1;}
+.bird-card:hover .bird-card-photo img {transform: scale(1.05);}
+
+
+/* back button css effects */
 .back-button {}
+
+/* responsive image section */
+@media (max-width: 1100px) {.bird-list {grid-template-columns: repeat(3, minmax(0, 1fr));}}
+
+@media (max-width: 750px) {
+    .bird-list {grid-template-columns: repeat(2, minmax(0, 1fr));}
+    .bird-list-section {padding: 40px 25px 60px;}}
+
+@media (max-width: 500px) { .bird-list {grid-template-columns: 1fr;} }

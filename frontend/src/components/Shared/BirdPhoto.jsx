@@ -20,7 +20,7 @@ function BirdPhoto({ commonName, scientificName }) {
                     generator: "search",
                     gsrsearch: searchBird,
                     gsrnamespace: "6",
-                    gsrlimit: "10",
+                    gsrlimit: "30",
                     prop: "imageinfo",
                     iiprop: "url|mime|size",
                     iiurlwidth: "800",
@@ -37,7 +37,7 @@ function BirdPhoto({ commonName, scientificName }) {
                     const info = page.imageinfo?.[0]
                     if (!info?.thumburl || !info.mime?.startsWith("image/")) { return false }
                     const aspectRatio = info.width / info.height
-                    return aspectRatio >= 0.55 && aspectRatio <= 1.55
+                    return aspectRatio >= 0.55 && aspectRatio <= 2
                 })
 
 
@@ -53,11 +53,7 @@ function BirdPhoto({ commonName, scientificName }) {
     if (!photo) { return ( <img className="bird-photo" src={fallBackImage} alt="No bird photo available"/>)}
 
     /* returns the corresponding image */
-    return (
-        <img className = "bird-photo" 
-        src = {photo} 
-        alt = {commonName} />
-    )
+    return (<img className = "bird-photo"  src = {photo}  alt = {commonName} />)
 }
 
 export default BirdPhoto;
