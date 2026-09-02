@@ -1,16 +1,15 @@
 .custom-scroll-bar-track {
-    --scroll-track: rgba(170, 212, 92, 0.25);
-    --scroll-thumb: rgb(10, 78, 59);
-    --scroll-thumb-hover: rgb(203, 230, 116);
-
-    position: absolute;
-    top: 0;
-    right: 4px;
+    position: fixed;
+    top: 60px;
+    bottom: 0;
+    right: 0px;
     width: 8px;
-    height: 100%;
+    height: auto;
     background: var(--scroll-track);
-    border-radius: 10px;
     cursor: pointer;
+    z-index: 20;
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
 }
 
 .custom-scroll-bar-thumb {
@@ -20,12 +19,20 @@
     background: var(--scroll-thumb);
     border-radius: 10px;
 
-    transition:
-        background 0.2s ease-in-out,
-        width 0.2s ease-in-out;
+    transition: background 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
 
 .custom-scroll-bar-track:hover .custom-scroll-bar-thumb {
     background: var(--scroll-thumb-hover);
-    width: 12px;
+    transform: scaleY(1.3);
+}
+
+.custom-scroll-bar-track.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.custom-scroll-bar-track.visible {
+    opacity: 1;
+    pointer-events: auto;
 }

@@ -42,6 +42,21 @@ html, body {
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.page-content::-webkit-scrollbar {
+  display: none;
+}
+
+.birdlist-theme .page-content {
+  overflow: hidden;
+}
+
+.main-theme .page-content,
+.info-theme .page-content {
+  overflow: hidden;
 }
 
 .aurora-layer {

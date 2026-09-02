@@ -32,10 +32,10 @@ function BirdList(){
     }, [])
 
     return (
-        <section className = "bird-list-section">
+        <section className = "bird-list-section" ref = {listRef}>
             <EscapeButton />
 
-            {/*<CustomScrollBar scrollRef={listRef} />*/}
+            <CustomScrollBar scrollRef={listRef} />
 
             <h1 className = "bird-list-title"> Available Birds. </h1>
 

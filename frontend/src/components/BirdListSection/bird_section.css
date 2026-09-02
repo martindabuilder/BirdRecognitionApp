@@ -4,19 +4,26 @@
     --escape-outline: rgb(238, 206, 44);
 
     /* section specific scroll wheer colors */
-    --scroll-track: rgba(238, 206, 44, 0.25);
-    --scroll-thumb: rgb(226, 131, 58);
-    --scroll-thumb-hover: rgb(238, 206, 44);
+    --scroll-track: linear-gradient(180deg, #b2411e, #c87625);
+    --scroll-thumb: rgb(224, 196, 102);
+    --scroll-thumb-hover: rgb(232, 218, 170);
 
 
     position: relative;
     width: 100%;
-    min-height: 100%;
+    height: 100%;
+    min-height: 0;
     padding: 50px 50px 80px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+    
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
+
 
 .bird-list-title {
     margin: 20px 0 40px;
