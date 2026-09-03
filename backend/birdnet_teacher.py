@@ -1,3 +1,11 @@
+# Additional "teacher" model to help train the main EfficientNet model.
+# Creates teacher probability distributions using the pre-trained BirdNET and its predictions.
+# The probabilities are used for knowledge distillation, 
+# allowing the student model to learn from the teacher model's predictions.
+
+
+# Libraries, folders, imports and evnvironmental settings.
+
 import os
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
@@ -8,6 +16,7 @@ import numpy as np
 import pandas as pd
 from birdnet import load
 
+# Folders and settings.
 BASE_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = BASE_DIR.parent
 DATA_DIRECTORY = PROJECT_ROOT / "dataset"
@@ -15,16 +24,21 @@ TAXONOMY_PATH = DATA_DIRECTORY / "eBird_taxonomy_v2025-4.csv"
 OUTPUT_DIR = BASE_DIR / "birdnet_teacher"
 OUTPUT_DIR.mkdir(parents = True, exist_ok = True)
 
-CHECKPOINT = 5
-FILES_PER_CLASS = 100
-RANDOM_SEED = 42
-N_WORKERS = 6
-PREDICT_BATCH_SIZE = 5
-TOP_K = 30
+CHECKPOINT = 5 # Saves progress every 5 bird classes.
+FILES_PER_CLASS = 100 # The teacher predicts 100 audio files per class.
+RANDOM_SEED = 42 # Fixed seed.
+N_WORKERS = 6 # Amount of workers used by BirdNET when processing audio.
+PREDICT_BATCH_SIZE = 5 # Number of files processed during in a single batch.
+TOP_K = 30 # Amount of highest probability BirdNET predictions to inspect.
 
+# Special files to save and resume the teacher's probability matrix.
 CHECKPOINT_MATRIX = (OUTPUT_DIR / "teacher_matrix_checkpoint.npy")
 CHECKPOINT_INDEX = (OUTPUT_DIR / "teacher_checkpoint_index.npy")
 
+
+# ---- Functions -----
+
+# Standartizes the bird species' names.
 def normalise_name(name):
     if pd.isna(name):
         return None
@@ -34,6 +48,7 @@ def normalise_name(name):
     return " ".join(name.split())
 
 
+# Converts the BirdNET species label into a standard scientific name, found in the taxonomy.
 def birdnet_to_scientific_name(species_label):
     species_label = normalise_name(species_label)
 
@@ -53,12 +68,15 @@ def build_code_to_scientific(taxonomy_df):
         zip(taxonomy_df["SPECIES_CODE"], taxonomy_df["SCI_NAME"]))
 
 
+# Runs BirdNET on a batch of recordings.
+# COnverts it's predictions into averaged probability distributions for each recording.
 def get_birdnet_species_probs(model, file_paths):
     file_paths = [Path(path) for path in file_paths]
 
     def predict_single_file(file_path):
         try:
-            result = model.predict([str(file_path)], top_k=TOP_K, n_workers=N_WORKERS, n_producers=1, batch_size=1, device="CPU", show_stats="minimal")
+            result = model.predict([str(file_path)], top_k = TOP_K, 
+            n_workers = N_WORKERS, n_producers = 1, batch_size = 1, device="CPU", show_stats = "minimal")
 
         except Exception as e:
             print(f"{file_path.name}: individual prediction failed: {type(e).__name__}: {e}")

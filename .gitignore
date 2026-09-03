@@ -12,9 +12,12 @@
 /backend/val_set_resized
 /backend/train_set_resized
 /backend/test_set_resized
-/backend/add_samples.py
+
+#/backend/add_samples.py
 
 #ignoring the teacher and test audios
-/backend/birdnet_teacher
+
+#/backend/birdnet_teacher
 /backend/__pycache__
+
 /test_audios

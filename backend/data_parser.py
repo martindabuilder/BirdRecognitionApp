@@ -13,11 +13,12 @@ from torch.utils.data import Dataset
 from sklearn.preprocessing import LabelEncoder
 
 # Settings for the data parsing.
-# MEAN and STD set to certain settings, to match the model's requirements.
+# MEAN and STD values set to certain settings, to match the model's requirements.
 IMAGENET_MEAN = torch.tensor([0.485, 0.456, 0.406]).view(3, 1, 1)
 IMAGENET_STD = torch.tensor([0.229, 0.224, 0.225]).view(3, 1, 1)
 
-MAX_CACHED_FILES = 32 # Maximum number of caches spectrograms open at once.
+# Maximum number of caches spectrograms open at once.
+MAX_CACHED_FILES = 32
 
 
 # ---- Functions ----
@@ -73,6 +74,7 @@ class SpectrogramDataset(Dataset):
             segment_indices.append(np.arange(n, dtype = np.int32))
             labels.append(np.full(n, label, dtype = np.int32))
 
+        # Store the indexing information used to map each dataset sample back to its source file, segment and bird class.
         self.file_paths = file_paths
         self.path_indices = np.concatenate(path_indices) if path_indices else np.array([], dtype = np.int32)
         self.segment_indices = np.concatenate(segment_indices) if segment_indices else np.array([], dtype = np.int32)
