@@ -9,6 +9,7 @@ import numpy as np
 
 # Seperate folders for the three subsets
 DATASET = "spectrograms_npy"
+
 TEST_SET_DIR = "test_set"
 VAL_SET_DIR = "val_set"
 TRAIN_SET_DIR = "train_set"

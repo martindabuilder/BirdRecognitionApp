@@ -22,29 +22,39 @@ SEED = 42 # Fixed random seed.
 # Creates output folder if it's missing.
 os.makedirs(OUTPUT_DIR, exist_ok = True)
 
+
+# ---- FUNCTIONS ----
+
+
 def spec_augment(spec, rng):
+    # Works on a copy of the spectrogram, the orignal stays unchanged.
     augmented = spec.copy()
     n_mels, n_frames = augmented.shape
     freq_width = rng.integers(0, min(FREQ_MASK_MAX, n_mels) + 1)
 
+    # Random width applied for frequency masking.
     if freq_width > 0:
         freq_start = rng.integers(0, n_mels - freq_width + 1)
         augmented[freq_start:freq_start + freq_width, :] = 0.0
 
     time_width = rng.integers(0, min(TIME_MASK_MAX, n_frames) + 1)
 
+    # Random width applied for time masking.
     if time_width > 0:
         time_start = rng.integers(0, n_frames - time_width + 1)
         augmented[:, time_start:time_start + time_width] = 0.0
 
+    # Returns the modified spectrogram.
     return augmented
 
+# Main function that calls the SpecAugment for the entire class.
 def augment_class(path, rng):
     class_name = os.path.splitext(os.path.basename(path))[0]
 
     if (class_name.endswith("_sources") or class_name.endswith("_segments")):
         return 0
 
+    # Outputh files for the augmented spectrograms and their metadata.
     output_path = os.path.join(OUTPUT_DIR, f"{class_name}.npy")
     sources_output = os.path.join(OUTPUT_DIR, f"{class_name}_sources.npy")
     segments_output = os.path.join(OUTPUT_DIR,f"{class_name}_segments.npy")
@@ -59,23 +69,30 @@ def augment_class(path, rng):
         print(f"Missing segments for {class_name}")
         return 0
 
+    # Loads the chosen training spectrograms and their metadata.
     arr = np.load(path)
     file_ids = np.load(sources_path, allow_pickle = True)
     segment_indices = np.load(segments_path)
 
+    # Empty classes get skipped.
     if len(arr) == 0:
         return 0
-        
+    
+    # Calculates how many training samples should be augmented.
     n_augmented = int(len(arr) * AUGMENT_RATIO)
 
+    # If the bird class is too small, it get's skipped.
     if n_augmented == 0:
         return 0
 
+    # Selects random samples to augment.
+    # Selects an original sample only once.
     selected_indices = rng.choice(len(arr),size = n_augmented, replace = False)
     augmented_samples = []
     augmented_sources = []
     augmented_segments = []
 
+    # Creates augmented versions of the selected samples.
     for index in selected_indices:
         original = arr[index].astype(np.float32)
         for _ in range(NUM_AUGMENTATIONS):
@@ -87,10 +104,12 @@ def augment_class(path, rng):
     if not augmented_samples:
         return 0
 
+    # Converts the samples and their metadata into numpy arrays.
     augmented_samples = np.stack(augmented_samples)
     augmented_sources = np.asarray(augmented_sources)
     augmented_segments = np.asarray(augmented_segments, dtype = np.int32)
 
+    # saves the augmented training samples and their metadata.
     np.save(output_path, augmented_samples)
     np.save(sources_output, augmented_sources)
     np.save(segments_output, augmented_segments)
