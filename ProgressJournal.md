@@ -100,4 +100,6 @@ Day 26: Mostly finished up the css for the bird list section, might touch up the
 Redid the exit button a bit so now its a reusable element between all the sections when needed. Its colors are customizeable between the sections aswell.
 Started work on a custom scroll bar that will also be reusable between all the sections, with different colors for each again just like the exit button. Still needs proper implementation but the base code is there.
 
-Day 27: Scrollbar work and its close to being done. It now appears and reappears whenever it is scrolled/not scrolled.
+Day 27: Scrollbar work and its close to being done. Its been made to work similary to the exit button where its customizeable depending on the current section with its colors. It now also appears and reappears whenever it is scrolled/not scrolled.
+
+Day 28: Not much coding today, instead im cleaning up the abckend and putting in all the comments in it since they will most likely be wanted (if not even required) for the the final project turn in.

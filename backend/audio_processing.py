@@ -1,10 +1,11 @@
-#File that handles the processing of all the audio files
-#before training the model on them
+# File that handles the processing of all the audio files before training the model on them
 
+# Environment setup
 import os
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 
+# Libraries and imports
 import librosa
 import numpy as np
 import matplotlib.pyplot as plt
@@ -17,41 +18,42 @@ import glob
 import warnings
 warnings.filterwarnings("ignore")
 
-#folder containing all the audio files that will be processed
+
+# Dataset configuration and imports
+# Folder containing all the audio files that will be processed
 data_directory = os.path.join("..", "dataset")
 
-#folders conainting the npy output of the spectrograms
+# Folders conainting the npy output of the spectrograms
 spectrogram_npy_output = "spectrograms_npy"
 
-#creating the (potentially missing) folders
+# Creates the folder if it's missing.
 os.makedirs(spectrogram_npy_output, exist_ok = True)
 
-#spectrogram specifications
-mel_lines = 150 #spectrogram height, measured in n_mels
-sample_rate = 32000 #set sample rate for each spectrogram
-audio_duration = 5.0 #seconds per segment
+# Spectrogram settings
+mel_lines = 150 #s pectrogram height, measured in n_mels.
+sample_rate = 32000 # set sample rate for each spectrogram.
+audio_duration = 5.0 # seconds per segment.
 
-minimal_active_threshold = 0.30 #the amount of "active" volume in the file
-max_darkness = 0.15 #intensity below .15 means the segment gets skipped, it's not active enough (i.e its too quiet/empty)
+minimal_active_threshold = 0.30 # the amount of "active" volume in the file.
+max_darkness = 0.15 # intensity below .15 means the segment gets skipped (i.e its too quiet/empty).
 
-#storage dtype for the saved spectrograms
-#a float16 format is chosen as it is a healthy middleground between uint8 and float36
+# Storage dtype for the saved spectrograms.
+# Float16 format is chosen as it is a good quality/size middleground between uint8/float36.
 STORAGE_DTYPE = "float16"
 
-#i have chosen to use 4 of the available cores on my computer for the processing
-#in case you want to test and run this locally, never go above the amount you actually have
-#(i would even suggest your cores - 1 just in case)
+# I have chosen to use 6/8 of the available cores on my computer for the processing.
+# In case the project is test ran locally, never go above the amount of cores you actually have.
 NUM_WORKERS = min(6, cpu_count())
 
-#used to precompute the lenght of the spectrogram, removing the need of resizing
+# Number of samples used to precompute the lenght of the spectrogram, removing the need of resizing.
 segment_samples = int(audio_duration * sample_rate)
 hop_length = int(0.020 * sample_rate)
 
 
 # ----FUNCTIONS ----
 
-#checks if the segment is active enough
-#if it isnt above the threshold it gets skipped
+# -- Audio filtering functions --
+# Checks if the segment is active enough, if it isnt above the threshold it gets skipped.
 def is_seg_active(spectrogram, threshold = 0.05, min_ratio = minimal_active_threshold):
     active_columns = np.any(spectrogram > threshold, axis = 0)
     ratio = np.sum(active_columns) / len(active_columns)
@@ -59,25 +61,27 @@ def is_seg_active(spectrogram, threshold = 0.05, min_ratio = minimal_active_thre
     return ratio >= min_ratio
 
 
-#checks for the overall darkness of the spectrogram
-#if its too dark it gets skipped
+# Checks for the average intensity of the spectrogram, if its too dark it gets skipped.
+# Dark spectrograms are likely to contain mostly silence.
 def spectrogram_too_dark(spectrogram):
     return spectrogram.mean() < max_darkness
 
 
-#splits the audio files into numerous 5s segments for better structured learning 
-#and transforming into a mel spectrogram
+# Loads an audio file, remvoes the any silence from the beginning/end of the file
+# and splits the file into overlapping 5 second segments.
 def split_audio(file_path, sr = sample_rate, duration = audio_duration):
     y, sr = librosa.load(file_path,sr = sr,res_type = "soxr_hq")
 
     y, _ = librosa.effects.trim(y)
     segment_length = int(duration * sr)
-    hop_samples = int(4.0 * sr) #allows a 1 second overlap between 2 consecutive segments
+    hop_samples = int(4.0 * sr) #allows a 1 second overlap between 2 consecutive segments.
     segments = []
     
     for start in range(0, len(y), hop_samples):
         end = start + segment_length
         seg = y[start:end]
+
+        # If the final segment is shorter than 5 seconds, it gets padded with 0s.
         if len(seg) < segment_length:
             seg = np.pad(seg,(0, segment_length - len(seg)))
         segments.append(seg)
@@ -85,9 +89,11 @@ def split_audio(file_path, sr = sample_rate, duration = audio_duration):
     return segments, sr
 
 
-#turns the 5s audio segments into a normalized mel spectrogram
+# Converts a 5 second audio segment into a normalized Mel spectrogram.
+# Spectrograms are later used for the input for the model.
 def audio_to_spectrogram(y, sr):
-    spectrogram = librosa.feature.melspectrogram(y = y, sr = sr, n_fft = 2048, hop_length = hop_length, n_mels = mel_lines, fmin = 200, fmax = 16000, power = 2.0)
+    spectrogram = librosa.feature.melspectrogram(y = y, sr = sr, n_fft = 2048, 
+    hop_length = hop_length, n_mels = mel_lines, fmin = 200, fmax = 16000, power = 2.0)
     spectrogram_db = librosa.power_to_db(spectrogram, ref = np.max, top_db=80)
     spectrogram_norm = (spectrogram_db + 80.0) / 80.0
     spectrogram_norm = np.clip( spectrogram_norm, 0.0, 1.0)
@@ -124,11 +130,17 @@ def process_file(file_path):
     return results
 
 
+# Pipeline for each audio file that is loaded into it.
+# The file: 
+# 1. gets split into 5 second segments;
+# 2. Each segment is turned into a Mel spectrogram;
+# 3. Any inactive/empty segments are removed;
+# 4. Saves the spectrogram as the chosen storage format.
 def process_class(bird_class):
     out_path = os.path.join(spectrogram_npy_output, f"{bird_class}.npy")
     sources_path = out_path.replace(".npy", "_sources.npy")
 
-    #checks if a class has already been processed, if it has it gets skipped
+    # Checks if a class has already been processed, if it has it gets skipped.
     if os.path.exists(out_path):
         return bird_class, 0
 
@@ -150,6 +162,8 @@ def process_class(bird_class):
     specs, file_ids, segment_indices = zip(*class_spectrograms)
     arr = np.stack(specs)
     np.save(out_path,arr)
+
+    # The original segment ID gets saved for each spectrogram.
     np.save( sources_path, np.array(file_ids))
     np.save(out_path.replace(".npy", "_segments.npy"),np.array(segment_indices, dtype=np.int32))
 
@@ -164,12 +178,15 @@ def main():
 
     print(f"Processing {len(bird_classes)}")
 
+    # Processing multiple classes simultaneously using multiple CPU workers.
+    # Used to reduce the processing time.
     with Pool(NUM_WORKERS) as pool:
         results = list(tqdm( pool.imap_unordered(process_class, bird_classes),total = len(bird_classes)))
 
+    # Total amount of usable spectrogram segments.
     total_segments = sum(count for _, count in results)
     
-    #label encoding all the classes
+    # Saves the class names in the same order as they were.
     label_encoder = LabelEncoder()
     label_encoder.fit(bird_classes)
     np.save(os.path.join(spectrogram_npy_output, "label_encoder_classes.npy"), label_encoder.classes_)

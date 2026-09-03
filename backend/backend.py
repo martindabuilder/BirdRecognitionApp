@@ -41,7 +41,7 @@ TARGET_SIZE = (224, 224)
 DEVICE = torch.device("cpu")
 
 
-#---- Functions related to visual presentation in the frontend ----
+#---- Functions related to the audio processing and information passing to the frontend ----
 #Saves and pushes the spectrogram segments for the predicted file
 def spectrogram_to_base64(spectrogram):
     buffer = BytesIO()
@@ -71,8 +71,7 @@ BIRD_INFO = load_bird_info()
 
 
 #---- Filtering functions ----
-#checks if the segment is active enough
-#if it isnt above the threshold it gets skipped
+#checks if the segment is active enough, if it isnt above the threshold it gets skipped
 def is_seg_active(spectrogram, threshold = 0.05, min_ratio = MINIMAL_ACTIVE_THRESHOLD):
     active_columns = np.any(spectrogram > threshold, axis = 0)
     ratio = np.sum(active_columns) / len(active_columns)
@@ -82,6 +81,7 @@ def is_seg_active(spectrogram, threshold = 0.05, min_ratio = MINIMAL_ACTIVE_THRE
 #checks for the overall darkness of the spectrogram, if its too dark it gets skipped
 def spectrogram_too_dark(spectrogram):
     return spectrogram.mean() < MAX_DARKNESS
+
 
 
 def prepare_spectrogram(spectrogram):

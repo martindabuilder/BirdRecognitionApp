@@ -1,17 +1,26 @@
+# Applies SpecAugment to a portion of the training set.
+# Validation and test subsets are left unchanged so the 
+# model's performance can be measured to the original data.
+
+# Libraries and imports
+
 import os
 import glob
 import numpy as np
 from tqdm import tqdm
 
-train_dir = "train_set"
-output_dir = "train_set_augmented"
-AUGMENT_RATIO = 0.30
-NUM_AUGMENTATIONS = 1
-TIME_MASK_MAX = 20
-FREQ_MASK_MAX = 15
-SEED = 42
+# Folders and settings for the augmentation process
+TRAIN_DIR = "train_set"
+OUTPUT_DIR = "train_set_augmented"
 
-os.makedirs(output_dir, exist_ok = True)
+AUGMENT_RATIO = 0.30 # % of the original training samples that will be augmented.
+NUM_AUGMENTATIONS = 1 # Number of augmented versions of each sample.
+TIME_MASK_MAX = 20 # Max width of the masked time region.
+FREQ_MASK_MAX = 15 # Max width of the masked frequency region.
+SEED = 42 # Fixed random seed.
+
+# Creates output folder if it's missing.
+os.makedirs(OUTPUT_DIR, exist_ok = True)
 
 def spec_augment(spec, rng):
     augmented = spec.copy()
@@ -36,9 +45,9 @@ def augment_class(path, rng):
     if (class_name.endswith("_sources") or class_name.endswith("_segments")):
         return 0
 
-    output_path = os.path.join(output_dir, f"{class_name}.npy")
-    sources_output = os.path.join(output_dir, f"{class_name}_sources.npy")
-    segments_output = os.path.join(output_dir,f"{class_name}_segments.npy")
+    output_path = os.path.join(OUTPUT_DIR, f"{class_name}.npy")
+    sources_output = os.path.join(OUTPUT_DIR, f"{class_name}_sources.npy")
+    segments_output = os.path.join(OUTPUT_DIR,f"{class_name}_segments.npy")
     sources_path = path.replace(".npy", "_sources.npy")
     segments_path = path.replace(".npy", "_segments.npy")
 
@@ -91,7 +100,7 @@ def augment_class(path, rng):
 
 def main():
     rng = np.random.default_rng(SEED)
-    class_files = sorted(glob.glob(os.path.join(train_dir, "*.npy")))
+    class_files = sorted(glob.glob(os.path.join(TRAIN_DIR, "*.npy")))
 
     class_files = [
         f for f in class_files
