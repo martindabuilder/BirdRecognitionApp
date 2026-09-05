@@ -103,3 +103,5 @@ Started work on a custom scroll bar that will also be reusable between all the s
 Day 27: Scrollbar work and its close to being done. Its been made to work similary to the exit button where its customizeable depending on the current section with its colors. It now also appears and reappears whenever it is scrolled/not scrolled.
 
 Day 28: Not much coding today, instead im cleaning up the abckend and putting in all the comments in it since they will most likely be wanted (if not even required) for the the final project turn in.
+
+Day 29: Work on the audio playing bar on the results section. Fixed its css so now all the buttons and trakc are aligned properly.

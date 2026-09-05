@@ -1,6 +1,10 @@
 .audio-player-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     width: 100%;
     height: 90px;
+    padding: 0 14px;
     background: rgb(13, 95, 107);
     border: 3px solid #288a71;
     border-radius: 10px;
@@ -11,36 +15,107 @@
     flex-shrink: 0;
     width: 42px;
     height: 42px;
+    border: none;
     border-radius: 30%;
     background: #309b89;
     color: #d6ea8d;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: transform 0.2s ease, background 0.2s ease;
 }
 
-.button-icons {
-
+.audio-play-button:hover {
+    transform: scale(1.08);
+    background: #3aa995;
 }
+
+.button-icons {font-size: 0.9rem;}
 
 .audio-time {
-
-}
-
-.audio-progress {
-    
+    flex-shrink: 0;
+    min-width: 38px;
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.85rem;
+    font-weight: 700;
 }
 
 .audio-progress-wrapper {
+    flex: 1;
+    min-width: 80px;
+}
 
+.audio-progress {
+    display: block;
+    width: 100%;
+    height: 6px;
+    appearance: none;
+    -webkit-appearance: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background: linear-gradient(to right, #d6ea8d var(--progress), rgba(255, 255, 255, 0.25) var(--progress));
+}
+
+.audio-progress::-webkit-slider-thumb {
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border: none;
+    border-radius: 50%;
+    background: #d6ea8d;
+    cursor: pointer;
+}
+
+.audio-progress::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border: none;
+    border-radius: 50%;
+    background: #d6ea8d;
+    cursor: pointer;
 }
 
 .volume-icon {
-
+    flex-shrink: 0;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 700;
 }
 
 .volume-wrapper {
-
+    flex-shrink: 0;
+    width: 75px;
 }
 
 .volume-slider {
-    
+    display: block;
+    width: 100%;
+    height: 5px;
+    appearance: none;
+    -webkit-appearance: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background: linear-gradient(to right, #d6ea8d var(--volume), rgba(255, 255, 255, 0.25) var(--volume));
+}
+
+.volume-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 12px;
+    height: 12px;
+
+    border: none;
+    border-radius: 50%;
+    background: #d6ea8d;
+    cursor: pointer;
+}
+
+.volume-slider::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    border: none;
+    border-radius: 50%;
+    background: #d6ea8d;
+    cursor: pointer;
 }

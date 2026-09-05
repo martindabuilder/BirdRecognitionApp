@@ -101,7 +101,7 @@ function AudioPlayer({ src }) {
             </span>
 
             <span className = "volume-icon">
-                V
+                volume
             </span>
 
             <div className = "volume-wrapper">
