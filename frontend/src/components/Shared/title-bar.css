@@ -1,4 +1,21 @@
+/* @propertys */
+@property --title-color-start {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #f1ec58;
+}
+
+@property --title-color-end {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #b45b35;
+}
+
+/* css */
+
 .title-bar {
+    --title-color-start: #f1ec58;
+    --title-color-end: #b45b35;
     position: relative;
     height: 60px;
     width: 100%;
@@ -13,26 +30,30 @@
     z-index: 10;
     overflow: hidden;
     isolation: isolate;
+    background: linear-gradient(90deg, var(--title-color-start), var(--title-color-end));
+    transition: --title-color-start 1s ease, --title-color-end 0.8s ease;
 }
 
-.title-gradient {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 1.2s ease;
+/* different color themes for the different pages */
+.main-theme {
+    --title-color-start: #f1ec58;
+    --title-color-end: #b45b35;
 }
 
-.main-gradient { background: linear-gradient( 90deg, #f1ec58, #b45b35); }
-.results-gradient { background: linear-gradient( 90deg, #bed26e, #7cacc5); }
-.birdlist-gradient { background: linear-gradient(90deg, #ecd866, #d33530); }
-.info-gradient { background: linear-gradient(90deg, #c4bcf5, #f49056); }
+.results-theme {
+    --title-color-start: #bed26e;
+    --title-color-end: #7cacc5;
+}
 
-/* active colors for the title bar */
-.main-theme .main-gradient { opacity: 1; }
-.results-theme .results-gradient { opacity: 1; }
-.birdlist-theme .birdlist-gradient { opacity: 1; }
-.info-theme .info-gradient { opacity: 1; }
+.birdlist-theme {
+    --title-color-start: #ecd866;
+    --title-color-end: #d33530;
+}
+
+.info-theme {
+    --title-color-start: #c4bcf5;
+    --title-color-end: #f49056;
+}
 
 
 /* title bar text */

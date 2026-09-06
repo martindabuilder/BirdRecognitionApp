@@ -18,9 +18,10 @@ References used when creating this part of the project
 
 https://stackoverflow.com/questions/4919076/outline-effect-to-text
 
----- GRADIENTS ----
+---- @PROPERTY ----
 
 [Use CSS3 transitions with gradient backgrounds](https://stackoverflow.com/questions/6542212/use-css3-transitions-with-gradient-backgrounds)
+[CSS @property Rule](https://www.w3schools.com/css/css3_property.asp)
 
 ---- BIRD PHOTOS ----
 

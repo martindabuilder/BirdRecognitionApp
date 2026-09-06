@@ -32,11 +32,6 @@ function TitleBar(){
         <>
         <div className = {`title-bar ${currentPage}-theme`}>
 
-            <div className = "title-gradient main-gradient"></div>
-            <div className = "title-gradient results-gradient"></div>
-            <div className = "title-gradient birdlist-gradient"></div>
-            <div className = "title-gradient info-gradient"></div>
-
             <button className = {`sidebar-button ${menuOpen ? "open" : ""}`} onClick = {() => setMenuOpen(!menuOpen)}>
                 <span></span>
                 <span></span>
