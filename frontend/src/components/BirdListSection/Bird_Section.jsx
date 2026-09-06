@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom"
 import { useEffect, useState, useRef } from "react"
 
 import BirdPhoto from "../Shared/BirdPhoto.jsx"

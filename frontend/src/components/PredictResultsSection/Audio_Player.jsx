@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
 
 import "./audio_player.css"
 
@@ -12,10 +12,45 @@ function AudioPlayer({ src }) {
     const [currentTime, setCurrentTime] = useState(0)
     const [audioDuration, setAudioDuration] = useState(0)
     const [volume, setVolume] = useState(1)
+    const [audioSrc, setAudioSrc] = useState("")
+
+    useEffect(() => {
+        if (!src) return
+
+        const [metadata, base64Data] = src.split(",")
+        const mimeType = metadata.match(/data:(.*?);base64/)?.[1] || "audio/mpeg"
+        const binaryData = atob(base64Data)
+        const bytes = new Uint8Array(binaryData.length)
+
+        for (let i = 0; i < binaryData.length; i++) {
+            bytes[i] = binaryData.charCodeAt(i)
+        }
+
+        const audioBlob = new Blob([bytes], { type: mimeType })
+        const blobUrl = URL.createObjectURL(audioBlob)
+
+        setAudioSrc(blobUrl)
+
+        return () => {
+            URL.revokeObjectURL(blobUrl)
+        
+        }
+    }, [src])
 
 
-    function handleMetadata(){
-        setAudioDuration(audioRef.current.duration)
+    useEffect(() => {
+        setCurrentTime(0)
+        setAudioDuration(0)
+        setIsPlaying(false)
+    }, [src])
+
+
+    function handleMetadata() {
+        const duration = audioRef.current.duration
+
+        if (Number.isFinite(duration) && duration > 0) {
+            setAudioDuration(duration)
+        }
     }
 
     function startPauseAudio() {
@@ -34,7 +69,7 @@ function AudioPlayer({ src }) {
     }
 
     function audioEnd() {
-        setIsPlaying(0)
+        setIsPlaying(false)
         setCurrentTime(0)
     }
 
@@ -60,9 +95,10 @@ function AudioPlayer({ src }) {
         <div className = "audio-player-container">
             <audio 
                 ref = {audioRef}
-                src = {src}
+                src = {audioSrc}
                 onTimeUpdate = {timeUpdate}
                 onLoadedMetadata = {handleMetadata}
+                onDurationChange={handleMetadata}
                 onEnded = {audioEnd}
             />
 

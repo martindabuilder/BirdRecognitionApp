@@ -18,6 +18,9 @@ References used when creating this part of the project
 
 https://stackoverflow.com/questions/4919076/outline-effect-to-text
 
+---- GRADIENTS ----
+
+[Use CSS3 transitions with gradient backgrounds](https://stackoverflow.com/questions/6542212/use-css3-transitions-with-gradient-backgrounds)
 
 ---- BIRD PHOTOS ----
 

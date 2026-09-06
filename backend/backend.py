@@ -247,7 +247,7 @@ async def results(file: UploadFile = File(...)):
             "predictions": predictions,
             "spectrograms": spectrogram_images,
             "audio": audio_base64,
-            "audioType": file.content_type
+            "audioType": file.content_type or "audio/mpeg"
         }
 
     except ValueError as e:

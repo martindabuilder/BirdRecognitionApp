@@ -1,3 +1,24 @@
+/* @property values */
+@property --card-color-top {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #1f8177;
+}   
+
+@property --card-color-bottom {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #aad45c;
+}
+
+@property --card-color-border {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #aad45c;
+}
+
+/* css */
+
 .warning-section {
     /* section specific button colors */
     --escape-color: rgb(10, 78, 59);
@@ -82,6 +103,11 @@
 .custom-audio-player,
 .spectrogram-segments-wrapper,
 .habitat-map {
+
+    --card-color-top: #1f8177;
+    --card-color-bottom: #aad45c;
+    --card-color-border: #aad45c;
+
     flex-shrink: 0;
     width: 700px;
     min-height: 200px;
@@ -89,9 +115,23 @@
     box-sizing: border-box;
 
     font-family: 'Courier New', Courier, monospace;
-    background: linear-gradient(180deg, #1f8177 0%, #aad45c 100%);
+    background: linear-gradient(180deg, var(--card-color-top) 0%, var(--card-color-bottom) 100%);
     border-radius: 20px;
-    border: 10px solid #aad45c;
+    border: 10px solid var(--card-color-border);
+    transition: 
+        --card-color-top 0.4s ease,
+        --card-color-bottom 0.4s ease,
+        --card-color-border 0.35s ease;
+}
+
+.main-confidence:hover,
+.top4-predictions:hover,
+.custom-audio-player:hover,
+.spectrogram-segments-wrapper:hover,
+.habitat-map:hover {
+    --card-color-top: #4dd08f;
+    --card-color-bottom: #bbc95d;
+    --card-color-border: #bbc95d;
 }
 
 
