@@ -12,3 +12,9 @@
 .predict-buttons {
     display: flex;
 }
+
+.processing {
+    font-size: 3.05rem;
+    font-weight: 800;
+    color: white;
+}
