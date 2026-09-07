@@ -165,30 +165,30 @@
     --title-color-start: #f1ec58;
     --title-color-end: #b45b35;
 
-    --sidebar-button-color: rgb(0, 167, 120);
-    --sidebar-button-border-color: rgb(213, 228, 130);
+    --sidebar-button-color: #daa228;
+    --sidebar-button-border-color: #846827;
 }
 
 .results-theme {
     --title-color-start: #bed26e;
     --title-color-end: #7cacc5;
 
-    --sidebar-button-color: rgb(1, 3, 113);
-    --sidebar-button-border-color: rgb(152, 38, 38);
+    --sidebar-button-color: #baf04d;
+    --sidebar-button-border-color: #65a8b1;
 }
 
 .birdlist-theme {
     --title-color-start: #ecd866;
     --title-color-end: #d33530;
 
-    --sidebar-button-color: rgb(1, 3, 113);
-    --sidebar-button-border-color: rgb(152, 38, 38);
+    --sidebar-button-color: #e5dc9d;
+    --sidebar-button-border-color: #e5dc9d;
 }
 
 .info-theme {
     --title-color-start: #c4bcf5;
     --title-color-end: #c556f4;
 
-    --sidebar-button-color: rgb(1, 3, 113);
-    --sidebar-button-border-color: rgb(152, 38, 38);
+    --sidebar-button-color: #614ce9;
+    --sidebar-button-border-color: #716928;
 }

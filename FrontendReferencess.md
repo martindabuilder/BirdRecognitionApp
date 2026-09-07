@@ -20,6 +20,7 @@ Saved in this way to make documentation and crediting them easier later on.
 ---- TEXT RELATED REFERENCES ----
 [Outline effect to text](https://stackoverflow.com/questions/4919076/outline-effect-to-text)
 
+
 ---- @PROPERTY ----
 [Use CSS3 transitions with gradient backgrounds](https://stackoverflow.com/questions/6542212/use-css3-transitions-with-gradient-backgrounds)
 [CSS @property Rule](https://www.w3schools.com/css/css3_property.asp)
@@ -35,8 +36,10 @@ Saved in this way to make documentation and crediting them easier later on.
 [API v1](https://api.inaturalist.org/v1/docs/),
 [Leaflet](https://leafletjs.com/#:~:text=Leaflet%20is%20the%20leading%20open,performance%20and%20usability%20in%20mind.),
 
+
 ---- FRAME MOTION ----
 [Rolling text button: Staggered](https://motion.dev/examples/react-rolling-text-button-stagger)
+
 
 ---- LIST OF SPECIFIC SOURCES TO BE LISTED IN THE "SOURCES" SECTION:
 

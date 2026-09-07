@@ -23,10 +23,8 @@ html, body {
   display: flex;
   flex-direction: column;
   position: relative;
-
   background: var(--aurora-base);
-
-  transition: background-color 1.2s ease, color 1.2s ease;
+  transition: background 1.2s ease, color 1.2s ease;
 }
 
 .app-content {
@@ -45,20 +43,16 @@ html, body {
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
+.page-content::-webkit-scrollbar {display: none;}
 
-.page-content::-webkit-scrollbar {
-  display: none;
-}
-
-.birdlist-theme .page-content {
-  overflow: hidden;
-}
+.birdlist-theme .page-content {overflow: hidden;}
 
 .main-theme .page-content,
 .info-theme .page-content {
   overflow: hidden;
 }
 
+/* flowing aurora background */
 .aurora-layer {
   position: absolute;
   inset: -20%;

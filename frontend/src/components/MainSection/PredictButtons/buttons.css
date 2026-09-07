@@ -6,7 +6,7 @@
     padding: 10px;
 
     width: 450px;
-    height: 250px;
+    height: 200px;
 
     text-align: center;
     font-size: 2.05rem;
@@ -14,6 +14,28 @@
     color: rgb(220, 141, 50);
 
     transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.rolling-text{
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+}
+
+.rolling-text-line{
+    display: flex;
+}
+
+.rolling-text-character{
+    display: inline-flex;
+    flex-direction: column;
+    height: 1.2em;
+    line-height: 1.2;
+}
+
+.rolling-text-character span{
+    display: block;
+    height: 1.2em;
 }
 
 .predict-button:hover{

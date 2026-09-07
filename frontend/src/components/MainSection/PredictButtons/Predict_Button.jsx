@@ -1,10 +1,16 @@
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { motion } from "motion/react"
+
+import RollingButtonText from "./Rolling_Button_Text.jsx"
+
 import "./buttons.css"
 
 function PredictButton(){
     const fileInputRef = useRef(null)
     const navigate = useNavigate()
+    const [rollCount, setRollCount] = useState(0)
+
     function handleButtonClick(){fileInputRef.current.click()}
 
     async function handleFileChange(event){
@@ -25,20 +31,25 @@ function PredictButton(){
     }
 
     return (
-        <div className="predict-buttons">
+        <div className = "predict-buttons">
             <input
-                ref={fileInputRef}
-                type="file"
-                accept="audio/*"
-                onChange={handleFileChange}
-                style={{ display: "none" }}
+                ref = {fileInputRef}
+                type = "file"
+                accept = "audio/*"
+                onChange = {handleFileChange}
+                style = {{ display: "none" }}
             />
 
-            <button
-                className="predict-button"
-                onClick={handleButtonClick}>
-                Upload an audio file.
-            </button>
+            <motion.button
+                className = "predict-button"
+                onHoverStart = {() => setRollCount((current) => current + 1)}
+                onClick = {handleButtonClick}>
+
+                <RollingButtonText rollCount={rollCount}>
+                    Upload an audio file.
+                </RollingButtonText>
+
+            </motion.button>
         </div>
     )
 }
