@@ -3,13 +3,14 @@ import { useState } from "react"
 
 import "./escape_button.css"
 
-function EscapeButton({ to = "/", className = "" }) {
+function EscapeButton({ to = "/", className = "", onClick }) {
     const navigate = useNavigate()
     const [exiting, setExiting] = useState(false)
 
     function handleClick() {
         setExiting(true)
-        setTimeout(() => {navigate(to)}, 400)
+        onClick?.()
+        setTimeout(() => {navigate(to)}, 1000)
     }
 
     return (

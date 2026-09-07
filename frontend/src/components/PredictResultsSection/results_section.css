@@ -86,10 +86,10 @@
     overflow: hidden;
     transform: translate(-50%, -50%) scale(0.65);
     transition:
-        left 1s ease,
-        top 1s ease,
+        left 0.8s ease,
+        top 0.8s ease,
         transform 0.7s ease,
-        opacity 0.45s ease;
+        opacity 0.7s ease;
     z-index: 10;
 }
 
@@ -109,7 +109,7 @@
     left: 28%;
     top: 50%;
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    transform: translate(-50%, -50%) scale(0.85);
 }
 
 .total-results-container {
@@ -156,7 +156,7 @@
 .custom-audio-player,
 .spectrogram-segments-wrapper,
 .habitat-map {
-    
+
     --card-color-top: #1f8177;
     --card-color-bottom: #aad45c;
     --card-color-border: #aad45c;
@@ -174,9 +174,9 @@
     border-radius: 20px;
     border: 10px solid var(--card-color-border);
     transition: 
-        --card-color-top 0.4s ease,
-        --card-color-bottom 0.4s ease,
-        --card-color-border 0.35s ease,
+        --card-color-top 0.3s ease-in-out,
+        --card-color-bottom 0.3s ease-in-out,
+        --card-color-border 0.3s ease-in-out,
         opacity 0.5s ease,
         transform 0.6s ease;
 }
@@ -191,7 +191,7 @@
     --card-color-border: #bbc95d;
 }
 
-/* transition delays between all the cards */
+/* transition delays between all the cards appearing*/
 .entrance-results-visible .main-confidence {
     opacity: 1;
     transform: translateX(0) scale(1);
@@ -258,4 +258,20 @@
     flex: 0 0 auto;
     height: 130px;
     width: auto;
+}
+
+
+/* closing animation */
+.entrance-closing .bird-photo-container {
+    left: -20%;
+    opacity: 0;
+}
+
+.entrance-closing .total-results-container {
+    transform: translate(100px, -50%);
+    opacity: 0;
+}
+
+.entrance-closing .results-title {
+    opacity: 0;
 }

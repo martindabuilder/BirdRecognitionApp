@@ -13,14 +13,17 @@ function ResultsSection(){
     const result = location.state
     const [entryAnimation, setEntryAnimation] = useState("initial")
 
+    function handleClose() {setEntryAnimation("closing")}
+
      useEffect(() => {
         if (!result) return
 
+        /* constants for the opening animation */
         const titleTimer = setTimeout(() => {setEntryAnimation("title-visible")}, 200)
         const popIntimer = setTimeout(() => {setEntryAnimation("bird-visible")}, 800)
         const moveTimer = setTimeout(() => {setEntryAnimation("bird-moved")}, 1300)
         const resultsTimer = setTimeout(() => setEntryAnimation("results-visible"), 2000)
-
+        
         return () => {
             clearTimeout(titleTimer)
             clearTimeout(popIntimer)
@@ -54,7 +57,7 @@ function ResultsSection(){
 
     return (
         <section className={`results-section entrance-${entryAnimation}`}>
-            <EscapeButton/>
+            <EscapeButton onClick = {handleClose}/>
 
             <h3 className = "results-title">Predicted as</h3>
 
