@@ -1,4 +1,5 @@
 import { useLocation } from "react-router-dom"
+import { useEffect, useState } from "react"
 
 import BirdPhoto from "../Shared/BirdPhoto.jsx"
 import HabitatMap from "../Shared/HabitatMap.jsx"
@@ -10,22 +11,41 @@ import "./results_section.css"
 function ResultsSection(){
     const location = useLocation()
     const result = location.state
+    const [entryAnimation, setEntryAnimation] = useState("initial")
 
-    function handleSpectrogramScroll(e) {
-        e.stopPropagation()
-        e.currentTarget.scrollLeft += e.deltaY
-        e.currentTarget.scrollLeft += e.deltaX
-    }
+     useEffect(() => {
+        if (!result) return
 
+        const titleTimer = setTimeout(() => {setEntryAnimation("title-visible")}, 200)
+        const popIntimer = setTimeout(() => {setEntryAnimation("bird-visible")}, 800)
+        const moveTimer = setTimeout(() => {setEntryAnimation("bird-moved")}, 1300)
+        const resultsTimer = setTimeout(() => setEntryAnimation("results-visible"), 2000)
+
+        return () => {
+            clearTimeout(titleTimer)
+            clearTimeout(popIntimer)
+            clearTimeout(moveTimer)
+            clearTimeout(resultsTimer)
+        }
+    }, [result])
+
+    /* if the result is missing the user gets warned and redirected back */
     if (!result) {
         return (
-            <section className="warning-section">
-                <h1 className="stroke-text">No uploaded results.</h1>
-                <h1 className="stroke-text">Go back to the main page, and try again.</h1>
+            <section className = "warning-section">
+                <h1 className = "stroke-text">No uploaded results.</h1>
+                <h1 className = "stroke-text">Go back to the main page, and try again.</h1>
 
                 <EscapeButton />
             </section>
         )
+    }
+
+    /* spectrogram segments output function */
+    function handleSpectrogramScroll(e) {
+        e.stopPropagation()
+        e.currentTarget.scrollLeft += e.deltaY
+        e.currentTarget.scrollLeft += e.deltaX
     }
 
     /* prediction result related constants */
@@ -33,8 +53,7 @@ function ResultsSection(){
     const topSpecies = predictions[0]
 
     return (
-        <section className="results-section">
-
+        <section className={`results-section entrance-${entryAnimation}`}>
             <EscapeButton/>
 
             <h3 className = "results-title">Predicted as</h3>

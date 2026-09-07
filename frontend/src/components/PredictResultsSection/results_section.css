@@ -38,39 +38,59 @@
     --escape-outline: rgb(203, 230, 116);
 
     position: relative;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: clamp(16px, 3vw, 30px);
+    width: 100%;
     height: 100%;
-    padding: clamp(20px, 4vh, 40px) 20px;
     box-sizing: border-box;
-    overflow-y: auto;
+    overflow: hidden;
     scrollbar-width: none;
 }
 .results-section::-webkit-scrollbar { display: none; }
 
 .results-title {
     position: absolute;
-    top: 40px;
     left: 50%;
-    transform: translateX(-50%);
-
+    top: 40px;
+    margin: 0;
     color: rgb(218, 230, 188);
     -webkit-text-stroke: 3px #0c7345;
     paint-order: stroke fill;
+    opacity: 0;
+    transform: translate(-50%, -30px);
+    z-index: 20;
+    pointer-events: none;
+    transition:
+        opacity 0.6s ease,
+        transform 0.7s ease;
+}
+
+.entrance-title-visible .results-title,
+.entrance-bird-visible .results-title,
+.entrance-bird-moved .results-title,
+.entrance-results-visible .results-title {
+    opacity: 1;
+    transform: translate(-50%, 0);
 }
 
 .bird-photo-container {
-    align-self: center;
-    flex-shrink: 0;
-    border-radius: 5%;
+    opacity: 0;
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
     width: clamp(280px, 32vw, 500px);
     height: clamp(280px, 32vw, 500px);
+    flex-shrink: 0;
+    border-radius: 5%;
     background-color: rgb(8, 71, 50);
     border: 10px solid white;
     overflow: hidden;
+    transform: translate(-50%, -50%) scale(0.65);
+    transition:
+        left 1s ease,
+        top 1s ease,
+        transform 0.7s ease,
+        opacity 0.45s ease;
+    z-index: 10;
 }
 
 .bird-photo-container img {
@@ -79,21 +99,49 @@
     object-fit: cover;
 }
 
+.entrance-bird-visible .bird-photo-container {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.entrance-bird-moved .bird-photo-container,
+.entrance-results-visible .bird-photo-container {
+    left: 28%;
+    top: 50%;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
 .total-results-container {
     display: flex;
     flex-direction: column;
     gap: 16px;
     width: clamp(320px, 45vw, 740px);
-    height: 100%;
+    height: 90%;
     max-height: 90vh;
     padding: 20px;
     overflow-y: auto;
     overflow-x: hidden;
     flex-shrink: 0;
     scrollbar-width: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    opacity: 0;
+    transform: translate(100px, -50%);
+    pointer-events: none;
+    transition:
+        opacity 0.7s ease,
+        transform 0.8s ease;
 }
+
 .total-results-container::-webkit-scrollbar {display: none;}
 
+.entrance-results-visible .total-results-container {
+    opacity: 1;
+    transform: translate(0, -50%);
+    pointer-events: auto;
+}
 
 /* text results border */
 .stroke-text {
@@ -102,18 +150,19 @@
     paint-order: stroke fill;
 }
 
-
 /* Shared base code for all the result cards */
 .main-confidence,
 .top4-predictions,
 .custom-audio-player,
 .spectrogram-segments-wrapper,
 .habitat-map {
-
+    
     --card-color-top: #1f8177;
     --card-color-bottom: #aad45c;
     --card-color-border: #aad45c;
 
+    opacity: 0;
+    transform: translateX(50px) scale(0.97);
     flex-shrink: 0;
     width: 100%;
     min-height: 200px;
@@ -127,7 +176,9 @@
     transition: 
         --card-color-top 0.4s ease,
         --card-color-bottom 0.4s ease,
-        --card-color-border 0.35s ease;
+        --card-color-border 0.35s ease,
+        opacity 0.5s ease,
+        transform 0.6s ease;
 }
 
 .main-confidence:hover,
@@ -138,6 +189,33 @@
     --card-color-top: #4dd08f;
     --card-color-bottom: #bbc95d;
     --card-color-border: #bbc95d;
+}
+
+/* transition delays between all the cards */
+.entrance-results-visible .main-confidence {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    transition-delay: 0.10s;
+}
+.entrance-results-visible .top4-predictions {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    transition-delay: 0.25s;
+}
+.entrance-results-visible .custom-audio-player {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    transition-delay: 0.40s;
+}
+.entrance-results-visible .spectrogram-segments-wrapper {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    transition-delay: 0.55s;
+}
+.entrance-results-visible .habitat-map {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    transition-delay: 0.70s;
 }
 
 
