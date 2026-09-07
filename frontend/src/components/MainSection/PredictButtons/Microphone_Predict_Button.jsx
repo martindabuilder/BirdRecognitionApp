@@ -15,6 +15,8 @@ function MicrophonePredictButton({ predicting }) {
                 onHoverStart = {() => setRollCount((current) => current + 1)}
                 initial = {{ opacity: 0, scale: 0.8 }}
                 animate = {{ opacity: predicting ? 0 : 1, scale: predicting ? 0.9 : 1 }}
+                whileHover = {{ scale: 1.03, transition: { duration: 0.2, ease: "ease"}}} 
+
                 transition = {{ opacity: {
                     duration: 0.3,
                     ease: "ease",

@@ -1,21 +1,52 @@
-.predict-button{
-    background: linear-gradient(35deg, rgb(237, 229, 168), rgb(218, 201, 76));
+/* button colors */
+@property --predict-button-color1{
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #f7e87c;
+}
 
-    border: 10px solid rgb(220, 141, 50);
+@property --predict-button-color2{
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #87ee67;
+}
+
+@property --predict-button-border{
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #d97d5e;
+}
+
+
+/* css */
+
+.predict-button{
+    background: linear-gradient(35deg, var(--predict-button-color1), var(--predict-button-color2));
+    border: 10px solid var(--predict-button-border);
     border-radius: 20px;
     padding: 10px;
-
     width: 450px;
     height: 200px;
-
     text-align: center;
     font-size: 2.05rem;
     font-weight: 600;
-    color: rgb(220, 141, 50);
+    color: var(--predict-button-border);
 
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    --predict-button-color1 0.4s ease,
+    --predict-button-color2 0.4s ease,
+    --predict-button-border 0.4s ease;
+}
+.predict-button:hover{
+    --predict-button-color1: #a4f158;
+    --predict-button-color2: #58f1ac;
+    --predict-button-border: #d65a6b;
 }
 
+
+/* rolling text css */
 .rolling-text{
     display: inline-block;
     overflow: hidden;
@@ -37,8 +68,3 @@
     display: block;
     height: 1.2em;
 }
-
-.predict-button:hover{
-    transform: scale(1.02);
-}
-
