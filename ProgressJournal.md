@@ -105,3 +105,10 @@ Day 27: Scrollbar work and its close to being done. Its been made to work simila
 Day 28: Not much coding today, instead im cleaning up the abckend and putting in all the comments in it since they will most likely be wanted (if not even required) for the the final project turn in.
 
 Day 29: Work on the audio playing bar on the results section. Fixed its css so now all the buttons and trakc are aligned properly.
+
+Day 30 + 31 combined: A lot of visual tweaks to the css and react.
+The buttons for the main page and the results section now have proper animations where needed.
+The main page's buttons now have small text staggering animation when hovering over them aswell as better color managment, they also fade out when the audio is being processed and fade back in when you return to the main page. 
+The title bar has slightly improved colors aswell.
+The results section has pop in animations for the bird image + the result cards. They now independently pop into view, and once you close the section they pop out left/right, to load back into the main page.
+Gradients and color shifts are now being slowly reworked and done better with @property.
