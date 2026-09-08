@@ -6,6 +6,7 @@ Saved in this way to make documentation and crediting them easier later on.
 ---- STRUCTURING ----
 [Best Practices for Creating a Folder and File Structure for a React Application](https://medium.com/@wolfflucas/best-practices-for-creating-a-folder-and-file-structure-for-a-react-application-82b6550b3bbf)
 [Why to use separate CSS files for components in React.js](https://stackoverflow.com/questions/60464799/why-to-use-separate-css-files-for-components-in-react-js)
+[Add Comments in JSX](https://forum.freecodecamp.org/t/react-add-comments-in-jsx/602487)
 
 
 ---- PAGE TRANSITIONS AND REACT ROUTER DOM ----

@@ -50,8 +50,7 @@ function TitleBar(){
 
         <div className = {`menu-blur ${menuOpen ? "open" : ""}`}></div>
 
-        <div className = {`side-menu-section ${menuOpen ? "open" : ""}`}>
-            
+        <div className = {`side-menu-section ${currentPage}-theme ${menuOpen ? "open" : ""}`}>            
             <button
                 className = "sources-button" onClick = {goToSources}
                 onMouseEnter = {() => setSourceButtonRoll((current) => current + 1)}
