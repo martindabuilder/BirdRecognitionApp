@@ -112,3 +112,7 @@ The main page's buttons now have small text staggering animation when hovering o
 The title bar has slightly improved colors aswell.
 The results section has pop in animations for the bird image + the result cards. They now independently pop into view, and once you close the section they pop out left/right, to load back into the main page.
 Gradients and color shifts are now being slowly reworked and done better with @property.
+
+Day 32: Mostly CSS touch ups to the title bar and the results section a bit. The buttons in the title bar section now have a shared theme with the page that the user is currently in, and the title bar's side opening meny now has matching style to the page's theme aswell.
+
+Day 33:
