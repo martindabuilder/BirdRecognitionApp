@@ -1,0 +1,21 @@
+.rolling-text {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+}
+
+.rolling-text-line {
+    display: flex;
+}
+
+.rolling-text-character {
+    display: inline-flex;
+    flex-direction: column;
+    height: 1.2em;
+    line-height: 1.2;
+}
+
+.rolling-text-character span {
+    display: block;
+    height: 1.2em;
+}

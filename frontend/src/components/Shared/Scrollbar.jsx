@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react"
 
-import "./custom-scroll-bar.css"
+import "./scrollbar.css"
 
 function CustomScrollBar({ scrollRef, className = "" }) {
 

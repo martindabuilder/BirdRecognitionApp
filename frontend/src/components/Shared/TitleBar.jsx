@@ -1,6 +1,8 @@
 import { useState } from "react"
 import { useNavigate, useLocation } from "react-router-dom"
 
+import RollingButtonText from "./Rolling_Button_Text.jsx"
+
 import "./title-bar.css"
 
 
@@ -8,6 +10,11 @@ function TitleBar(){
     const [menuOpen, setMenuOpen] = useState(false)
     const navigate = useNavigate()
     const location = useLocation()
+
+    /*rolling text constants */
+    const [sourceButtonRoll, setSourceButtonRoll] = useState(0)
+    const [listButtonRoll, setListButtonRoll] = useState(0)
+
 
     const currentPage =
         location.pathname === "/results"
@@ -38,20 +45,34 @@ function TitleBar(){
                 <span></span>
             </button>
 
-            <h2 className = "project-title">
-                Birds Recognition Project
-            </h2>
+            <h2 className = "project-title"> Birds Recognition Project </h2>
         </div>
 
         <div className = {`menu-blur ${menuOpen ? "open" : ""}`}></div>
 
         <div className = {`side-menu-section ${menuOpen ? "open" : ""}`}>
-            <button className = "list-button" onClick = {goToSources}>
-                Sources.
+            
+            <button
+                className = "sources-button" onClick = {goToSources}
+                onMouseEnter = {() => setSourceButtonRoll((current) => current + 1)}
+            >
+
+                <RollingButtonText rollCount = {sourceButtonRoll}>
+                    Sources.
+                </RollingButtonText>
+
             </button>
 
-            <button className = "sources-button" onClick = {goToBirdList}>
-                List of birds.
+            
+            <button 
+                className = "list-button" onClick = {goToBirdList}
+                onMouseEnter = {() => setListButtonRoll((current) => current + 1)}
+            >
+
+                <RollingButtonText rollCount = {listButtonRoll}>
+                    List of birds.
+                </RollingButtonText>
+
             </button>
         </div>
 

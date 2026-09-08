@@ -1,7 +1,8 @@
 import { useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { motion } from "motion/react"
-import RollingButtonText from "./Rolling_Button_Text.jsx"
+
+import RollingButtonText from "../../Shared/Rolling_Button_Text.jsx"
 
 import "./buttons.css"
 

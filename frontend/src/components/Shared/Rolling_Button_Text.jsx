@@ -1,5 +1,7 @@
 import { motion } from "motion/react"
 
+import "./rolling-button.css"
+
 function RollingButtonText({ children, rollCount }){
     return (
         <span className = "rolling-text" aria-hidden = "true">
