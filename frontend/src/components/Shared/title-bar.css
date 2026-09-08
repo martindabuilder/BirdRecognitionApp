@@ -29,6 +29,17 @@
     initial-value: rgb(190, 98, 13);
 }
 
+@property --button-color-start {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: rgb(193, 189, 65);
+}
+@property --button-color-end {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: rgb(190, 98, 13);
+}
+
 
 /* different color themes for the different pages */
 .main-theme {
@@ -37,6 +48,11 @@
 
     --sidebar-button-color: #edaf29;
     --sidebar-button-border-color: #7e5218;
+
+    --button-left-border: #000000;
+
+    --button-color-start: #f7eac3;
+    --button-color-end: #ebe652;
 }
 
 .results-theme {
@@ -45,6 +61,11 @@
 
     --sidebar-button-color: #e1dc7d;
     --sidebar-button-border-color: #337876;
+
+    --button-left-border: #000000;
+
+    --button-color-start: #e6fcbd;
+    --button-color-end: #bed26e;
 }
 
 .birdlist-theme {
@@ -53,6 +74,11 @@
 
     --sidebar-button-color: #e5d97d;
     --sidebar-button-border-color: #d85f2b;
+
+    --button-left-border: #000000;
+
+    --button-color-start: #f0e8ba;
+    --button-color-end: #e9cf3f;
 }
 
 .info-theme {
@@ -61,6 +87,11 @@
 
     --sidebar-button-color: #d2cef2;
     --sidebar-button-border-color: #918ce9;
+
+    --button-left-border: #000000;
+
+    --button-color-start: #defeff;
+    --button-color-end: #cee0f7;
 }
 
 
@@ -167,7 +198,7 @@
 .sources-button:hover,
 .list-button:hover {
     color: rgb(24, 141, 92);
-    background: linear-gradient(170deg,#dedc61 0%, #dce1a3 80%);
+    background: linear-gradient(90deg, var(--button-color-start), var(--button-color-end));
 }
 
 /* blurring the background when opening the sidebar */

@@ -77,8 +77,8 @@
     position: absolute;
     left: 50%;
     top: 50%;
-    width: clamp(280px, 32vw, 500px);
-    height: clamp(280px, 32vw, 500px);
+    width: clamp(280px, 32vw, 550px);
+    height: clamp(280px, 32vw, 550px);
     flex-shrink: 0;
     border-radius: 5%;
     background-color: rgb(8, 71, 50);
@@ -135,8 +135,6 @@
         transform 0.8s ease;
 }
 
-.total-results-container::-webkit-scrollbar {display: none;}
-
 .entrance-results-visible .total-results-container {
     opacity: 1;
     transform: translate(0, -50%);
@@ -186,9 +184,9 @@
 .custom-audio-player:hover,
 .spectrogram-segments-wrapper:hover,
 .habitat-map:hover {
-    --card-color-top: #4dd08f;
-    --card-color-bottom: #bbc95d;
-    --card-color-border: #bbc95d;
+    --card-color-top: #4ab48b;
+    --card-color-bottom: #d2e266;
+    --card-color-border: #d2e266;
 }
 
 /* transition delays between all the cards appearing*/
@@ -225,11 +223,13 @@
 .custom-audio-player-header,
 .spectrogram-header,
 .habitat-header {
+    position: relative;
+    text-align: center;
     flex-shrink: 0;
-    margin-bottom: 14px;
+    margin-bottom: 20px;
     font-weight: 700;
     font-family: 'Courier New', Courier, monospace;
-    font-size: 1rem;
+    font-size: 1.1rem;
     text-transform: uppercase;
     letter-spacing: 0.1rem;
 }

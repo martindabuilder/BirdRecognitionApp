@@ -73,7 +73,7 @@ function ResultsSection(){
             <div className = "total-results-container stroke-text">
                 {topSpecies && (
                     <div className = "main-confidence stroke-text">
-                        <h3>{topSpecies.species}</h3>
+                        <h3 className = "main-confidence-header"> {topSpecies.species} </h3>
                         <p className = "scientific-name"> <i> {topSpecies.scientificName} </i> </p>
                         <p>Confidence: {(topSpecies.probabilities * 100).toFixed(2)}%</p>
                     </div>
