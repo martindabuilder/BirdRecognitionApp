@@ -53,7 +53,7 @@ function TitleBar(){
             className = {`menu-blur ${menuOpen ? "open" : ""}`}
             onClick = {() => setMenuOpen(false)}
         > </div>
-        
+
         <div 
             className = {`side-menu-section ${currentPage}-theme ${menuOpen ? "open" : ""}`}
             style = {{ "--toucan-image": `url(${toucans})` }}

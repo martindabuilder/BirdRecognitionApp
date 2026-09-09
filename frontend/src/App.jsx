@@ -10,6 +10,8 @@ import AuroraLayer from "./components/Shared/AuroraLayer.jsx"
 
 import "./index.css"
 
+import main_bg from "./assets/main_bg.mp4"
+
 
 function AppWrapper(){
     const location = useLocation()
@@ -27,6 +29,9 @@ function AppWrapper(){
             <TitleBar />
             <div className = "app-content">
                 <AuroraLayer />
+                
+                <video  className = "main-bg-video" autoPlay muted loop playsInline src = {main_bg} />
+
                 <div className = "page-content">
                     <Routes>
                         <Route path = "/" element = {<MainSection />}/>
