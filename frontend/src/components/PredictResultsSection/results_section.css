@@ -293,7 +293,6 @@
     cursor: grab;
     overscroll-behavior: contain;
 }
-
 .spectrogram-segments::-webkit-scrollbar {display: none;}
 
 .spectrogram-segments img {

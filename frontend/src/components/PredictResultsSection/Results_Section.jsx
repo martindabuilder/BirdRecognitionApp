@@ -23,10 +23,10 @@ function ResultsSection(){
         if (!result) return
 
         /* constants for the opening animation */
-        const titleTimer = setTimeout(() => {setEntryAnimation("title-visible")}, 200)
-        const popIntimer = setTimeout(() => {setEntryAnimation("bird-visible")}, 800)
-        const moveTimer = setTimeout(() => {setEntryAnimation("bird-moved")}, 1300)
-        const resultsTimer = setTimeout(() => setEntryAnimation("results-visible"), 2000)
+        const titleTimer = setTimeout(() => {setEntryAnimation("title-visible")}, 600)
+        const popIntimer = setTimeout(() => {setEntryAnimation("bird-visible")}, 1000)
+        const moveTimer = setTimeout(() => {setEntryAnimation("bird-moved")}, 1600)
+        const resultsTimer = setTimeout(() => setEntryAnimation("results-visible"), 2400)
         
         return () => {
             clearTimeout(titleTimer)
@@ -73,10 +73,7 @@ function ResultsSection(){
 
             <div className = "bird-photo-container">
                 {topSpecies && (
-                    <BirdPhoto
-                        commonName = {topSpecies.species}
-                        scientificName = {topSpecies.scientificName}
-                    />
+                    <BirdPhoto commonName = {topSpecies.species} photo = {result.birdPhoto} />
                 )}
             </div>
 

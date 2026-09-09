@@ -7,18 +7,33 @@ import "./main_section.css"
 
 function MainSection(){
 
-    const [predicting, setPredicting] = useState(false)
+    const [processingStage, setProcessingStage] = useState(null)
+
+    const processingMessages = {
+        processing: "Analysing birdsong...",
+        "fetching-photo": "Finding your bird...",
+        "readying-results": "Preparing results..."
+    }
 
     return(
         <section className = "main-section">
-            <PredictButton predicting = {predicting} setPredicting = {setPredicting} />
-            <MicrophonePredictButton predicting = {predicting} setPredicting = {setPredicting} />
 
-            {predicting && (
+            <PredictButton
+                processingStage = {processingStage}
+                setProcessingStage = {setProcessingStage}
+            />
+
+            <MicrophonePredictButton
+                processingStage = {processingStage}
+                setProcessingStage = {setProcessingStage}
+            />
+
+            {processingStage && (
                 <div className = "processing">
-                    Processing audio..
+                    {processingMessages[processingStage]}
                 </div>
             )}
+
         </section>
     )
 }

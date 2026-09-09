@@ -246,5 +246,11 @@ html, body {
 
 .info-theme {
   --aurora-base: linear-gradient(90deg, #4182a0 0%, #55afbb 100%);
+  --aurora-c1: #000dff;
+  --aurora-c2: #00b3ff;
+  --aurora-c3: #00f2ff;
+  --aurora-c4: #8cf4c4;
 
+  --aurora-c5: #201d6e;
+  --aurora-c6: #142f65;
 }
