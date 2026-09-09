@@ -5,6 +5,7 @@ import RollingButtonText from "./Rolling_Button_Text.jsx"
 
 import "./title-bar.css"
 
+import toucans from "../../assets/toucans.jpg"
 
 function TitleBar(){
     const [menuOpen, setMenuOpen] = useState(false)
@@ -48,10 +49,16 @@ function TitleBar(){
             <h2 className = "project-title"> Birds Recognition Project </h2>
         </div>
 
-        <div className = {`menu-blur ${menuOpen ? "open" : ""}`}></div>
-
-        <div className = {`side-menu-section ${currentPage}-theme ${menuOpen ? "open" : ""}`}>            
-            <button 
+        <div 
+            className = {`menu-blur ${menuOpen ? "open" : ""}`}
+            onClick = {() => setMenuOpen(false)}
+        > </div>
+        
+        <div 
+            className = {`side-menu-section ${currentPage}-theme ${menuOpen ? "open" : ""}`}
+            style = {{ "--toucan-image": `url(${toucans})` }}
+        >
+                <button 
                 className = "list-button" onClick = {goToBirdList}
                 onMouseEnter = {() => setListButtonRoll((current) => current + 1)}
             >

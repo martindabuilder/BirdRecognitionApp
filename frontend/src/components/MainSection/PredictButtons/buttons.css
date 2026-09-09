@@ -40,7 +40,7 @@
     --predict-button-border 0.4s ease;
 }
 .predict-button:hover{
-    --predict-button-color1: #a4f158;
-    --predict-button-color2: #58f1ac;
+    --predict-button-color1: #eeedab;
+    --predict-button-color2: #1deab3;
     --predict-button-border: #d65a6b;
 }

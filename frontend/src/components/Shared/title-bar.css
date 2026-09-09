@@ -39,6 +39,11 @@
     inherits: true;
     initial-value: rgb(190, 98, 13);
 }
+@property --button-color-text {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: rgb(247, 0, 0);
+}
 
 
 /* different color themes for the different pages */
@@ -46,10 +51,12 @@
     --title-color-start: #ebe652;
     --title-color-end: #e6a346;
 
+    --button-color-text: rgb(152, 142, 40);
+
     --sidebar-button-color: #edaf29;
     --sidebar-button-border-color: #7e5218;
 
-    --button-left-border: #000000;
+    --button-left-border: #4d350b;
 
     --button-color-start: #f7eac3;
     --button-color-end: #ebe652;
@@ -59,10 +66,12 @@
     --title-color-start: #bed26e;
     --title-color-end: #7cacc5;
 
+    --button-color-text: #52b58a;
+
     --sidebar-button-color: #e1dc7d;
     --sidebar-button-border-color: #337876;
 
-    --button-left-border: #000000;
+    --button-left-border: #1c8b8b;
 
     --button-color-start: #e6fcbd;
     --button-color-end: #bed26e;
@@ -71,6 +80,8 @@
 .birdlist-theme {
     --title-color-start: #e9cf3f;
     --title-color-end: #dc4025;
+
+    --button-color-text: rgb(179, 53, 53);
 
     --sidebar-button-color: #e5d97d;
     --sidebar-button-border-color: #d85f2b;
@@ -84,6 +95,8 @@
 .info-theme {
     --title-color-start: #cee0f7;
     --title-color-end: #918ce9;
+
+    --button-color-text: rgb(17, 0, 252);
 
     --sidebar-button-color: #d2cef2;
     --sidebar-button-border-color: #918ce9;
@@ -172,10 +185,25 @@
     box-sizing: border-box;
     padding-top: 80px;
     gap: 25px;
+    overflow: hidden;
+    isolation: isolate;
     transform: translateX(-100%);
     transition: transform 0.5s ease;
     z-index: 9;
 }
+.side-menu-section::before {
+    content: "";
+    filter: blur(1px);
+    inset: -10px;
+    position: absolute;
+    inset: 0;
+    background-image: var(--toucan-image);
+    background-size: cover;
+    background-position: center;
+    opacity: 0.25;
+    z-index: -1;
+}
+
 .side-menu-section.open { transform: translateX(0); }
 
 /* sources and bird list section buttons */
@@ -197,7 +225,7 @@
 
 .sources-button:hover,
 .list-button:hover {
-    color: rgb(24, 141, 92);
+    color: var(--button-color-text);
     background: linear-gradient(90deg, var(--button-color-start), var(--button-color-end));
 }
 

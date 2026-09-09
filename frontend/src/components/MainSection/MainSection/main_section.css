@@ -1,3 +1,16 @@
+/* @property */
+@property --text-fill-color {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #ebe652;
+}
+
+@property --text-outline-color {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #e6a346;
+}
+
 .main-section {
     position: relative;
     display: flex;
@@ -19,9 +32,10 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 3.05rem;
+    font-size: 4.05rem;
     font-weight: 800;
-    color: white;
+    color: var(--text-fill-color);
+    -webkit-text-stroke: 2px var(--text-outline-color);    
     opacity: 0;
     animation: processing-appear 0.4s ease forwards;
     animation-delay: 0.3s;
