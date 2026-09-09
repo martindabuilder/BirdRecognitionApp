@@ -1,13 +1,10 @@
 .bird-list-section {
-    /* section specific button colors */
     --escape-color: rgb(226, 131, 58);
     --escape-outline: rgb(238, 206, 44);
 
-    /* section specific scroll wheer colors */
     --scroll-track: linear-gradient(180deg, #b2411e, #c87625);
     --scroll-thumb: rgb(224, 196, 102);
     --scroll-thumb-hover: rgb(232, 218, 170);
-
 
     position: relative;
     width: 100%;
@@ -19,7 +16,6 @@
     align-items: center;
     overflow-y: auto;
     overflow-x: hidden;
-    
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
@@ -48,10 +44,17 @@
     overflow: hidden;
     position: relative;
     background: linear-gradient(145deg, #a42626, #edbb4d);
-    border: 2px solid rgb(188, 179, 112);
+    border: 5px solid rgb(251, 203, 144);
     border-radius: 20px;
     text-align: center;
-    transition: transform 0.4s ease;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: transform 0.4s ease, opacity 0.6s ease;
+}
+
+.bird-card-visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .bird-card::before {
@@ -102,16 +105,26 @@
 
 
 /* hover effects */
-.bird-card:hover {transform: translateY(-6px);}
-.bird-card:hover::before {opacity: 1;}
-.bird-card:hover .bird-card-photo img {transform: scale(1.05);}
+.bird-card:hover
+.bird-card:hover { transform: translateY(-6px); }
+.bird-card:hover::before { opacity: 1; }
+.bird-card:hover .bird-card-photo img { transform: scale(1.05); }
 
+.bird-loading-more { margin: 20px 0; }
 
-/* responsive image section */
-@media (max-width: 1100px) {.bird-list {grid-template-columns: repeat(3, minmax(0, 1fr));}}
+/* exiting the page */
+.bird-list-section-exit .bird-card {
+    opacity: 0;
+    transform: scale(0.5);
+}
+
+@media (max-width: 1100px) {
+    .bird-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
 
 @media (max-width: 750px) {
-    .bird-list {grid-template-columns: repeat(2, minmax(0, 1fr));}
-    .bird-list-section {padding: 40px 25px 60px;}}
+    .bird-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .bird-list-section { padding: 40px 25px 60px; } 
+}
 
 @media (max-width: 500px) { .bird-list {grid-template-columns: 1fr;} }

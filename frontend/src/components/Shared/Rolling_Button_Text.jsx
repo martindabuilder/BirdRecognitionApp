@@ -11,13 +11,9 @@ function RollingButtonText({ children, rollCount }){
                         className = "rolling-text-character"
                         key = {`${character}-${index}`}
                         animate = {{ y: `-${rollCount * 1.2}em` }}
-                        transition = {{
-                            duration: 0.45,
-                            delay: index * 0.02,
-                            ease: [0.22, 1, 0.36, 1],
-                        }}
+                        transition = {{duration: 0.35, delay: index * 0.02, ease: "ease",}}
                     >
-                        {Array.from({ length: 20 }, (_, repetition) => (
+                        {Array.from({ length: 100 }, (_, repetition) => (
                             <span key = {repetition}>
                                 {character === " " ? "\u00a0" : character}
                             </span>

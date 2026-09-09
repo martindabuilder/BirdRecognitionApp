@@ -27,12 +27,6 @@
     transform: scaleY(1.3);
 }
 
-.custom-scroll-bar-track.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.custom-scroll-bar-track.visible {
-    opacity: 1;
-    pointer-events: auto;
-}
+.custom-scroll-bar-track.hidden {opacity: 0;}
+.custom-scroll-bar-track.visible {opacity: 1;}
+.custom-scroll-bar-track:hover {opacity: 1;}

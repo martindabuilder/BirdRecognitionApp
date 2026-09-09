@@ -51,18 +51,6 @@ function TitleBar(){
         <div className = {`menu-blur ${menuOpen ? "open" : ""}`}></div>
 
         <div className = {`side-menu-section ${currentPage}-theme ${menuOpen ? "open" : ""}`}>            
-            <button
-                className = "sources-button" onClick = {goToSources}
-                onMouseEnter = {() => setSourceButtonRoll((current) => current + 1)}
-            >
-
-                <RollingButtonText rollCount = {sourceButtonRoll}>
-                    Sources.
-                </RollingButtonText>
-
-            </button>
-
-            
             <button 
                 className = "list-button" onClick = {goToBirdList}
                 onMouseEnter = {() => setListButtonRoll((current) => current + 1)}
@@ -70,6 +58,18 @@ function TitleBar(){
 
                 <RollingButtonText rollCount = {listButtonRoll}>
                     List of birds.
+                </RollingButtonText>
+
+            </button>
+
+        
+            <button
+                className = "sources-button" onClick = {goToSources}
+                onMouseEnter = {() => setSourceButtonRoll((current) => current + 1)}
+            >
+
+                <RollingButtonText rollCount = {sourceButtonRoll}>
+                    Sources.
                 </RollingButtonText>
 
             </button>

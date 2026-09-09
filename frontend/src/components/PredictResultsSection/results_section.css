@@ -133,7 +133,7 @@
     width: clamp(320px, 45vw, 740px);
     height: 90%;
     max-height: 90vh;
-    padding: 20px;
+    padding: 72px 20px 20px;
     overflow-y: auto;
     overflow-x: hidden;
     flex-shrink: 0;

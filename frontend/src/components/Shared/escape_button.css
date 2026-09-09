@@ -1,6 +1,6 @@
 .escape-button {
-    position: absolute;
-    top: 20px;
+    position: fixed;
+    top: 80px;
     left: 20px;
     width: 44px;
     height: 44px;
@@ -10,7 +10,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 10;
+    z-index: 20;
     opacity: 1;
     transition: opacity 0.3s ease-in-out;
 }
