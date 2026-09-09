@@ -13,6 +13,10 @@ function ResultsSection(){
     const result = location.state
     const [entryAnimation, setEntryAnimation] = useState("initial")
 
+    /* constans managing the top and bottom blur of the results container */
+    const [atTop, setAtTop] = useState(true)
+    const [atBottom, setAtBottom] = useState(false)
+
     function handleClose() {setEntryAnimation("closing")}
 
      useEffect(() => {
@@ -51,6 +55,12 @@ function ResultsSection(){
         e.currentTarget.scrollLeft += e.deltaX
     }
 
+    function handleResultsScroll(e) {
+        const container = e.currentTarget
+        setAtTop(container.scrollTop === 0)
+        setAtBottom(container.scrollTop + container.clientHeight >= container.scrollHeight - 1)
+    }
+
     /* prediction result related constants */
     const predictions = result.predictions || []
     const topSpecies = predictions[0]
@@ -59,7 +69,7 @@ function ResultsSection(){
         <section className={`results-section entrance-${entryAnimation}`}>
             <EscapeButton onClick = {handleClose}/>
 
-            <h3 className = "results-title">Predicted as</h3>
+            <h3 className = "results-title"> Predicted as </h3>
 
             <div className = "bird-photo-container">
                 {topSpecies && (
@@ -70,7 +80,10 @@ function ResultsSection(){
                 )}
             </div>
 
-            <div className = "total-results-container stroke-text">
+            <div 
+                className = {`total-results-container stroke-text ${atTop ? "at-top" : ""} ${atBottom ? "at-bottom" : ""}`}
+                onScroll = {handleResultsScroll}
+            >               
                 {topSpecies && (
                     <div className = "main-confidence stroke-text">
                         <h3 className = "main-confidence-header"> {topSpecies.species} </h3>

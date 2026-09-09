@@ -17,6 +17,18 @@
     initial-value: #aad45c;
 }
 
+@property --top-fade {
+    syntax: "<percentage>";
+    inherits: false;
+    initial-value: 0%;
+}
+
+@property --bottom-fade {
+    syntax: "<percentage>";
+    inherits: false;
+    initial-value: 100%;
+}
+
 /* css */
 
 .warning-section {
@@ -46,11 +58,13 @@
 }
 .results-section::-webkit-scrollbar { display: none; }
 
+/* Predicted as title */
 .results-title {
     position: absolute;
     left: 50%;
     top: 40px;
     margin: 0;
+    font-size: 1.6rem;
     color: rgb(218, 230, 188);
     -webkit-text-stroke: 3px #0c7345;
     paint-order: stroke fill;
@@ -135,6 +149,33 @@
         transform 0.8s ease;
 }
 
+/*blurs to the top and bottom of the results section */
+.total-results-container {
+    --top-fade: 0%;
+    --bottom-fade: 100%;
+    mask-image: linear-gradient( to bottom, transparent 0%, black var(--top-fade), black var(--bottom-fade), transparent 100%);
+    -webkit-mask-image: linear-gradient( to bottom, transparent 0%, black var(--top-fade), black var(--bottom-fade), transparent 100%);
+    transition:
+        opacity 0.7s ease,
+        transform 0.8s ease,
+        --top-fade 0.4s ease,
+        --bottom-fade 0.4s ease;
+}
+.total-results-container.at-top {
+    --top-fade: 0%;
+    --bottom-fade: 80%;
+}
+.total-results-container.at-bottom {
+    --top-fade: 20%;
+    --bottom-fade: 100%;
+}
+.total-results-container:not(.at-top):not(.at-bottom) {
+    --top-fade: 15%;
+    --bottom-fade: 85%;
+}
+
+
+/* entrance for the entire results section */
 .entrance-results-visible .total-results-container {
     opacity: 1;
     transform: translate(0, -50%);
@@ -155,9 +196,9 @@
 .spectrogram-segments-wrapper,
 .habitat-map {
 
-    --card-color-top: #1f8177;
-    --card-color-bottom: #aad45c;
-    --card-color-border: #aad45c;
+    --card-color-top: #126058;
+    --card-color-bottom: #b8cb59;
+    --card-color-border: #b8cb59;
 
     opacity: 0;
     transform: translateX(50px) scale(0.97);
@@ -178,6 +219,7 @@
         opacity 0.5s ease,
         transform 0.6s ease;
 }
+.main-confidence { min-height: 140px; }
 
 .main-confidence:hover,
 .top4-predictions:hover,
