@@ -4,6 +4,19 @@
   box-sizing: border-box;
 }
 
+/* @property's for the aurora background */
+@property --aurora-start {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #072430;
+}
+
+@property --aurora-end {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #134740;
+}
+
 #root{
   min-height: 100%;
 }
@@ -23,8 +36,11 @@ html, body {
   display: flex;
   flex-direction: column;
   position: relative;
-  background: var(--aurora-base);
-  transition: background 1.2s ease, color 1.2s ease;
+  background: linear-gradient(90deg, var(--aurora-start) 0%, var(--aurora-end) 100%);
+  transition:
+    --aurora-start 1.2s ease,
+    --aurora-end 1.2s ease,
+    color 1.2s ease;
 }
 
 .app-content {
@@ -211,7 +227,8 @@ html, body {
 
 /* main page background */
 .main-theme {
-  --aurora-base: linear-gradient(90deg, #072430 0%, #134740 100%);
+  --aurora-start: #072430;
+  --aurora-end: #134740;
   --aurora-c1: #0e6443;
   --aurora-c2: #509a2d;
   --aurora-c3: #b0c749;
@@ -223,7 +240,8 @@ html, body {
 
 /* results page background */
 .results-theme {
-  --aurora-base: linear-gradient(90deg, #15526c 0%, #25ae95 100%);
+  --aurora-start: #15526c;
+  --aurora-end: #25ae95;
   --aurora-c1: #26c286;
   --aurora-c2: #46c26f;
   --aurora-c3: #6cd459;
@@ -234,7 +252,8 @@ html, body {
 }
 
 .birdlist-theme {
-  --aurora-base: linear-gradient(90deg, #ce507e 0%, #ae7d49 100%);
+  --aurora-start: #ce507e;
+  --aurora-end: #ae7d49;
   --aurora-c1: #ff0080;
   --aurora-c2: #ffd000;
   --aurora-c3: #e1ff00;
@@ -245,7 +264,8 @@ html, body {
 }
 
 .info-theme {
-  --aurora-base: linear-gradient(90deg, #4182a0 0%, #55afbb 100%);
+  --aurora-start: #4182a0;
+  --aurora-end: #55afbb;
   --aurora-c1: #000dff;
   --aurora-c2: #00b3ff;
   --aurora-c3: #00f2ff;
