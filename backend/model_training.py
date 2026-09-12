@@ -21,7 +21,7 @@ TEACHER_PROBS = TEACHER_DIR / "teacher_probs.npy"
 TEACHER_CLASSES = TEACHER_DIR / "class_order.npy"
 
 # Knowledge distialion settings.
-DISTILLATION_ALPHA = 0.0
+DISTILLATION_ALPHA = 0.3
 DISTILLATION_TEMPERATURE = 3.0
 
 MODEL_DIR = BASE_DIR / "model"

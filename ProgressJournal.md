@@ -115,4 +115,7 @@ Gradients and color shifts are now being slowly reworked and done better with @p
 
 Day 32: Mostly CSS touch ups to the title bar and the results section a bit. The buttons in the title bar section now have a shared theme with the page that the user is currently in, and the title bar's side opening meny now has matching style to the page's theme aswell.
 
-Day 33:
+Day 33: CSS work again with some retraining for the model, added back the teacher distillation to see how it performs with it. 
+For the CSS i touched up the transitions for the background colors between the different pages making it a bit smoother, that change will be applied to the task bar's side opening menu aswell.
+Added text that shows up once the model starts processing the uploaded audio, right now its only plain text but will be worked on and improved visually later on. The results section now also waits for the result's photo to be requested and fully loaded in before it shows, as before the photo would still be loading while the results showed up.
+Improved the way that bird photos are loaded/parsed aswell. Now they get loaded and API requested in batches so that the API doesnt get too many requests at the same time. They also get requested in batches *while* scrolling down aswell, so the 200th photo is immidietly being requested the second the page loads. Will improve on the "loading birds" text that shows up when the birds are being requested loaded.
