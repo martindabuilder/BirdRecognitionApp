@@ -44,3 +44,35 @@
     --predict-button-color2: #1deab3;
     --predict-button-border: #d65a6b;
 }
+
+/* css pretaining to the microphone recording */
+.recording-overlay {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(8px);
+}
+
+.recording-popup {
+    width: 420px;
+    height: 400px;
+
+}
+
+.recording-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #87ee67;
+}
+
+.recording-status {}
+
+/* buttons in the recording pop-up */
+.record-button {}
+.pause-button {}
+.resume-button {}
+
+.stop-button {}
+.cancel-button {}

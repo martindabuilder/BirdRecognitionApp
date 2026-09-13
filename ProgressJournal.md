@@ -119,3 +119,7 @@ Day 33: CSS work again with some retraining for the model, added back the teache
 For the CSS i touched up the transitions for the background colors between the different pages making it a bit smoother, that change will be applied to the task bar's side opening menu aswell.
 Added text that shows up once the model starts processing the uploaded audio, right now its only plain text but will be worked on and improved visually later on. The results section now also waits for the result's photo to be requested and fully loaded in before it shows, as before the photo would still be loading while the results showed up.
 Improved the way that bird photos are loaded/parsed aswell. Now they get loaded and API requested in batches so that the API doesnt get too many requests at the same time. They also get requested in batches *while* scrolling down aswell, so the 200th photo is immidietly being requested the second the page loads. Will improve on the "loading birds" text that shows up when the birds are being requested loaded.
+
+Day 34: Did some CSS work for the title bar, the side opening menu now changes colors properly once you go to a different page.
+Finally added the microphone recognition functionality which seems to work well and records/sends through the audio to the backend properly. Will work on proper CSS for it tomorrow.
+Also fixed sort of a bug where if you hover over the rolling text multiple times it will trigger the animation all those times even if the animation isnt done yet, so now it only happens once per hover.
