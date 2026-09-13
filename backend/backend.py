@@ -46,7 +46,7 @@ DEVICE = torch.device("cpu")
 def spectrogram_to_base64(spectrogram):
     buffer = BytesIO()
     plt.figure(figsize = (10, 4))
-    plt.imshow(spectrogram, aspect="auto", origin="lower")
+    plt.imshow(spectrogram, aspect = "auto", origin = "lower")
     plt.axis("off")
     plt.savefig(buffer, format = "png", bbox_inches = "tight", pad_inches = 0)
     plt.close()
@@ -71,14 +71,14 @@ BIRD_INFO = load_bird_info()
 
 
 #---- Filtering functions ----
-#checks if the segment is active enough, if it isnt above the threshold it gets skipped
+# Checks if the segment is active enough, if it isnt above the threshold it gets skipped
 def is_seg_active(spectrogram, threshold = 0.05, min_ratio = MINIMAL_ACTIVE_THRESHOLD):
     active_columns = np.any(spectrogram > threshold, axis = 0)
     ratio = np.sum(active_columns) / len(active_columns)
     return ratio >= min_ratio
 
 
-#checks for the overall darkness of the spectrogram, if its too dark it gets skipped
+# Checks for the overall darkness of the spectrogram, if its too dark it gets skipped
 def spectrogram_too_dark(spectrogram):
     return spectrogram.mean() < MAX_DARKNESS
 
@@ -94,13 +94,13 @@ def prepare_spectrogram(spectrogram):
 
 
 #---- Audio processing related functions ----
-#preprocessing, which is done in the same way as preprocessing.py
+# Preprocessing, which is done in the same way as preprocessing.py
 def split_audio(file_path, sr = SAMPLE_RATE, duration = AUDIO_DURATION):
     y, sr = librosa.load(file_path, sr = sr, res_type = "soxr_hq")
 
     y, _ = librosa.effects.trim(y)
     segment_length = int(duration * sr)
-    hop_samples = int(4.0 * sr) #allows a 1 second overlap between 2 consecutive segments
+    hop_samples = int(4.0 * sr) # allows a 1 second overlap between 2 consecutive segments
     segments = []
 
     for start in range(0, len(y), hop_samples):
@@ -113,7 +113,7 @@ def split_audio(file_path, sr = SAMPLE_RATE, duration = AUDIO_DURATION):
     return segments, sr
 
 
-#turns the 5s audio segments into a normalized mel spectrogram
+# Turns the 5s audio segments into a normalized mel spectrogram
 def audio_to_spectrogram(y, sr):
     spectrogram = librosa.feature.melspectrogram(y = y, sr = sr, n_fft = 2048, 
     hop_length = HOP_LENGTH, n_mels = MEL_LINES, fmin = 200, fmax = 16000, power = 2.0)
@@ -126,7 +126,7 @@ def audio_to_spectrogram(y, sr):
 
 
 #---- Model loading and performance functions
-#Loads the pre-trained model with our custom weights
+# Loads the pre-trained model with our custom weights
 def load_model():
     classes = np.load(LABEL_ENCODER_PATH, allow_pickle = True)
     num_classes = len(classes)
@@ -149,11 +149,11 @@ def load_model():
     return model, classes
 
 
-#Once the backend starts the model gets automatically loaded
+# Once the backend starts the model gets automatically loaded
 model, classes = load_model()
 
 
-#Used to predict the file uploaded by the user, regardless of if its from device or recording
+# Used to predict the file uploaded by the user, regardless of if its from device or recording
 def predict_uploaded_file(file_path):
     segments, sr = split_audio(file_path)
     inputs = []
@@ -213,19 +213,19 @@ app.add_middleware(
 )
 
 
-#Main portion of the site
+# Main portion of the site
 @app.get("/")
 def home():
     return {"message" : "Bird Recognition FastAPI endpoint is running"}
 
 
-#Receives an audio file and runs it through the model
+# Receives an audio file and runs it through the model
 @app.post("/predict")
 async def results(file: UploadFile = File(...)):
     if not file.filename:
-        raise HTTPException(status_code=400, detail="No file was uploaded.")
+        raise HTTPException(status_code = 400, detail = "No file was uploaded.")
 
-    temp_file = BASE_DIR / f"temp_{file.filename}"
+    temp_file = BASE_DIR / f"temp_{Path(file.filename).name}"
 
     try:
         contents = await file.read()
@@ -237,7 +237,6 @@ async def results(file: UploadFile = File(...)):
 
         for spectrogram in spectrograms:
             image = spectrogram_to_base64(spectrogram)
-
             spectrogram_images.append(image)
 
         audio_base64 = base64.b64encode(contents).decode("utf-8")
@@ -247,7 +246,7 @@ async def results(file: UploadFile = File(...)):
             "predictions": predictions,
             "spectrograms": spectrogram_images,
             "audio": audio_base64,
-            "audioType": file.content_type or "audio/mpeg"
+            "audioType": file.content_type or "audio/wav"
         }
 
     except ValueError as e:
@@ -259,6 +258,7 @@ async def results(file: UploadFile = File(...)):
     finally:
         if temp_file.exists():
             temp_file.unlink()
+
 
 # List of all the available birds in the project
 @app.get("/birds")

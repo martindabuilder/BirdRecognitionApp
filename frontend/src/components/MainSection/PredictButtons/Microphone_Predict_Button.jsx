@@ -1,15 +1,23 @@
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { motion } from "motion/react"
+import { useNavigate } from "react-router-dom"
 
 import RollingButtonText from "../../Shared/Rolling_Button_Text.jsx"
 
 import "./buttons.css"
 
-function MicrophonePredictButton({ processingStage }){
+function MicrophonePredictButton({ processingStage, setProcessingStage }){
 
     const [rollCount, setRollCount] = useState(0)
     const [rolling, setRolling] = useState(false)
 
+    const navigate = useNavigate()
+    const chunksRef = useRef([])
+
+    const [recording, setRecording] = useState(false)
+    const [recordingTime, setRecordingTime] = useState(0)
+    const [recorder, setRecorder] = useState(null)
+    
     const predicting = processingStage !== null
 
     return (

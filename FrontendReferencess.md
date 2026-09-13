@@ -42,6 +42,12 @@ Saved in this way to make documentation and crediting them easier later on.
 [Rolling text button: Staggered](https://motion.dev/examples/react-rolling-text-button-stagger)
 
 
+---- MICROPHONE PREDICTING PORTION ----
+[How to record audio in React](https://stackoverflow.com/questions/78825337/how-to-record-audio-in-react)
+[Record & Upload Audio From ReactJS](https://guymanzurola.medium.com/recording-upload-audio-from-reactjs-c127235b909e)
+[MediaStream Recording API](https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Recording_API)
+
+
 ---- LIST OF SPECIFIC SOURCES TO BE LISTED IN THE "SOURCES" SECTION:
 
 Corresponding bird photos:
