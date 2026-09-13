@@ -11,7 +11,9 @@ function PredictButton({ processingStage, setProcessingStage }){
 
     const fileInputRef = useRef(null)
     const navigate = useNavigate()
+
     const [rollCount, setRollCount] = useState(0)
+    const [rolling, setRolling] = useState(false)
 
     function handleButtonClick(){fileInputRef.current.click()}
 
@@ -62,7 +64,12 @@ function PredictButton({ processingStage, setProcessingStage }){
 
             <motion.button
                 className = "predict-button"
-                onHoverStart = {() => setRollCount((current) => current + 1)}
+                onHoverStart = {() => {
+                    if (rolling) return
+
+                    setRolling(true)
+                    setRollCount((current) => current + 1)
+                }}
                 onClick = {handleButtonClick}
 
                 initial = {{ opacity: 0, scale: 0.8 }}
@@ -75,7 +82,7 @@ function PredictButton({ processingStage, setProcessingStage }){
                 }}
             >
 
-                <RollingButtonText rollCount = {rollCount}>
+                <RollingButtonText rollCount = {rollCount} onAnimationComplete = {() => setRolling(false)}>
                     Upload an audio file.
                 </RollingButtonText>
 

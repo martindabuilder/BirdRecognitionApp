@@ -16,6 +16,9 @@ function TitleBar(){
     const [sourceButtonRoll, setSourceButtonRoll] = useState(0)
     const [listButtonRoll, setListButtonRoll] = useState(0)
 
+    const [sourceButtonRolling, setSourceButtonRolling] = useState(false)
+    const [listButtonRolling, setListButtonRolling] = useState(false)
+
 
     const currentPage =
         location.pathname === "/results"
@@ -60,10 +63,15 @@ function TitleBar(){
         >
                 <button 
                 className = "list-button" onClick = {goToBirdList}
-                onMouseEnter = {() => setListButtonRoll((current) => current + 1)}
+                onMouseEnter = {() =>  {
+                    if (listButtonRolling) return
+                    
+                    setListButtonRolling(true)
+                    setListButtonRoll((current) => current + 1)}
+                }
             >
 
-                <RollingButtonText rollCount = {listButtonRoll}>
+                <RollingButtonText rollCount = {listButtonRoll} onAnimationComplete = {() => setListButtonRolling(false)}>
                     List of birds.
                 </RollingButtonText>
 
@@ -72,10 +80,15 @@ function TitleBar(){
         
             <button
                 className = "sources-button" onClick = {goToSources}
-                onMouseEnter = {() => setSourceButtonRoll((current) => current + 1)}
+                onMouseEnter = {() => {
+                    if (sourceButtonRolling) return
+
+                    setSourceButtonRolling(true)
+                    setSourceButtonRoll((current) => current + 1)}
+                }
             >
 
-                <RollingButtonText rollCount = {sourceButtonRoll}>
+                <RollingButtonText rollCount = {sourceButtonRoll} onAnimationComplete = {() => setSourceButtonRolling(false)}>
                     Sources.
                 </RollingButtonText>
 

@@ -8,13 +8,20 @@ import "./buttons.css"
 function MicrophonePredictButton({ processingStage }){
 
     const [rollCount, setRollCount] = useState(0)
+    const [rolling, setRolling] = useState(false)
+
     const predicting = processingStage !== null
 
     return (
         <div className = "predict-buttons">
             <motion.button
                 className = "predict-button"
-                onHoverStart = {() => setRollCount((current) => current + 1)}
+                onHoverStart = { () => {
+                    if (rolling) return
+
+                    setRolling(true)
+                    setRollCount((current) => current + 1)
+                }}
                 initial = {{ opacity: 0, scale: 0.8 }}
                 animate = {{ opacity: predicting ? 0 : 1, scale: predicting ? 0.9 : 1 }}
                 whileHover = {{ scale: 1.03, transition: {duration: 0.2, ease: "ease"} }}
@@ -25,7 +32,7 @@ function MicrophonePredictButton({ processingStage }){
                 }}
             >
 
-                <RollingButtonText rollCount = {rollCount}>
+                <RollingButtonText rollCount = {rollCount} onAnimationComplete = {() => setRolling(false)}>
                     Record audio.
                 </RollingButtonText>
 

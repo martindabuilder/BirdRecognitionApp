@@ -188,7 +188,10 @@
     overflow: hidden;
     isolation: isolate;
     transform: translateX(-100%);
-    transition: transform 0.5s ease;
+    transition: 
+        transform 0.5s ease,
+        --title-color-start 0.8s ease,
+        --title-color-end 1s ease;
     z-index: 9;
 }
 .side-menu-section::before {
