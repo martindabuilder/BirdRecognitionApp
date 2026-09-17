@@ -7,6 +7,7 @@ import AudioPlayer from "./Audio_Player.jsx"
 import EscapeButton from "../Shared/Escape_Button.jsx"
 
 import "./results_section.css"
+import { tooltip } from "leaflet"
 
 function ResultsSection(){
     const location = useLocation()

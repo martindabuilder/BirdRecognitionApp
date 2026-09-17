@@ -308,59 +308,31 @@ function MicrophonePredictButton({ processingStage, setProcessingStage }){
 
             </motion.button>
 
-             {recording && (
-            <div className = "recording-overlay">
+            {recording && (
+                <div className = "recording-overlay">
 
-                <div className = "recording-popup">
+                    <div className = "recording-popup">
 
-                    <div className = "recording-title">
-                        Recording Birdsong
-                    </div>
+                    <div className = "recording-title"> Recording Birdsong </div>
 
-                    <div className = "recording-timer">
-                        {formatTime(recordingTime)}
-                    </div>
+                    <div className = "recording-timer"> {formatTime(recordingTime)} </div>
 
-                    <div className = "recording-status">
-                        {pauseRecording ? "recording paused" : "recording..."}
-                    </div>
+                    <div className = "recording-status"> {pauseRecording ? "recording paused" : "recording..."} </div>
 
                     <div className = "recording-buttons">
+                        {!pauseRecording ? (<button className = "record-button pause-button" onClick = {pauseRecordingAudio}> Pause </button>) 
+                        : (<button className = "record-button resume-button" onClick = {resumeRecording}> Resume </button>)}
 
-                        {!pauseRecording ? (
-                            <button
-                                className = "record-button pause-button"
-                                onClick = {pauseRecordingAudio}
-                            >
-                                Pause
-                            </button>
-                        ) : (
-                            <button
-                                className = "record-button resume-button"
-                                onClick = {resumeRecording}
-                            >
-                                Resume
-                            </button>
-                        )}
-
-                        <button
-                            className = "record-button stop-button"
-                            onClick = {stopRecording}
-                        >
+                        <button className = "record-button stop-button" onClick = {stopRecording}>
                             Stop
                         </button>
 
-                        <button
-                            className = "record-button cancel-button"
-                            onClick = {cancelRecording}
-                        >
+                        <button className = "record-button cancel-button"onClick = {cancelRecording}>
                             Cancel
                         </button>
-
                     </div>
 
                 </div>
-
             </div>
         )}
         </div>
