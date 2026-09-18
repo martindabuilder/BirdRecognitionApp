@@ -96,3 +96,6 @@ For the connection between the front and backend i will be using
 [CORS (Cross-Origin Resource Sharing)¶](https://fastapi.tiangolo.com/tutorial/cors/)
 
 Using fastAPI, the user will be able to call the model and have it classify the audio its getting.
+
+Reference material for the overall project: 
+[Notebook for the Cornell Lab of Ornithology Lab at CLEF 2024s](https://ceur-ws.org/Vol-3740/paper-204.pdf)

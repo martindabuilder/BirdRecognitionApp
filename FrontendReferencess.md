@@ -14,6 +14,9 @@ Saved in this way to make documentation and crediting them easier later on.
 [Page Transitions In React - React Router V6 and Framer Motion Tutorial](https://www.youtube.com/watch?v=FdrEjwymzdY)
 
 
+---- CSS ----
+[background-blend-mode](https://css-tricks.com/almanac/properties/b/background-blend-mode/)
+
 ---- OVERFLOW ----
 [A Simple Fix for Your CSS Overflow Problems](https://www.youtube.com/watch?v=2WWAEftnzf0)
 
