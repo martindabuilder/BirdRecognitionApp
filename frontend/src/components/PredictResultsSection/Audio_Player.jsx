@@ -1,18 +1,32 @@
 import { useRef, useState, useEffect } from "react"
 
+import noVolume from "../../assets/volumeicons/no_volume.png"
+import lowVolume from "../../assets/volumeicons/low_volume.png"
+import midVolume from "../../assets/volumeicons/mid_volume.png"
+import maxVolume from "../../assets/volumeicons/max_volume.png"
+
 import "./audio_player.css"
 
 
 function AudioPlayer({ src }) {
     
-    const audioRef = useRef(null)
-
     /* audio player related constants */
+    const audioRef = useRef(null)
     const [isPlaying, setIsPlaying] = useState(false)
     const [currentTime, setCurrentTime] = useState(0)
     const [audioDuration, setAudioDuration] = useState(0)
     const [volume, setVolume] = useState(1)
+    const lastVolumeRef = useRef(1)
     const [audioSrc, setAudioSrc] = useState("")
+
+    const volumeIcons = [noVolume, lowVolume, midVolume, maxVolume]
+
+    function getVolumeLevel(volume) {
+        if (volume === 0) return 0
+        if (volume <= 0.33) return 1
+        if (volume <= 0.66) return 2
+        return 3
+    }
 
     useEffect(() => {
         if (!src) return
@@ -89,13 +103,19 @@ function AudioPlayer({ src }) {
         const newVolume = Number(e.target.value)
         audioRef.current.volume = newVolume
         setVolume(newVolume)
+        if (newVolume > 0) lastVolumeRef.current = newVolume
+    }
+
+    function toggleMute() {
+        const newVolume = volume === 0 ? (lastVolumeRef.current || 1) : 0
+        audioRef.current.volume = newVolume
+        setVolume(newVolume)
     }
 
     return(
         <div className = "audio-player-container">
             <audio 
-                ref = {audioRef}
-                src = {audioSrc}
+                ref = {audioRef} src = {audioSrc}
                 onTimeUpdate = {timeUpdate}
                 onLoadedMetadata = {handleMetadata}
                 onDurationChange={handleMetadata}
@@ -107,51 +127,35 @@ function AudioPlayer({ src }) {
                 onClick = {startPauseAudio}
                 aria-label={isPlaying ? "Pause audio" : "Play audio"}>
                 
-                <span className = "button-icons">
-                    {isPlaying ? "❚❚" : "▶"}
-                </span>
+                <span className = "button-icons"> {isPlaying ? "❚❚" : "▶"} </span>
             </button>
 
-            <span className = "audio-time">
-                {formatTime(currentTime)}
-            </span>
+            <span className = "audio-time"> {formatTime(currentTime)} </span>
 
             <div className = "audio-progress-wrapper">
                 <input
                     className="audio-progress"
                     type="range"
-                    min="0"
-                    max={audioDuration || 0}
+                    min="0" max={audioDuration || 0}
                     value={currentTime}
                     onChange={handleProgressChange}
-                    style={{
-                        "--progress": audioDuration > 0
-                        ? `${(currentTime / audioDuration) * 100}%`
-                        : "0%"
-                    }}                
+                    style={{"--progress": audioDuration > 0 ? `${(currentTime / audioDuration) * 100}%` : "0%"}}                
                 />
             </div>
 
-            <span className = "audio-time">
-                {formatTime(audioDuration)}
-            </span>
+            <span className = "audio-time"> {formatTime(audioDuration)} </span>
 
-            <span className = "volume-icon">
-                volume
-            </span>
+            <button className = "volume-icon" onClick = {toggleMute} aria-label = {volume === 0 ? "Unmute" : "Mute"}>
+                <img className = "volume-icon-img" src = {volumeIcons[getVolumeLevel(volume)]} alt = ""/>
+            </button>
 
             <div className = "volume-wrapper">
                 <input
                     className = "volume-slider"
-                    type = "range"
-                    min = "0"
-                    max = "1"
-                    step = "0.01"
-                    value = {volume}
+                    type = "range" min = "0" max = "1"
+                    step = "0.01" value = {volume}
                     onChange = {handleVolumeChange}
-                    style = {{
-                        "--volume": `${volume * 100}%`
-                    }}
+                    style = {{ "--volume": `${volume * 100}%` }}
                     aria-label = "Volume"
                 />
             </div>

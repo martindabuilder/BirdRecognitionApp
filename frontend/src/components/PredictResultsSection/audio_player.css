@@ -80,8 +80,24 @@
 
 .volume-icon {
     flex-shrink: 0;
-    font-family: 'Courier New', Courier, monospace;
-    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.volume-icon:hover { transform: scale(1.12); }
+
+.volume-icon-img {
+    width: 30px;
+    height: 30px;
+    display: block;
 }
 
 .volume-wrapper {
