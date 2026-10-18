@@ -123,3 +123,5 @@ Improved the way that bird photos are loaded/parsed aswell. Now they get loaded 
 Day 34: Did some CSS work for the title bar, the side opening menu now changes colors properly once you go to a different page.
 Finally added the microphone recognition functionality which seems to work well and records/sends through the audio to the backend properly. Will work on proper CSS for it tomorrow.
 Also fixed sort of a bug where if you hover over the rolling text multiple times it will trigger the animation all those times even if the animation isnt done yet, so now it only happens once per hover.
+
+Day 35: Short break but we are so back, added more bird species to the dataset, mostly focusing on commonly seen bulgarian birds.

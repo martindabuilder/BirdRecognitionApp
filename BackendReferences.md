@@ -34,6 +34,9 @@ The original 2 datasets used fior the initial 260 classes when creating the proj
 [Xeno-Canto Bird Recordings Extended (N-Z)](https://www.kaggle.com/datasets/rohanrao/xeno-canto-bird-recordings-extended-n-z)
 Later on the projects lifecycle, the dataset will be expanded with more species
 
+[Bulgarian specific birds to be included in the dataset](https://www.animalspot.net/birds-around-the-world/birds-of-bulgaria)
+[Another list of bulgaria specific birds](https://picturebirdai.com/region/Bulgaria-Varna.html)
+
 Long term idea for the project is not to limit myself to only birds from the Kaggle dataset, so to be able to have a wide access to all kinds of bird taxonomy info ill be using the [eBird Taxonomy v2025 file](https://www.birds.cornell.edu/clementschecklist/introduction/updateindex/october-2025/2025-citation-checklist-downloads/) to extract information for the corresponding bird class. That way the original Kaglle code names match the scientific ones.
 For the corresponding bird classes to be able to add photos/location ill be using the iNaturalist endpoint so i can access the photos, but that will come later on.
 

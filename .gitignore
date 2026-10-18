@@ -16,8 +16,6 @@
 #/backend/add_samples.py
 
 #ignoring the teacher and test audios
-
-#/backend/birdnet_teacher
-/backend/__pycache__
-
 /test_audios
+/backend/__pycache__
+/backend/birdnet_teacher
