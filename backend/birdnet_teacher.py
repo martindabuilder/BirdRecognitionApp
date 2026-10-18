@@ -24,8 +24,8 @@ TAXONOMY_PATH = DATA_DIRECTORY / "eBird_taxonomy_v2025-4.csv"
 OUTPUT_DIR = BASE_DIR / "birdnet_teacher"
 OUTPUT_DIR.mkdir(parents = True, exist_ok = True)
 
-CHECKPOINT = 5 # Saves progress every 5 bird classes.
-FILES_PER_CLASS = 50 # The teacher predicts 100 audio files per class.
+CHECKPOINT = 4 # Saves progress every 5 bird classes.
+FILES_PER_CLASS = 20 # The teacher predicts 20 audio files per class.
 RANDOM_SEED = 42 # Fixed seed.
 N_WORKERS = 6 # Amount of workers used by BirdNET when processing audio.
 PREDICT_BATCH_SIZE = 5 # Number of files processed during in a single batch.

@@ -33,7 +33,7 @@ REQUEST_DELAY_SECONDS = 1.0
 
 # API key and xeno canto url endpoint
 XC_API_URL = ("https://xeno-canto.org/api/3/recordings")
-XC_API_KEY = "YOUR API KEY HERE"
+XC_API_KEY = "CUSTOM API KEY HERE"
 
 
 # Maps the dataset's species codes to their scientific names when searching.

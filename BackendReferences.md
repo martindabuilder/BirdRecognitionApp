@@ -13,7 +13,7 @@ Running the training set through the augment_trainset.py file. It applies a Spec
 ↓
 Resizing the three splits, its done in order to make them fit the preffered EfficientNet size format (resize_splits.py).
 ↓
-Once the training set has been created and resized, its ran through the BirdNet teacher file. The concep behind it is that the teacher will be able to learn from the dataset, backed by the already well trained and expansive BirdNet model. This way it becomes a "teacher" to the main model that gets built in the next step.
+While the dataset is being augmented and turned into spectrograms, the raw audio files get ran through the BirdNet teacher file. The concept behind it is that the teacher will be able to learn from the dataset, backed by the already well trained and expansive BirdNet model. This way it becomes a "teacher" to the main model that gets built in the next step, giving it a target for its predictions.
 ↓
 Model training happens with the model_training.py and data_parser.py files respectively. The data parser is used to alleviate the memory use and GPU strain that loading the entire test/train/val sets would put on the machine. With the help of the teacher the EfficientNet model gets trained on the created splits and the teacher's knowledge gets applied. The model code is built in a way where it saves a checkpoint for the current epoch its on and also a best model version. In case accuracy stops increasing and the model plateaus, it has a 7 epoch patience built in, which once it reaches it automatically stops and saves the best model version.
 ↓
