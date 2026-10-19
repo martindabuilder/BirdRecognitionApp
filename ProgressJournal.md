@@ -125,3 +125,8 @@ Finally added the microphone recognition functionality which seems to work well 
 Also fixed sort of a bug where if you hover over the rolling text multiple times it will trigger the animation all those times even if the animation isnt done yet, so now it only happens once per hover.
 
 Day 35: Short break but we are so back, added more bird species to the dataset, mostly focusing on commonly seen bulgarian birds.
+
+Day 36: More new birds, retrained the main + the teacher models to see if they perform better with about 30ish new birds added, and generally the performance has improved a wee bit (about 1% over last model run). Added even more birds later during the day and touched up the teacher to take 30 samples per class rather than the tested 20 before, so retraining it again will take some time again but we keep it pushing.
+In total added X new species, their taxonomy codes being: 
+(on day 35) whteag eurjay1 reffal1 eurrol1 eugori2 whisto1 eupfly1 eubeat1 eurgol bbgsta1 rocpta1 horgre eurbla grecor wemhar1 eurcoo combuz1 swtgul1 
+(on day 36) cowpig1 dunnoc1 blackc1 eurjac maggoo1 cretit2 comswi comhom1 leseag1 syrwoo1 loeowl lolbuz1 rinphe1 sonthr1 rebfly comred2 whiwag comcha eurlin1 santer1 misthr1

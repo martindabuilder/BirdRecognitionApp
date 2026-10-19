@@ -23,13 +23,13 @@ TAXONOMY_PATH = os.path.join(DATASET_DIR, "eBird_taxonomy_v2025-4.csv")
 MIN_QUALITY = {"A", "B"}
 
 # Max new recordings to download per species each time the script is run.
-MAX_NEW_RECORDINGS = 45
+MAX_NEW_RECORDINGS = 70
 
 # Maximum number of pages searched for a species.
 MAX_PAGES = 20
 
 # Delay between requests
-REQUEST_DELAY_SECONDS = 1.0
+REQUEST_DELAY_SECONDS = 1.5
 
 # API key and xeno canto url endpoint
 XC_API_URL = ("https://xeno-canto.org/api/3/recordings")
