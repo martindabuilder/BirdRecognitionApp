@@ -1,5 +1,5 @@
-# Applies SpecAugment to a portion of the training set.
-# Validation and test subsets are left unchanged so the model's performance can be measured to the original data.
+# Applies SpecAugment to a portion of the training set. Прилага SpecAugment върху част от тренировъчния комплект.
+# Валидационния и тестовия комплект остават непроменени, за да може производителността на модела да бъде измерена спрямо непроменените комплекти.
 
 # Библиотеки и импорти.
 import os
@@ -76,21 +76,20 @@ def augment_class(path, rng):
     if len(arr) == 0:
         return 0
     
-    # Calculates how many training samples should be augmented.
+    # Пресмята се колко от тренировъчните данни ще бъдат аугментирани
     n_augmented = int(len(arr) * AUGMENT_RATIO)
 
-    # If the bird class is too small, it get's skipped.
+    # Ако класа е твърде малък се пропуска.
     if n_augmented == 0:
         return 0
 
-    # Selects random samples to augment.
-    # Selects an original sample only once.
-    selected_indices = rng.choice(len(arr),size = n_augmented, replace = False)
+    # Избира случайни проби да аугментира, като всяка проба се избира само веднъж
+    selected_indices = rng.choice(len(arr), size = n_augmented, replace = False)
     augmented_samples = []
     augmented_sources = []
     augmented_segments = []
 
-    # Creates augmented versions of the selected samples.
+    # Създава аугментирани версии на избраните проби.
     for index in selected_indices:
         original = arr[index].astype(np.float32)
         for _ in range(NUM_AUGMENTATIONS):
@@ -102,12 +101,12 @@ def augment_class(path, rng):
     if not augmented_samples:
         return 0
 
-    # Converts the samples and their metadata into numpy arrays.
+    # Преобразува пробите и техните метаданни в NumPy масиви.
     augmented_samples = np.stack(augmented_samples)
     augmented_sources = np.asarray(augmented_sources)
     augmented_segments = np.asarray(augmented_segments, dtype = np.int32)
 
-    # saves the augmented training samples and their metadata.
+    # Запазва аугментираните тренировъчни данни и техните метаданни
     np.save(output_path, augmented_samples)
     np.save(sources_output, augmented_sources)
     np.save(segments_output, augmented_segments)

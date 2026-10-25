@@ -1,7 +1,7 @@
-# Additional file, used to download more audio files to a specific class.
+# Отделен файл за добавяне на определен брой нови аудио файлове за клас птици.
+# Файловете се изтеглят от Xeno-canto.
 
-# Libraries and imports.
-
+# Библиотеки и импорти.
 import os
 import sys
 import time
@@ -16,22 +16,23 @@ PROJECT_ROOT = os.path.dirname(
     )
 )
 
+# Патки съдържащи оригиналния датасет и таксономния файл с данни за класовете птици.
 DATASET_DIR = os.path.join(PROJECT_ROOT, "dataset")
 TAXONOMY_PATH = os.path.join(DATASET_DIR, "eBird_taxonomy_v2025-4.csv")
 
-# Only download recordings with these quality ratings.
+# Теглят се файлове с минимална оценка от А или В.
 MIN_QUALITY = {"A", "B"}
 
-# Max new recordings to download per species each time the script is run.
+# Максимален брой нови записи, които ще се изтеглят за всеки вид птица при всяко използване на фунционалността.
 MAX_NEW_RECORDINGS = 70
 
-# Maximum number of pages searched for a species.
+# Максимален брой страници за всеки вид птица.
 MAX_PAGES = 20
 
-# Delay between requests
+# Изчакване между всяко изпращане на API заявка към Xeno-canto.
 REQUEST_DELAY_SECONDS = 1.5
 
-# API key and xeno canto url endpoint
+# API ключ и Xeno-canto kрайна точка за достъпване на аудио файловете.
 XC_API_URL = ("https://xeno-canto.org/api/3/recordings")
 XC_API_KEY = "CUSTOM API KEY HERE"
 
@@ -44,7 +45,7 @@ def lookup_scientific_name(code,taxonomy_df):
     return row.iloc[0]["SCI_NAME"]
 
 
-# Finds any already downloaded recordings so the script doesn't duplicate any recordings.
+# Намира вече изтеглени записи, така че да се избегне дублирано теглене.
 def get_existing_xc_ids(species_dir):
     existing_ids = set()
     
@@ -61,7 +62,7 @@ def get_existing_xc_ids(species_dir):
 
 
 # Searches Xeno-canto for recordings of the requested species.
-# Keeps only the newly found recordings.
+# Изтеглят се само нови записи.
 def query_species(scientific_name, existing_ids, target_count):
     genus, _, species = (scientific_name.partition(" "))
     query = (f"gen:{genus} sp:{species}")
@@ -173,6 +174,7 @@ def process_code(code, taxonomy_df):
         time.sleep(REQUEST_DELAY_SECONDS)
 
     print(f"\n{downloaded} new recordings added, location: {species_dir}")
+
 
 def main():
     if len(sys.argv) < 2:
