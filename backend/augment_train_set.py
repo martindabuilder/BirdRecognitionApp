@@ -1,60 +1,58 @@
 # Applies SpecAugment to a portion of the training set.
-# Validation and test subsets are left unchanged so the 
-# model's performance can be measured to the original data.
+# Validation and test subsets are left unchanged so the model's performance can be measured to the original data.
 
-# Libraries and imports
-
+# Библиотеки и импорти.
 import os
 import glob
 import numpy as np
 from tqdm import tqdm
 
-# Folders and settings for the augmentation process
+# Папки и настройки за аугментирането на данните.
 TRAIN_DIR = "train_set"
 OUTPUT_DIR = "train_set_augmented"
 
-AUGMENT_RATIO = 0.30 # % of the original training samples that will be augmented.
-NUM_AUGMENTATIONS = 1 # Number of augmented versions of each sample.
-TIME_MASK_MAX = 20 # Max width of the masked time region.
-FREQ_MASK_MAX = 15 # Max width of the masked frequency region.
+AUGMENT_RATIO = 0.30 # 30% от оригиналните данни ще бъдат обработени.
+NUM_AUGMENTATIONS = 1 # Брой аугментирани версии на всяка проба.
+TIME_MASK_MAX = 20 # Максимална широчина на региона за времево маскиране.
+FREQ_MASK_MAX = 15 # Максимална височина на региона за честотно маскиране.
 SEED = 42 # Fixed random seed.
 
-# Creates output folder if it's missing.
+#Създава папка за изходните данни ако липсва.
 os.makedirs(OUTPUT_DIR, exist_ok = True)
 
 
-# ---- FUNCTIONS ----
-
+# ---- Функции ----
 
 def spec_augment(spec, rng):
-    # Works on a copy of the spectrogram, the orignal stays unchanged.
+    # Работи се върху копие на спектрограмата, не оригинала.
     augmented = spec.copy()
     n_mels, n_frames = augmented.shape
     freq_width = rng.integers(0, min(FREQ_MASK_MAX, n_mels) + 1)
 
-    # Random width applied for frequency masking.
+    # Случайно приложена височина за честотно маскиране.
     if freq_width > 0:
         freq_start = rng.integers(0, n_mels - freq_width + 1)
         augmented[freq_start:freq_start + freq_width, :] = 0.0
 
     time_width = rng.integers(0, min(TIME_MASK_MAX, n_frames) + 1)
 
-    # Random width applied for time masking.
+    # Случайно приложена широчина за времево маскиране.
     if time_width > 0:
         time_start = rng.integers(0, n_frames - time_width + 1)
         augmented[:, time_start:time_start + time_width] = 0.0
 
-    # Returns the modified spectrogram.
+    # Връща обработената спектрограма.
     return augmented
 
-# Main function that calls the SpecAugment for the entire class.
+
+# Основна функция която извиква SpecAugment за целия клас.
 def augment_class(path, rng):
     class_name = os.path.splitext(os.path.basename(path))[0]
 
     if (class_name.endswith("_sources") or class_name.endswith("_segments")):
         return 0
 
-    # Outputh files for the augmented spectrograms and their metadata.
+    # Изходни файлове за обработените спектрограми и техните метаданни.
     output_path = os.path.join(OUTPUT_DIR, f"{class_name}.npy")
     sources_output = os.path.join(OUTPUT_DIR, f"{class_name}_sources.npy")
     segments_output = os.path.join(OUTPUT_DIR,f"{class_name}_segments.npy")
@@ -69,12 +67,12 @@ def augment_class(path, rng):
         print(f"Missing segments for {class_name}")
         return 0
 
-    # Loads the chosen training spectrograms and their metadata.
+    # Зарежда избраните спектрограми и техните метаданни/
     arr = np.load(path)
     file_ids = np.load(sources_path, allow_pickle = True)
     segment_indices = np.load(segments_path)
 
-    # Empty classes get skipped.
+    # Празни класове биват пропуснати.
     if len(arr) == 0:
         return 0
     
